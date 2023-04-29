@@ -1,16 +1,12 @@
 import React from "react";
 import Typewriter from "typewriter-effect";
+import {typeString} from "../../data/home";
 
 function Type() {
   return (
     <Typewriter
       options={{
-        strings: [
-          "Developer",
-          "Deep Learning Engineer",
-          "MERN Stack Developer",
-          "Open Source Contributor",
-        ],
+        strings: typeString,
         autoStart: true,
         loop: true,
         deleteSpeed: 50,
