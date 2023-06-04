@@ -23,7 +23,7 @@ export const office_projects = [
       "Go",
     ],
     snapshots: [""],
-    liveUrl: ["https://futurenation.gov.bd/"],
+    liveUrl: ["https://dev-platform.futurenation.gov.bd/"],
   },
   {
     id: 2,
