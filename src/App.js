@@ -10,12 +10,13 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate
+  Navigate,
 } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import "./style.css";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SingleProjectPage from "./components/Projects/SingleProjectPage";
 
 function App() {
   const [load, upadateLoad] = useState(true);
@@ -37,9 +38,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/project" element={<Projects />} />
+          <Route path="/project/office/:slug" element={<SingleProjectPage />} />
+          <Route
+            path="/project/personal/:slug"
+            element={<SingleProjectPage />}
+          />
           <Route path="/about" element={<About />} />
           <Route path="/resume" element={<Resume />} />
-          <Route path="*" element={<Navigate to="/"/>} />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />
       </div>

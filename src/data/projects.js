@@ -1,6 +1,7 @@
 export const office_projects = [
   {
     id: 1,
+    slug: "future-nation-web",
     title: "Future Nation Web",
     development: "Softbdltd",
     active: true,
@@ -23,11 +24,12 @@ export const office_projects = [
       "Go",
     ],
     snapshots: [""],
-    liveUrl: ["https://dev-platform.futurenation.gov.bd/"],
+    liveUrl: "https://dev-platform.futurenation.gov.bd/",
   },
   {
     id: 2,
     title: "NISE3",
+    slug: "nise3",
     development: "Softbdltd",
     active: true,
     description: [
@@ -49,11 +51,12 @@ export const office_projects = [
       "Kafka",
     ],
     snapshots: [""],
-    liveUrl: ["https://futurenation.gov.bd/"],
+    liveUrl: "https://nise.dev.niseee.gov.bd/",
   },
   {
     id: 3,
     title: "E-toss",
+    slug: "etoss-bd",
     development: "PromoteUP",
     active: true,
     description: [
@@ -75,7 +78,7 @@ export const office_projects = [
       "Go",
     ],
     snapshots: [""],
-    liveUrl: ["https://futurenation.gov.bd/"],
+    liveUrl: "http://www.etossbd.com/",
   },
 ];
 
@@ -83,6 +86,7 @@ export const personal_projects = [
   {
     id: 1,
     title: "Bookmark",
+    slug: "bookmark",
     active: true,
     description: [
       "Bookmark is an e-commerce website that allows the admin to manage various publications and books from different authors, with variant types. Users can add their desired books to their cart, mark them as favorites, and leave reviews on the website. The website supports payment through Stripe and cash on delivery.",
@@ -101,12 +105,13 @@ export const personal_projects = [
       "fakerJS",
     ],
     snapshots: [""],
-    liveUrl: ["https://bookmark-bd.fly.dev/"],
-    sourceUrl: ["https://github.com/fahimfaisaal/bookmark"],
+    liveUrl: "https://bookmark-bd.fly.dev/",
+    sourceUrl: "https://github.com/fahimfaisaal/bookmark",
   },
   {
     id: 2,
     title: "Clean Youtube",
+    slug: "clean-youtube",
     active: true,
     description: [
       "Clean YouTube is a platform designed for users who want to learn from YouTube without any distractions and minimal design. This app allows users to watch playlists without being interrupted by suggested videos or other distractions. Clean YouTube has four main sections: Home, Playlists, Favorite, and Recent.",
@@ -115,19 +120,29 @@ export const personal_projects = [
     ],
     short_description:
       "Clean YouTube is a platform that helps users learn from YouTube without distractions. The app has four main sections: Home, Playlists, Favorite, and Recent. Users can watch playlists without interruptions and take notes to keep track of their progress. The single player with dynamic layout control feature allows users to remove distractions and concentrate better while watching tutorials.",
-    techstack: ["NextJS", "Youtube api v3", "Redux", "rtk-query", "typescript", "react-player", "MUI"],
+    techstack: [
+      "NextJS",
+      "Youtube api v3",
+      "Redux",
+      "rtk-query",
+      "typescript",
+      "react-player",
+      "MUI",
+    ],
     snapshots: [""],
-    liveUrl: ["https://clean-youtube-playlists.vercel.app/"],
-    sourceUrl: ["https://github.com/nahidnstu12/clean-youtube"],
+    liveUrl: "https://clean-youtube-playlists.vercel.app/",
+    sourceUrl: "https://github.com/nahidnstu12/clean-youtube",
   },
   {
     id: 3,
     title: "CollageLMS",
+    slug: "collage-lms",
+    active: false,
     description: [
       "CollageLMS is a college management system that managing various college-related activities. The system is designed to cater to the needs of three main types of users: students, teachers, and super admin.",
       "Super Admin can create and manage teachers, admit students, create and manage subjects, classes, and routines. The super admin can also set up the grading system, manage attendance records, and generate reports based on the data collected.",
       "Teachers can manage their classes, including scheduling exams, managing results, and taking attendance.",
-      "Students can view their results, attendance records, and class notes. The system allows students to access their academic records, track their progress, and communicate with their teachers."
+      "Students can view their results, attendance records, and class notes. The system allows students to access their academic records, track their progress, and communicate with their teachers.",
     ],
     short_description:
       "CollageLMS is a college management system with three main user types: students, teachers, and super admin. The super admin can manage teachers, students, subjects, classes, routines, grading, attendance, and generate reports. Teachers can manage classes, exams, results, and attendance, while students can access their academic records, view results, attendance, and class notes.",
@@ -139,12 +154,14 @@ export const personal_projects = [
       "Mysql",
     ],
     snapshots: [""],
-    liveUrl: ["https://collage-lms-nstu.netlify.app/"],
-    sourceUrl: ["https://github.com/nahidnstu12/collageLMS"],
+    liveUrl: "https://collage-lms-nstu.netlify.app/",
+    sourceUrl: "https://github.com/nahidnstu12/collageLMS",
   },
   {
     id: 4,
     title: "JapanGardenShop",
+    slug: "japan-garden-shop",
+    active: false,
     description: [
       "JapanGardenShop is a small clothing shop that mainly lists women's and baby dresses. Users can add the desired items to their cart or mark them as favorites for later purchase. ",
       "Customers can order in two ways: either through delivery or by booking the dress and buying it directly from the shop. Payment methods include cash on delivery and bKash.",
@@ -160,12 +177,14 @@ export const personal_projects = [
       "Mysql",
     ],
     snapshots: [""],
-    liveUrl: ["https://ecom-admin-japangardencity.vercel.app"],
-    sourceUrl: ["https://github.com/nahidnstu12/ecom-admin-japangardencity"],
+    liveUrl: "https://ecom-admin-japangardencity.vercel.app",
+    sourceUrl: "https://github.com/nahidnstu12/ecom-admin-japangardencity",
   },
   {
     id: 5,
     title: "Food Finding",
+    slug: "food-finding",
+    active: true,
     description: [
       "Futurenation is a coalition of government, private sector, and development leaders working together to transform the country's population dividend into a driving force for the economy. ",
       "The website includes an Assessment Portal for customized career tests, a Learning Management System for skill-enhancing courses recommended by AI, and a Job Recommendation Engine for AI-based job suggestions",
@@ -183,12 +202,14 @@ export const personal_projects = [
       "fakerJS",
     ],
     snapshots: [""],
-    liveUrl: ["https://bookmark-bd.fly.dev/"],
-    sourceUrl: ["https://github.com/fahimfaisaal/bookmark"],
+    liveUrl: "https://food-finding.vercel.app/",
+    sourceUrl: "https://github.com/nahidnstu12/food-finding",
   },
   {
     id: 6,
     title: "devBlog",
+    slug: "dev-blog",
+    active: false,
     description: [
       "Futurenation is a coalition of government, private sector, and development leaders working together to transform the country's population dividend into a driving force for the economy. ",
       "The website includes an Assessment Portal for customized career tests, a Learning Management System for skill-enhancing courses recommended by AI, and a Job Recommendation Engine for AI-based job suggestions",
@@ -196,13 +217,9 @@ export const personal_projects = [
     ],
     short_description:
       "Futurenation is a coalition of government, private sector, and development leaders working together to transform the country's population dividend into a driving force for the economy.The website includes an Assessment Portal for customized career tests, a Learning Management System for skill-enhancing courses recommended by AI, and a Job Recommendation Engine for AI-based job suggestions.",
-    techstack: [
-      "NextJS",
-      "graphCMS",
-
-    ],
+    techstack: ["NextJS", "graphCMS"],
     snapshots: [""],
-    liveUrl: ["https://devblog-graphcms.vercel.app/"],
-    sourceUrl: ["https://gitlab.com/nahidcste12/devblog-next"],
+    liveUrl: "https://devblog-graphcms.vercel.app/",
+    sourceUrl: "https://gitlab.com/nahidcste12/devblog-next",
   },
 ];

@@ -1,15 +1,8 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import ProjectCard from "./ProjectCards";
+import { Col, Container, Row } from "react-bootstrap";
 import Particle from "../Particle";
-import leaf from "../../Assets/Projects/leaf.png";
-import emotion from "../../Assets/Projects/emotion.png";
-import editor from "../../Assets/Projects/codeEditor.png";
-import chatify from "../../Assets/Projects/chatify.png";
-import suicide from "../../Assets/Projects/suicide.png";
-import bitsOfCode from "../../Assets/Projects/blog.png";
 import ProjectCardV2 from "./ProjectCardV2";
-import { office_projects } from "../../data/projects";
+import { office_projects, personal_projects } from "../../data/projects";
 
 function Projects() {
   return (
@@ -28,7 +21,7 @@ function Projects() {
         </h1>
         <Row style={{ justifyContent: "center", paddingBottom: "10px" }}>
           {office_projects
-            ?.filter((item) => item)
+            ?.filter((item) => item.active)
             .map((project) => (
               <Col md={4} className="project-card">
                 <ProjectCardV2
@@ -36,6 +29,8 @@ function Projects() {
                   description={project.short_description}
                   demoLink={project.liveUrl}
                   techStacks={project.techstack}
+                  type={"office"}
+                  slug={project.slug}
                 />
               </Col>
             ))}
@@ -44,6 +39,23 @@ function Projects() {
         <h1 className="project-heading" style={{ textAlign: "left" }}>
           Personal <strong className="purple">Project </strong>
         </h1>
+        <Row style={{ justifyContent: "center", paddingBottom: "10px" }}>
+          {personal_projects
+            ?.filter((item) => item.active)
+            .map((project) => (
+              <Col md={4} className="project-card">
+                <ProjectCardV2
+                  title={project?.title}
+                  description={project.short_description}
+                  demoLink={project.liveUrl}
+                  techStacks={project.techstack}
+                  ghLink={project.sourceUrl}
+                  type={"office"}
+                  slug={project.slug}
+                />
+              </Col>
+            ))}
+        </Row>
       </Container>
     </Container>
   );
