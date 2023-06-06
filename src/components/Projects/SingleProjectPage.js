@@ -1,16 +1,14 @@
-import React, { useEffect } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import Particle from "../Particle";
-import Aboutcard from "../About/AboutCard";
-import laptopImg from "../../Assets/about.png";
-import Card from "react-bootstrap/Card";
-import { ImPointRight } from "react-icons/im";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { office_projects, personal_projects } from "../../data/projects";
-import { techStack } from "../../data/home";
+import React, {useEffect} from "react";
+import {Col, Container, Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import { BsGithub } from "react-icons/bs";
-import { CgWebsite } from "react-icons/cg";
+import Card from "react-bootstrap/Card";
+import {BsGithub} from "react-icons/bs";
+import {CgWebsite} from "react-icons/cg";
+import {ImPointRight} from "react-icons/im";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
+import laptopImg from "../../Assets/about.png";
+import {office_projects, personal_projects} from "../../data/projects";
+import Particle from "../Particle";
 
 function SingleProjectPage() {
   const { slug } = useParams();
