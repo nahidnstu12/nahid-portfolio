@@ -50,7 +50,7 @@ function Projects() {
                   demoLink={project.liveUrl}
                   techStacks={project.techstack}
                   ghLink={project.sourceUrl}
-                  type={"office"}
+                  type={"personal"}
                   slug={project.slug}
                 />
               </Col>
