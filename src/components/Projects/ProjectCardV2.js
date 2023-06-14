@@ -70,7 +70,10 @@ function ProjectCardV2({
         <Card.Text style={{ textAlign: "justify", margin: "20px 0" }}>
           {techStacks?.length > 0 &&
             techStacks?.map((item) => (
-              <Button variant="outline-warning" style={{ margin: "4px" }}>
+              <Button
+                variant="outline-warning"
+                style={{ margin: "4px", fontWeight: "600" }}
+              >
                 {item}
               </Button>
             ))}

@@ -18,7 +18,7 @@ export const socialConnections = [
   {
     id: 2,
     title: "linkedin",
-    url: "https://linkedin.com/in/nahid-islam-1aaa6814b",
+    url: "https://www.linkedin.com/in/mazharul-islam-nahid-1aaa6814b/",
     icon: <FaLinkedinIn />,
     active: true,
   },

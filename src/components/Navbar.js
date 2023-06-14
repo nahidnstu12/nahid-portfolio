@@ -1,10 +1,15 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import {AiOutlineFundProjectionScreen, AiOutlineHome, AiOutlineUser,} from "react-icons/ai";
-import {CgFileDocument} from "react-icons/cg";
-import {Link} from "react-router-dom";
+import {
+  AiOutlineFundProjectionScreen,
+  AiOutlineHome,
+  AiOutlineUser,
+} from "react-icons/ai";
+import { CgFileDocument } from "react-icons/cg";
+import { Link } from "react-router-dom";
+import { GiAchievement } from "react-icons/gi";
 
 function NavBar() {
   const [expand, updateExpanded] = useState(false);
@@ -82,15 +87,15 @@ function NavBar() {
               </Nav.Link>
             </Nav.Item>
 
-            {/*<Nav.Item>*/}
-            {/*  <Nav.Link*/}
-            {/*    href="https://soumyajitblogs.vercel.app/"*/}
-            {/*    target="_blank"*/}
-            {/*    rel="noreferrer"*/}
-            {/*  >*/}
-            {/*    <ImBlog style={{ marginBottom: "2px" }} /> Blogs*/}
-            {/*  </Nav.Link>*/}
-            {/*</Nav.Item>*/}
+            <Nav.Item>
+              <Nav.Link
+                as={Link}
+                to="/others"
+                onClick={() => updateExpanded(false)}
+              >
+                <GiAchievement style={{ marginBottom: "2px" }} /> Others
+              </Nav.Link>
+            </Nav.Item>
 
             {/*<Nav.Item className="fork-btn">*/}
             {/*  <Button*/}

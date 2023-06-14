@@ -1,13 +1,13 @@
-import React, {useEffect} from "react";
-import {Col, Container, Row} from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Col, Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import {BsGithub} from "react-icons/bs";
-import {CgWebsite} from "react-icons/cg";
-import {ImPointRight} from "react-icons/im";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
+import { BsGithub } from "react-icons/bs";
+import { CgWebsite } from "react-icons/cg";
+import { ImPointRight } from "react-icons/im";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import laptopImg from "../../Assets/about.png";
-import {office_projects, personal_projects} from "../../data/projects";
+import { office_projects, personal_projects } from "../../data/projects";
 import Particle from "../Particle";
 
 function SingleProjectPage() {
@@ -63,7 +63,7 @@ function SingleProjectPage() {
                     <p style={{ textAlign: "justify" }}>{item}</p>
                   ))}
                 </blockquote>
-                <div style={{ width: "200px" }}>
+                <div style={{ width: "185px", marginTop: "24px" }}>
                   <Button
                     variant="primary"
                     href={data.liveUrl}
@@ -104,24 +104,18 @@ function SingleProjectPage() {
             <Item key={item} icon={item} />
           ))}
         </Row>
-
-        <h1 className="project-heading">
-          My <strong className="purple">Contribution</strong>
-        </h1>
-        <ul style={{ maxWidth: "550px", margin: "40px auto" }}>
-          <li className="about-activity">
-            <ImPointRight /> "Futurenation is a coalition of government, private
-            sector, and development leaders working together to transform the
-            country's population dividend into a driving force for the economy.
-            ",
-          </li>
-          <li className="about-activity" style={{ margin: "30px 0" }}>
-            <ImPointRight /> Writing Tech Blogs
-          </li>
-          <li className="about-activity">
-            <ImPointRight /> Travelling
-          </li>
-        </ul>
+        {data?.my_contributions?.length > 0 && (
+          <>
+            <h1 className="project-heading">
+              My <strong className="purple">Contribution</strong>
+            </h1>
+            <ul style={{ maxWidth: "550px", margin: "40px auto" }}>
+              {data?.my_contributions?.map((item, index) => (
+                <ContributionItem key={index} text={item} />
+              ))}
+            </ul>
+          </>
+        )}
       </Container>
     </Container>
   );
@@ -132,6 +126,14 @@ const Item = ({ icon }) => {
     <Col xs={4} md={1} className="tech-icons-project">
       {icon}
     </Col>
+  );
+};
+
+const ContributionItem = ({ text }) => {
+  return (
+    <li className="about-activity" style={{ margin: "30px 0" }}>
+      <ImPointRight /> {text}
+    </li>
   );
 };
 

@@ -17,6 +17,7 @@ import "./style.css";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SingleProjectPage from "./components/Projects/SingleProjectPage";
+import OtherSection from "./components/Others/OtherSection";
 
 function App() {
   const [load, upadateLoad] = useState(true);
@@ -45,6 +46,7 @@ function App() {
           />
           <Route path="/about" element={<About />} />
           <Route path="/resume" element={<Resume />} />
+          <Route path="/others" element={<OtherSection />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
         <Footer />

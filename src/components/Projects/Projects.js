@@ -28,6 +28,7 @@ function Projects() {
                   title={project?.title}
                   description={project.short_description}
                   demoLink={project.liveUrl}
+                  ghLink={project.sourceUrl}
                   techStacks={project.techstack}
                   type={"office"}
                   slug={project.slug}

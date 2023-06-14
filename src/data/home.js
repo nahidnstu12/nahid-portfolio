@@ -22,10 +22,10 @@ import {
 } from "react-icons/si";
 
 export const typeString = [
-  "Developer",
+  "Web Developer",
   "Software Engineer",
-  "MERN Stack Developer",
-  "Open Source Contributor",
+  "Frontend Developer",
+  "Learner",
 ];
 
 export const techStack = [

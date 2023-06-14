@@ -25,6 +25,13 @@ export const office_projects = [
     ],
     snapshots: [""],
     liveUrl: "https://dev-platform.futurenation.gov.bd/",
+    my_contributions: [
+      "As a frontend developer, I am working on a complex course feature that includes three types: Online, Live, and Imported. I focus on the admin part, where I create and maintain course content, design course modules and lessons, and establish a content library. Online courses involve modules, lessons, assignments, exams, and interactive elements such as audio/video-based quizzes.\n",
+      "For the live course feature, I create courses and schedule class times by assigning providers. Admin approval is required to publish the course. Challenges arise due to server capacity limitations, prompting the implementation of a conflict resolution system for scheduling conflicts.\n",
+      "An advanced job and course filter is implemented, allowing users to customize their search queries for more precise results.\n",
+      "I also participated in the implementation of a job candidate interview feature. Youth can apply for jobs, and Junior Recruiting Executives (JRE) can assess the applicants. Once the JRE selects a candidate, interviews with the interview board are arranged.\n",
+      "Overall, my responsibilities involve creating and maintaining course content, handling different course types, managing server capacity challenges, implementing advanced search filters, and contributing to the job candidate interview process.",
+    ],
   },
   {
     id: 2,
@@ -52,6 +59,11 @@ export const office_projects = [
     ],
     snapshots: [""],
     liveUrl: "https://nise.dev.niseee.gov.bd/",
+    my_contributions: [
+      "As a junior frontend developer, I implemented an apprenticeship module for a youth scholarship program. This module allows young individuals to apply for the program, and upon completion, they receive a certificate and financial benefits.\n",
+      "Another feature I developed is multiple enrollment, which facilitates the seamless switching between different course batches. The system automatically handles the varying payment structures and batch availability across different sectors.\n",
+      "Additionally, I implemented a custom youth feed that combines job and course listings, providing a curated mix of employment opportunities and educational offerings for the target audience.",
+    ],
   },
   {
     id: 3,
@@ -66,19 +78,15 @@ export const office_projects = [
     ],
     short_description:
       "The clothing brand is an online marketplace that allows vendors to sell their products on a multivendor system to wholesale and reseller customers. The platform also provides an end-to-end platform for small businesses with features such as selling products, inventory management, point-of-sale, digital payments, delivery system, and logistics services. ",
-    techstack: [
-      "NestJS",
-      "NextJS",
-      "Node",
-      "MySQL",
-      "MongoDB",
-      "Keyclock",
-      "RabbitMQ",
-      "AI",
-      "Go",
-    ],
+    techstack: ["Laravel", "Theme Customization", "MySQL", "SSL Commerce"],
     snapshots: [""],
     liveUrl: "http://www.etossbd.com/",
+    sourceUrl: "https://www.facebook.com/etossbd",
+    my_contributions: [
+      "As a frontend developer, I embarked on my first professional freelancing project with a team of three members. My primary responsibility was designing components for the product details page. This page allowed buyers to make wholesale or small-scale purchases, with the total price varying accordingly.\n",
+      "I also implemented standard features such as adding products to the cart and marking them as favorites, ensuring a seamless user experience.\n",
+      "In addition to component design, I undertook the task of implementing the overall theme for the website. This involved converting the HTML template to Laravel Blade, ensuring consistency and functionality throughout the site.",
+    ],
   },
 ];
 
@@ -107,6 +115,13 @@ export const personal_projects = [
     snapshots: [""],
     liveUrl: "https://bookmark-bd.fly.dev/",
     sourceUrl: "https://github.com/fahimfaisaal/bookmark",
+    my_contributions: [
+      "Setup Global State: I implemented global state management throughout the project using Redux Toolkit (RTK) and utilized RTK Query to handle all possible endpoints efficiently.\n",
+      "HTTP Token-based Authentication: I integrated a token-based authentication system for secure user authentication, allowing users to access protected routes and perform authorized actions using HTTP tokens.\n",
+      "Stripe Payment System Integration: I integrated the Stripe payment system with our Strapi backend, enabling seamless and secure payment processing for users.\n",
+      "Order Processing: I implemented order processing functionality, allowing users to complete purchases, track orders, and manage order status efficiently within the system.\n",
+      " Add to Cart & Add to Favorite Item: I implemented features to add items to the cart and mark them as favorites, providing users with a convenient way to store desired items for future reference or purchase.",
+    ],
   },
   {
     id: 2,
@@ -132,6 +147,11 @@ export const personal_projects = [
     snapshots: [""],
     liveUrl: "https://clean-youtube-playlists.vercel.app/",
     sourceUrl: "https://github.com/nahidnstu12/clean-youtube",
+    my_contributions: [
+      "YouTube Data API Integration: As part of a solo project assigned during a Fullstack Army bootcamp, I integrated the YouTube Data API. I implemented a recursive function to generate video playlists and stored them in our Redux store, allowing efficient access and management of videos.\n",
+      "Customizable Layout System: On a single home page, I created a layout system that enables customization. Users can personalize their layout by removing elements such as the playlists video sidebar, description, and note-taking section.\n",
+      "Basic Video-Based Note Taking: Within the project, I implemented a basic feature for taking notes related to videos. Users can watch videos and jot down their thoughts, comments, or important points directly within the application.",
+    ],
   },
   {
     id: 3,
@@ -156,6 +176,7 @@ export const personal_projects = [
     snapshots: [""],
     liveUrl: "https://collage-lms-nstu.netlify.app/",
     sourceUrl: "https://github.com/nahidnstu12/collageLMS",
+    my_contributions: [],
   },
   {
     id: 4,
@@ -179,6 +200,7 @@ export const personal_projects = [
     snapshots: [""],
     liveUrl: "https://ecom-admin-japangardencity.vercel.app",
     sourceUrl: "https://github.com/nahidnstu12/ecom-admin-japangardencity",
+    my_contributions: [],
   },
   {
     id: 5,
@@ -204,6 +226,7 @@ export const personal_projects = [
     snapshots: [""],
     liveUrl: "https://food-finding.vercel.app/",
     sourceUrl: "https://github.com/nahidnstu12/food-finding",
+    my_contributions: [],
   },
   {
     id: 6,
@@ -221,5 +244,6 @@ export const personal_projects = [
     snapshots: [""],
     liveUrl: "https://devblog-graphcms.vercel.app/",
     sourceUrl: "https://gitlab.com/nahidcste12/devblog-next",
+    my_contributions: [],
   },
 ];

@@ -15,9 +15,10 @@ function Particle() {
             },
           },
           line_linked: {
-            enable: false,
+            enable: true,
             opacity: 0.03,
           },
+
           move: {
             direction: "right",
             speed: 0.05,
