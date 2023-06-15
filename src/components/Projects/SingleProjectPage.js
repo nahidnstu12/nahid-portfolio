@@ -63,26 +63,28 @@ function SingleProjectPage() {
                     <p style={{ textAlign: "justify" }}>{item}</p>
                   ))}
                 </blockquote>
-                <div style={{ width: "185px", marginTop: "24px" }}>
+                <div style={{ marginTop: "24px" }}>
                   <Button
                     variant="primary"
                     href={data.liveUrl}
                     target="_blank"
-                    size={"sm"}
+                    size={"lg"}
                     style={{ marginRight: "10px" }}
                   >
                     <CgWebsite /> &nbsp;
                     {"Demo"}
                   </Button>
-                  <Button
-                    variant="primary"
-                    size={"sm"}
-                    style={{ marginLeft: "auto" }}
-                    href={data.sourceUrl}
-                    target="_blank"
-                  >
-                    <BsGithub /> &nbsp; GitHub
-                  </Button>
+                  {data.sourceUrl && (
+                    <Button
+                      variant="primary"
+                      size={"lg"}
+                      style={{ marginLeft: "auto" }}
+                      href={data.sourceUrl}
+                      target="_blank"
+                    >
+                      <BsGithub /> &nbsp; GitHub
+                    </Button>
+                  )}
                 </div>
               </Card.Body>
             </Card>

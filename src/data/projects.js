@@ -113,7 +113,7 @@ export const personal_projects = [
       "fakerJS",
     ],
     snapshots: [""],
-    liveUrl: "https://bookmark-bd.fly.dev/",
+    liveUrl: "https://bookmark-bd.render.com/",
     sourceUrl: "https://github.com/fahimfaisaal/bookmark",
     my_contributions: [
       "Setup Global State: I implemented global state management throughout the project using Redux Toolkit (RTK) and utilized RTK Query to handle all possible endpoints efficiently.\n",
