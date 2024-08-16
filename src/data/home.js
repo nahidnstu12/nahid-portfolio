@@ -19,6 +19,7 @@ import {
   SiTypescript,
   SiVercel,
   SiVisualstudiocode,
+  SiNestjs
 } from "react-icons/si";
 
 export const typeString = [
@@ -69,6 +70,12 @@ export const techStack = [
     id: 10,
     title: "express",
     icon: <SiExpress />,
+    active: true,
+  },
+  {
+    id: 10,
+    title: "NestJS",
+    icon: <SiNestjs />,
     active: true,
   },
   {

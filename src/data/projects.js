@@ -24,7 +24,7 @@ export const office_projects = [
       "Go",
     ],
     snapshots: [""],
-    liveUrl: "https://dev-platform.futurenation.gov.bd/",
+    liveUrl: "https://platform.futurenation.gov.bd/",
     my_contributions: [
       "As a frontend developer, I am working on a complex course feature that includes three types: Online, Live, and Imported. I focus on the admin part, where I create and maintain course content, design course modules and lessons, and establish a content library. Online courses involve modules, lessons, assignments, exams, and interactive elements such as audio/video-based quizzes.\n",
       "For the live course feature, I create courses and schedule class times by assigning providers. Admin approval is required to publish the course. Challenges arise due to server capacity limitations, prompting the implementation of a conflict resolution system for scheduling conflicts.\n",
@@ -58,7 +58,7 @@ export const office_projects = [
       "Kafka",
     ],
     snapshots: [""],
-    liveUrl: "https://nise.dev.niseee.gov.bd/",
+    liveUrl: "https://nise.gov.bd/",
     my_contributions: [
       "As a junior frontend developer, I implemented an apprenticeship module for a youth scholarship program. This module allows young individuals to apply for the program, and upon completion, they receive a certificate and financial benefits.\n",
       "Another feature I developed is multiple enrollment, which facilitates the seamless switching between different course batches. The system automatically handles the varying payment structures and batch availability across different sectors.\n",
@@ -70,7 +70,7 @@ export const office_projects = [
     title: "E-toss",
     slug: "etoss-bd",
     development: "PromoteUP",
-    active: true,
+    active: false,
     description: [
       "The clothing brand is an online marketplace that operates on a multivendor system, allowing different vendors to sell their products through the platform. The platform caters to both wholesale and reseller customers, with prices varying based on the type of customer.",
       "This system to provide end-to-end platform for small businesses to manage their operations online.This offers selling products, an inventory management system, a point-of-sale system, digital payments, delivery system and logistics services for order fulfillment. ",
@@ -86,6 +86,39 @@ export const office_projects = [
       "As a frontend developer, I embarked on my first professional freelancing project with a team of three members. My primary responsibility was designing components for the product details page. This page allowed buyers to make wholesale or small-scale purchases, with the total price varying accordingly.\n",
       "I also implemented standard features such as adding products to the cart and marking them as favorites, ensuring a seamless user experience.\n",
       "In addition to component design, I undertook the task of implementing the overall theme for the website. This involved converting the HTML template to Laravel Blade, ensuring consistency and functionality throughout the site.",
+    ],
+  },
+  {
+    id: 4,
+    title: "LMMPP",
+    slug: "lmmpp",
+    development: "Softbdltd",
+    active: true,
+    description: [
+      "Designed and constructed an engaging hub highlighting skills, job opportunities, and entrepreneurship prospects for the Cox's Bazar area, fostering skill enhancement and resourcefulness",
+      "Developed a streamlined data entry system for NGOs (such as Brac, ILO, UNDP), enabling efficient activity recording and comprehensive report generation. Offers high-level overviews for investors to assess progress toward their target goals The registered employable youths are able to access information on AI based career guidance, skills trainings, job forecast, apprenticeship opportunities, business and entrepreneurship guidance, migration suggestions, etc.",
+        "Conceptualized and developed a comprehensive landing page from scratch, along with visually appealing charts, large forms, maps, sliders, stepper react components, and various UI features.",
+        "Implemented a streamlined two-way approval process in data entry to enhance data management flow, ensuring precision and accountability. The system involves data entry at various frequencies, verified by the NGO's data approval head and coordinator, ensuring authenticated inputs."
+    ],
+    short_description:
+        "Designed and constructed an engaging hub highlighting skills, job opportunities, and entrepreneurship prospects for the Cox's Bazar area, fostering skill enhancement and resourcefulness",
+    techstack: [
+      "NextJS",
+      "Laravel",
+      "Node",
+      "MySQL",
+      "MongoDB",
+      "RabbitMQ",
+      "AI",
+      "Kafka",
+    ],
+    snapshots: [""],
+    liveUrl: "https://isec.gov.bd/",
+    my_contributions: [
+        "I am leading this project as frontend development side.",
+      "Developed a streamlined data entry system for NGOs (such as Brac, ILO, UNDP), enabling efficient activity recording and comprehensive report generation. Offers high-level overviews for investors to assess progress toward their target goals The registered employable youths are able to access information on AI based career guidance, skills trainings, job forecast, apprenticeship opportunities, business and entrepreneurship guidance, migration suggestions, etc.",
+      "Implemented a streamlined two-way approval process in data entry to enhance data management flow, ensuring precision and accountability. The system involves data entry at various frequencies, verified by the NGO's data approval head and coordinator, ensuring authenticated inputs.",
+      "Additionally, I implemented a custom youth feed that combines job and course listings, providing a curated mix of employment opportunities and educational offerings for the target audience.",
     ],
   },
 ];

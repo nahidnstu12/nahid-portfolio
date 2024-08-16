@@ -45,7 +45,7 @@ const PortfolioLinks = () => {
         <li className="about-activity" style={{ marginTop: "20px" }}>
           <ImPointRight style={{ color: "#fff" }} />{" "}
           <Link
-            to={"https://leetcode.com/nahid_dev19/"}
+            to={"https://leetcode.com/u/nahid-dev/"}
             style={{ marginLeft: "10px", cursor: "pointer", color: "#fff" }}
             target="_blank"
           >
