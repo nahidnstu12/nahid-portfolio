@@ -18,7 +18,6 @@ import {
   SiPostman,
   SiTypescript,
   SiVercel,
-  SiVisualstudiocode,
   SiNestjs
 } from "react-icons/si";
 
@@ -108,7 +107,7 @@ export const toolsStack = [
   {
     id: 2,
     title: "vscode",
-    icon: <SiVisualstudiocode />,
+    // icon: <SiVisualstudiocode />,
     active: true,
   },
   {

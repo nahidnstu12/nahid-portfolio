@@ -9,26 +9,26 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-	metadataBase: new URL("https://new-portfolio-psi-bice.vercel.app"),
+	metadataBase: new URL("https://nahid-portfolio.vercel.app"),
 	title: {
-		default: "Nishat Mazumder - Full Stack Web Developer",
-		template: "%s | Nishat Mazumder",
+		default: "Mazharul Islam - Full Stack Web Developer",
+		template: "%s | Mazharul Islam",
 	},
 	description: "Full Stack Web Developer specializing in Next.js, Laravel, and React. I build enterprise-grade applications with modern technologies and clean, scalable code.",
 	keywords: ["Full Stack Developer", "Next.js", "Laravel", "React", "TypeScript", "Web Development", "Frontend", "Backend", "PostgreSQL", "MySQL", "Prisma ORM", "Tailwind CSS", "JavaScript", "PHP", "Bangladesh Developer", "Dhaka Developer"],
-	authors: [{ name: "Nishat Mazumder" }],
-	creator: "Nishat Mazumder",
+	authors: [{ name: "Mazharul Islam" }],
+	creator: "Mazharul Islam",
 	openGraph: {
 		type: "website",
 		locale: "en_US",
-		url: "https://new-portfolio-psi-bice.vercel.app",
-		title: "Nishat Mazumder - Full Stack Web Developer",
+		url: "https://nahid-portfolio.vercel.app",
+		title: "Mazharul Islam - Full Stack Web Developer",
 		description: "Full Stack Web Developer specializing in Next.js, Laravel, and React. I build enterprise-grade applications with modern technologies and clean, scalable code.",
-		siteName: "Nishat Mazumder Portfolio",
+		siteName: "Mazharul Islam Portfolio",
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Nishat Mazumder - Full Stack Web Developer",
+		title: "Mazharul Islam - Full Stack Web Developer",
 		description: "Full Stack Web Developer specializing in Next.js, Laravel, and React. I build enterprise-grade applications with modern technologies and clean, scalable code.",
 	},
 	robots: {

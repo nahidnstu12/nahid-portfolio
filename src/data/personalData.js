@@ -266,150 +266,148 @@ export const projects = [
     image: "/api/placeholder/600/400"
   },
   {
-    id: 1,
-    title: "DIGITAL LAND RECORD AND MANAGEMENT SYSTEM (DLRMS)",
+    id: 4,
+    title: "FUTURE NATION",
     type: "Government Project",
     status: "Live",
     duration: "April 2024 - Dec 2024",
     liveUrl: "#",
     description: [
-      "Worked on a large-scale government project aimed at digitizing land records and improving administrative workflows.",
-      "Developed features for khatian entry from the citizen panel and streamlined the processing workflow for DLRMS office administration.",
-      "Created a khatian correction system, enabling citizens to correct their land records in an organized and efficient manner.",
-      "Designed and maintained a scalable backend API using Nest.js, TypeORM, and Oracle to handle millions of user land records."
+      "Developed interactive e-learning platform: Built engaging course modules with content provider tools and integrated BigBlueButton for live class and live class routine, collaborative learning experiences.",
+      "Enhanced skill development: Implemented SCORM compliance for uploading interactive project modules, enabling deeper dives into practical applications.",
+      "Streamlined job search process: Designed and developed a seamless job application platform with integrated assessments, interview scheduling, and shortlisting processes.",
+      "Optimized user journeys: Created a step-by-step onboarding system for young users, facilitating registration, profile completion, and access to courses and job applications."
     ],
     features: [
-      "Large-scale government digitization",
-      "Khatian entry and correction system",
-      "Scalable backend for millions of records",
-      "Streamlined administrative workflows"
+      "Interactive e-learning platform",
+      "SCORM compliance integration",
+      "Job application and assessment system",
+      "Step-by-step user onboarding",
+      "BigBlueButton live class integration"
     ],
     techStack: ["React", "NextJs", "TypeScript", "MUI", "NestJS", "Oracle", "TypeORM", "Redis", "RabbitMQ"],
     category: "Government",
     image: "/api/placeholder/600/400"
   },
   {
-    id: 2,
-    title: "RADIUS DIRECTORY",
+    id: 5,
+    title: "School",
     type: "SaaS Product",
     status: "Development",
     duration: "Jan 2025 - Current",
     liveUrl: "#",
     description: [
-      "Core contributor to one of RadiusTheme's top-selling SaaS products designed for dynamic directory and website creation.",
-      "Developed a fully custom drag-and-drop Page Builder module, inspired by Elementor, with container-based layout logic and real-time styling.",
-      "Implemented modular widget architecture, enabling scalable, reusable UI components.",
-      "Built an interactive Menu Builder system, optimized beyond WordPress models for performance and extensibility.",
-      "Integrated Next.js 15 App Router, Zustand, and shadcn/ui for dynamic rendering, layout control, and component styling.",
-      "Contributed to core UX features like container nesting, layout switching, flexbox controls, and dynamic background configuration."
+      "Developed comprehensive school management system with integrated student information, attendance tracking, and academic performance monitoring.",
+      "Built parent-teacher communication portal with real-time notifications, grade reporting, and assignment tracking capabilities.",
+      "Implemented fee management system with automated billing, payment processing, and financial reporting for educational institutions.",
+      "Created timetable management and resource allocation system for optimized class scheduling and facility utilization.",
+      "Designed role-based access control for administrators, teachers, students, and parents with customized dashboard experiences."
     ],
     features: [
-      "Custom drag-and-drop Page Builder",
-      "Modular widget architecture",
-      "Interactive Menu Builder",
-      "Real-time styling system",
-      "Container-based layout logic"
+      "Student information management",
+      "Parent-teacher communication portal",
+      "Fee management and billing",
+      "Timetable and resource allocation",
+      "Role-based access control"
     ],
     techStack: ["Next.js 15", "React", "Node.js", "Prisma", "PostgreSQL", "Zustand", "Tailwind CSS", "shadcn/ui", "TypeScript"],
     category: "SaaS",
     image: "/api/placeholder/600/400"
   },
   {
-    id: 3,
-    title: "NATIONAL PORTAL FRAMEWORK (NPF)",
+    id: 6,
+    title: "Team Docs",
     type: "Government Project",
     status: "Development",
     duration: "Dec 2023 – Dec 2024",
     liveUrl: "#",
     description: [
-      "Built a dynamic theme customization system powering 54,000+ Bangladeshi government websites under the National Portal Framework.",
-      "Designed a flexible theme engine using Express + EJS with React-based composition to render dynamic pages from XML configurations.",
-      "Created a dependency-free drag-and-drop system using Shadow DOM, supporting custom raw widgets and dynamic content rendering.",
-      "Built reusable tools like Minioloader, Fileloader, and Mongoloader to manage resource loading across admin and theme layers.",
-      "Developed a feature-rich data table component in EJS, enabling high-performance, theme-aware content management.",
-      "Integrated backend with MongoDB and MinIO, enabling reliable data handling and asset delivery."
+      "Developed collaborative documentation platform for government teams with real-time editing, version control, and approval workflows.",
+      "Built document management system with hierarchical organization, advanced search capabilities, and secure access controls.",
+      "Implemented team collaboration features including comments, mentions, task assignments, and notification systems.",
+      "Created template library with standardized government document formats and automated compliance checking.",
+      "Designed audit trail system for document changes, approvals, and access logs to ensure transparency and accountability."
     ],
     features: [
-      "Powers 54,000+ government websites",
-      "Dynamic theme customization",
-      "Shadow DOM drag-and-drop",
-      "XML-based page rendering",
-      "Reusable resource loaders"
+      "Real-time collaborative editing",
+      "Document management and organization",
+      "Team collaboration tools",
+      "Government template library",
+      "Audit trail and compliance"
     ],
     techStack: ["Express.js", "EJS", "React", "Node.js", "Shadow DOM", "XML", "MongoDB", "MinIO", "NestJS", "Next.js", "TypeScript"],
     category: "Government",
     image: "/api/placeholder/600/400"
   },
   {
-    id: 1,
-    title: "DIGITAL LAND RECORD AND MANAGEMENT SYSTEM (DLRMS)",
+    id: 7,
+    title: "Ecom-Microservice",
     type: "Government Project",
     status: "Live",
     duration: "April 2024 - Dec 2024",
     liveUrl: "#",
     description: [
-      "Worked on a large-scale government project aimed at digitizing land records and improving administrative workflows.",
-      "Developed features for khatian entry from the citizen panel and streamlined the processing workflow for DLRMS office administration.",
-      "Created a khatian correction system, enabling citizens to correct their land records in an organized and efficient manner.",
-      "Designed and maintained a scalable backend API using Nest.js, TypeORM, and Oracle to handle millions of user land records."
+      "Architected and developed scalable microservices-based e-commerce platform with distributed system architecture and inter-service communication.",
+      "Built independent services for user management, product catalog, order processing, payment gateway, and inventory management.",
+      "Implemented event-driven architecture with message queues for reliable service communication and data consistency.",
+      "Designed API gateway with load balancing, rate limiting, and security middleware for unified service access.",
+      "Integrated monitoring, logging, and health check systems for comprehensive system observability and maintenance."
     ],
     features: [
-      "Large-scale government digitization",
-      "Khatian entry and correction system",
-      "Scalable backend for millions of records",
-      "Streamlined administrative workflows"
+      "Microservices architecture",
+      "Event-driven communication",
+      "API gateway with load balancing",
+      "Distributed system design",
+      "Comprehensive monitoring"
     ],
     techStack: ["React", "NextJs", "TypeScript", "MUI", "NestJS", "Oracle", "TypeORM", "Redis", "RabbitMQ"],
     category: "Government",
     image: "/api/placeholder/600/400"
   },
   {
-    id: 2,
-    title: "RADIUS DIRECTORY",
+    id: 8,
+    title: "NISE",
     type: "SaaS Product",
     status: "Development",
     duration: "Jan 2025 - Current",
     liveUrl: "#",
     description: [
-      "Core contributor to one of RadiusTheme's top-selling SaaS products designed for dynamic directory and website creation.",
-      "Developed a fully custom drag-and-drop Page Builder module, inspired by Elementor, with container-based layout logic and real-time styling.",
-      "Implemented modular widget architecture, enabling scalable, reusable UI components.",
-      "Built an interactive Menu Builder system, optimized beyond WordPress models for performance and extensibility.",
-      "Integrated Next.js 15 App Router, Zustand, and shadcn/ui for dynamic rendering, layout control, and component styling.",
-      "Contributed to core UX features like container nesting, layout switching, flexbox controls, and dynamic background configuration."
+      "Developed apprenticeship module for a youth scholarship program, provided different topics on skills, enabling applications, and granting certificates and financial benefits upon completion.",
+      "Designed multiple enrollment feature for seamless switching between course batches, handling payment structures and availability across sectors.",
+      "Working on onboarding NISE youth of our platform to the ILO-erpl platform via rpl assessment, significantly empowering our youth users.",
+      "Working on onboarding NASCIB & SMEF members to our system and providing personalized dashboards for task management."
     ],
     features: [
-      "Custom drag-and-drop Page Builder",
-      "Modular widget architecture",
-      "Interactive Menu Builder",
-      "Real-time styling system",
-      "Container-based layout logic"
+      "Youth scholarship program",
+      "Multiple enrollment system",
+      "ILO-erpl platform integration",
+      "NASCIB & SMEF member onboarding",
+      "Personalized task dashboards"
     ],
     techStack: ["Next.js 15", "React", "Node.js", "Prisma", "PostgreSQL", "Zustand", "Tailwind CSS", "shadcn/ui", "TypeScript"],
     category: "SaaS",
     image: "/api/placeholder/600/400"
   },
   {
-    id: 3,
-    title: "NATIONAL PORTAL FRAMEWORK (NPF)",
+    id: 9,
+    title: "Scholars (SEM)",
     type: "Government Project",
     status: "Development",
     duration: "Dec 2023 – Dec 2024",
     liveUrl: "#",
     description: [
-      "Built a dynamic theme customization system powering 54,000+ Bangladeshi government websites under the National Portal Framework.",
-      "Designed a flexible theme engine using Express + EJS with React-based composition to render dynamic pages from XML configurations.",
-      "Created a dependency-free drag-and-drop system using Shadow DOM, supporting custom raw widgets and dynamic content rendering.",
-      "Built reusable tools like Minioloader, Fileloader, and Mongoloader to manage resource loading across admin and theme layers.",
-      "Developed a feature-rich data table component in EJS, enabling high-performance, theme-aware content management.",
-      "Integrated backend with MongoDB and MinIO, enabling reliable data handling and asset delivery."
+      "Developed comprehensive scholarship management system for government educational programs with application processing and evaluation workflows.",
+      "Built student eligibility verification system with automated document validation, academic record checking, and merit-based scoring.",
+      "Implemented scholarship distribution tracking with payment processing, disbursement schedules, and financial reporting capabilities.",
+      "Created evaluation dashboard for review committees with scoring rubrics, comparative analysis, and decision-making tools.",
+      "Designed student portal for application submission, status tracking, and communication with scholarship administrators."
     ],
     features: [
-      "Powers 54,000+ government websites",
-      "Dynamic theme customization",
-      "Shadow DOM drag-and-drop",
-      "XML-based page rendering",
-      "Reusable resource loaders"
+      "Scholarship application processing",
+      "Student eligibility verification",
+      "Payment and disbursement tracking",
+      "Evaluation and scoring system",
+      "Student portal and communication"
     ],
     techStack: ["Express.js", "EJS", "React", "Node.js", "Shadow DOM", "XML", "MongoDB", "MinIO", "NestJS", "Next.js", "TypeScript"],
     category: "Government",
