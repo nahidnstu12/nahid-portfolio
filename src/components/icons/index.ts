@@ -8,3 +8,7 @@ export { LinkedInIcon } from './LinkedIn';
 export { WhatsAppIcon } from './WhatsApp';
 export { MessengerIcon } from './Messenger';
 export { GmailIcon } from './Gmail';
+export { DocumentIcon } from './Document';
+export { ChevronLeftIcon } from './ChevronLeft';
+export { ChevronRightIcon } from './ChevronRight';
+export { XIcon } from './X';

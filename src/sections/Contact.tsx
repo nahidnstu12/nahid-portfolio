@@ -52,7 +52,7 @@ export const ContactSection = () => {
 						<FadeIn delay={0.2}>
 							<Card variant="glass" className="p-8 h-[750px]">
 								<form ref={formRef} action={handleSubmit} className="space-y-6 h-40 flex flex-col">
-									<div className="flex-grow space-y-6">
+									<div className="grow space-y-6">
 										<div>
 											<label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
 												Name
@@ -125,9 +125,9 @@ export const ContactSection = () => {
 
 						{/* Contact Info */}
 						<div className="space-y-8 h-full flex flex-col">
-							<FadeIn delay={0.4} className="flex-grow">
+							<FadeIn delay={0.4} className="grow">
 								<Card variant="glass" className="p-8 h-full flex flex-col">
-									<div className="flex-grow">
+									<div className="grow">
 										<h3 className="heading-3 mb-6">Get in Touch</h3>
 										<div className="space-y-6 mb-8">
 											<div>

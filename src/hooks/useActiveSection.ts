@@ -7,7 +7,7 @@ export const useActiveSection = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['home', 'about', 'projects', 'contact'];
+      const sections = ['home', 'about', 'experience', 'education', 'projects', 'skills', 'contact'];
       const scrollPosition = window.scrollY + 100; // Offset for header
 
       for (const section of sections) {

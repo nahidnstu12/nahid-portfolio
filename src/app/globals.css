@@ -1,63 +1,27 @@
-@import "tailwindcss";
-
-@theme {
-  --color-gray-900: 15 23 42;
-  --color-gray-800: 30 41 59;
-  --color-gray-700: 51 65 85;
-  --color-gray-600: 71 85 105;
-  --color-gray-500: 100 116 139;
-  --color-gray-400: 148 163 184;
-  --color-gray-300: 203 213 225;
-  --color-gray-200: 226 232 240;
-  --color-gray-100: 241 245 249;
-  --color-gray-50: 248 250 252;
-
-  --color-emerald-300: 110 231 183;
-  --color-emerald-400: 52 211 153;
-  --color-emerald-500: 16 185 129;
-
-  --color-sky-300: 125 211 252;
-  --color-sky-400: 56 189 248;
-  --color-sky-500: 14 165 233;
-
-  --font-sans: "Inter", system-ui, sans-serif;
-
-  --animate-fade-in: fadeIn 0.5s ease-in-out;
-  --animate-slide-up: slideUp 0.5s ease-out;
-  --animate-slide-down: slideDown 0.5s ease-out;
-  --animate-scale-in: scaleIn 0.3s ease-out;
-  --animate-bounce-slow: bounce 2s infinite;
-  --animate-spin-slow: spin 3s linear infinite;
-  --animate-pulse-slow: pulse 3s infinite;
-  --animate-move-left: moveLeft 1s linear infinite;
-}
-
-@keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
-}
-
-@keyframes slideUp {
-  0% { transform: translateY(20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slideDown {
-  0% { transform: translateY(-20px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes scaleIn {
-  0% { transform: scale(0.9); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-@keyframes moveLeft {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
+@import 'tailwindcss';
 
 @layer base {
+	:root {
+		/* --color-gray-900: 15 23 42;
+		--color-gray-800: 30 41 59;
+		--color-gray-700: 51 65 85;
+		--color-gray-600: 71 85 105;
+		--color-gray-500: 100 116 139;
+		--color-gray-400: 148 163 184;
+		--color-gray-300: 203 213 225;
+		--color-gray-200: 226 232 240;
+		--color-gray-100: 241 245 249;
+		--color-gray-50: 248 250 252; */
+
+		/* --color-emerald-300: 110 231 183;
+		--color-emerald-400: 52 211 153;
+		--color-emerald-500: 16 185 129; */
+
+		/* --color-sky-300: 125 211 252;
+		--color-sky-400: 56 189 248;
+		--color-sky-500: 14 165 233; */
+	}
+
 
 	* {
 		@apply border-gray-700;
@@ -73,6 +37,11 @@
 		font-feature-settings:
 			"rlig" 1,
 			"calt" 1;
+	}
+
+	/* Force dark theme by default */
+	html {
+		color-scheme: dark;
 	}
 
 	/* Custom scrollbar */
@@ -160,6 +129,10 @@
 		animation: float 6s ease-in-out infinite;
 	}
 
+	.animate-move-left {
+		animation: moveLeft 30s linear infinite;
+	}
+
 	@keyframes float {
 		0%,
 		100% {
@@ -167,6 +140,15 @@
 		}
 		50% {
 			transform: translateY(-20px);
+		}
+	}
+
+	@keyframes moveLeft {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
 		}
 	}
 

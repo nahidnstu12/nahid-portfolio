@@ -5,40 +5,38 @@ import Image from "next/image";
 import { Section } from "@/components/ui";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { otherImages } from "@/assets/images";
+import { skills } from "@/data/personalData.js";
 
-// Tech stack icons as simple blue gradient rectangles with text
-const TechIcon = ({ name }: { name: string }) => {
+// Category color mapping
+const categoryColors = {
+	languages: "from-yellow-400 to-yellow-600",
+	frameworks: "from-blue-400 to-blue-600", 
+	backend: "from-green-500 to-green-700",
+	tools: "from-purple-500 to-purple-700",
+	others: "from-pink-500 to-pink-700"
+};
+
+// Tech stack icons with proper icons and colors
+const TechIcon = ({ skill, categoryKey }: { skill: any; categoryKey: string }) => {
+	const Icon = skill.icon;
+	const colorClass = categoryColors[categoryKey as keyof typeof categoryColors] || "from-gray-500 to-gray-700";
+	
+	if (!Icon) {
+		return (
+			<div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${colorClass} flex items-center justify-center`}>
+				<span className="text-white text-xs font-bold">{skill.name.slice(0, 2).toUpperCase()}</span>
+			</div>
+		);
+	}
+	
 	return (
-		<div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
-			<span className="text-white text-xs font-bold">{name.slice(0, 2).toUpperCase()}</span>
+		<div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${colorClass} flex items-center justify-center`}>
+			<Icon className="w-4 h-4 text-white" />
 		</div>
 	);
 };
 
-// Toolbox items with tech stack
-const toolboxItems = [
-	{ title: "JavaScript" },
-	{ title: "TypeScript" },
-	{ title: "React" },
-	{ title: "Next.js" },
-	{ title: "NestJS" },
-	{ title: "PHP" },
-	{ title: "Laravel" },
-	{ title: "MySQL" },
-	{ title: "PostgreSQL" },
-	{ title: "Prisma ORM" },
-	{ title: "Tailwind CSS" },
-	{ title: "SASS" },
-	{ title: "Shadcn UI" },
-	{ title: "Zustand" },
-	{ title: "NextAuth.js" },
-	{ title: "Redis" },
-	{ title: "Docker" },
-	{ title: "Git" },
-	{ title: "Bun" },
-];
-
-const ToolboxItem = ({ item, index }: { item: (typeof toolboxItems)[0]; index: number }) => (
+const SkillItem = ({ skill, index, categoryKey }: { skill: any; index: number; categoryKey: string }) => (
 	<motion.div
 		className="inline-flex items-center gap-3 px-4 py-3 bg-gray-800/50 rounded-xl border border-gray-700/50 backdrop-blur-sm hover:border-emerald-500/30 hover:bg-emerald-500/5 transition-all duration-300"
 		initial={{ opacity: 0, scale: 0.8 }}
@@ -46,16 +44,32 @@ const ToolboxItem = ({ item, index }: { item: (typeof toolboxItems)[0]; index: n
 		viewport={{ once: true }}
 		transition={{ duration: 0.5, delay: index * 0.05 }}
 		whileHover={{ scale: 1.05, y: -3 }}>
-		<div className="text-blue-400">
-			<TechIcon name={item.title} />
+		<TechIcon skill={skill} categoryKey={categoryKey} />
+		<div className="flex flex-col">
+			<span className="text-white font-medium text-sm">{skill.name}</span>
+			<span className="text-emerald-400 text-xs">{skill.level}</span>
 		</div>
-		<span className="text-white font-medium text-sm bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">{item.title}</span>
 	</motion.div>
 );
 
-export const ToolboxSection = () => {
+const SkillCategory = ({ title, skills: categorySkills, categoryKey, delay }: { title: string; skills: any[]; categoryKey: string; delay: number }) => (
+	<FadeIn delay={delay}>
+		<div className="mb-12">
+			<h3 className="text-xl font-bold text-white mb-6 text-center">
+				<span className="gradient-text">{title}</span>
+			</h3>
+			<div className="flex flex-wrap justify-center gap-4">
+				{categorySkills.map((skill, index) => (
+					<SkillItem key={skill.name} skill={skill} index={index} categoryKey={categoryKey} />
+				))}
+			</div>
+		</div>
+	</FadeIn>
+);
+
+export const SkillsSection = () => {
 	return (
-		<Section className="relative overflow-hidden">
+		<Section id="skills" className="relative overflow-hidden">
 			{/* Background elements */}
 			<div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
@@ -96,25 +110,54 @@ export const ToolboxSection = () => {
 					<FadeIn>
 						<div className="text-center mb-16">
 							<h2 className="heading-2 mb-4">
-								My <span className="gradient-text">Toolbox</span>
+								Skills & <span className="gradient-text">Technologies</span>
 							</h2>
-							<p className="body-large text-gray-400 max-w-2xl mx-auto">Explore the technologies and tools I use to craft exceptional digital experiences.</p>
+							<p className="body-large text-gray-400 max-w-2xl mx-auto">
+								A comprehensive overview of my technical expertise across the full stack development spectrum.
+							</p>
 						</div>
 					</FadeIn>
 
-					{/* Toolbox Grid */}
-					<FadeIn delay={0.2}>
-						<div className="flex flex-wrap justify-center gap-4 max-w-5xl mx-auto">
-							{toolboxItems.map((item, index) => (
-								<ToolboxItem key={item.title} item={item} index={index} />
-							))}
-						</div>
-					</FadeIn>
+					{/* Skills Categories */}
+					<div className="max-w-6xl mx-auto">
+						<SkillCategory 
+							title="Languages & Core" 
+							skills={skills.languages} 
+							categoryKey="languages"
+							delay={0.2}
+						/>
+						<SkillCategory 
+							title="Frameworks & Libraries" 
+							skills={skills.frameworks} 
+							categoryKey="frameworks"
+							delay={0.3}
+						/>
+						<SkillCategory 
+							title="Backend & Databases" 
+							skills={skills.backend} 
+							categoryKey="backend"
+							delay={0.4}
+						/>
+						<SkillCategory 
+							title="Tools & DevOps" 
+							skills={skills.tools} 
+							categoryKey="tools"
+							delay={0.5}
+						/>
+						<SkillCategory 
+							title="Other Technologies" 
+							skills={skills.others} 
+							categoryKey="others"
+							delay={0.6}
+						/>
+					</div>
 
 					{/* Additional info */}
-					<FadeIn delay={0.4}>
-						<div className="text-center mt-12">
-							<p className="text-gray-400 text-sm">And many more tools and technologies that I continue to explore and master.</p>
+					<FadeIn delay={0.7}>
+						<div className="text-center mt-16">
+							<p className="text-gray-400 text-sm">
+								Continuously learning and exploring new technologies to stay at the forefront of modern development.
+							</p>
 						</div>
 					</FadeIn>
 				</StaggerContainer>

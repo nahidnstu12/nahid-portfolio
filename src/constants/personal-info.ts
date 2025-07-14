@@ -1,55 +1,35 @@
-// Personal Information Constants
-// Update this file with your own information to customize the portfolio
+// Import from the new data structure
+import { personalInfo, techStack as techStackData, workExperience as workExperienceData } from '../data/personalData.js';
 
+// Personal Information Constants - Now using actual resume data
 export const PERSONAL_INFO = {
 	// Basic Information
-	name: "Nishat Mazumder",
-	title: "Full Stack Web Developer",
+	name: personalInfo.name,
+	title: personalInfo.title,
 
 	// Profile/Bio
-	profile: `Full Stack Web Developer specializing in Next.js, Laravel, and React. I build enterprise-grade applications with modern technologies and clean, scalable code.`,
+	profile: personalInfo.careerObjective,
 
 	// Contact Information
-	email: "nishatislam3108@gmail.com",
-	phone: "+880 1641102404",
-	location: "Rampura, Dhaka, Bangladesh",
-	availability: "Available for freelance projects",
+	email: personalInfo.contact.email,
+	phone: personalInfo.contact.phone,
+	location: personalInfo.contact.location,
+	availability: personalInfo.contact.availability,
 
 	// Social Links
-	socialLinks: {
-		linkedin: "https://www.linkedin.com/in/nishat-mazumder/",
-		github: "https://github.com/nishatislam04",
-		whatsapp: "https://wa.me/8801641102404",
-		messenger: "https://m.me/nishat.mazumder.004",
-	},
+	socialLinks: personalInfo.socialLinks,
 
 	// Work Experience
-	workExperience: [
-		{
-			company: "SOFTBD LTD",
-			position: "Junior Software Engineer",
-			duration: "JULY 2024 - CURRENT",
-			description: [
-				"Developed a comprehensive organization management system with role-based permissions (Super, Admin, Member), subscription management, and automated payment tracking with penalty calculations.",
-				"Contributed to Jukto News platform development, implementing real-time news aggregation, content management, and interactive UI components with responsive design.",
-				"Applied modern technologies including Laravel, React, MySQL, and REST APIs while collaborating with team members on full-stack web development projects.",
-			],
-		},
-	],
+	workExperience: workExperienceData,
 
-	// Technical Skills
-	skills: ["JavaScript", "TypeScript", "React", "Next.js", "PHP", "Laravel", "Vue.js", "MySQL", "PostgreSQL", "Prisma ORM", "NextAuth.js", "Zustand", "Docker", "Tailwind CSS", "Shadcn UI", "TipTap", "Framer Motion", "Git", "Bun"],
+	// Technical Skills (extract from the new skills structure)
+	skills: techStackData.map(tech => tech.name),
 
-	// Tech Stack for About Section (subset of main skills)
-	techStack: ["Next.js", "Laravel", "React", "PostgreSQL", "Prisma ORM", "Docker"],
+	// Tech Stack for About Section
+	techStack: techStackData.map(tech => tech.name),
 
 	// Achievements/Stats
-	stats: {
-		projectsCompleted: "10+",
-		experience: "1+",
-		technologies: "20+",
-		clientSatisfaction: "100%",
-	},
+	stats: personalInfo.stats,
 };
 
 // Export individual items for easier access

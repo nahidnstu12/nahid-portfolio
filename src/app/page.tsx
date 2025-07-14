@@ -1,9 +1,10 @@
 import { Header } from '@/sections/Header';
 import { HeroSection } from '@/sections/Hero';
 import { AboutSection } from '@/sections/About';
-import { ToolboxSection } from '@/sections/Toolbox';
+import { Experience } from '@/sections/Experience';
+import { Education } from '@/sections/Education';
+import { SkillsSection } from '@/sections/Toolbox';
 import { ProjectsSection } from '@/sections/Projects';
-// import { TestimonialsSection } from '@/sections/Testimonials';
 import { TapeSection } from '@/sections/Tape';
 import { ContactSection } from '@/sections/Contact';
 import { CTASection } from '@/sections/CTA';
@@ -18,10 +19,11 @@ export default function Home() {
       <main id="main-content" className="min-h-screen">
         <HeroSection />
         <AboutSection />
-        <ToolboxSection />
+        <Experience />
+        <Education />
+        <SkillsSection />
         <TapeSection />
         <ProjectsSection />
-        {/* <TestimonialsSection /> */}
         <ContactSection />
         <CTASection />
       </main>

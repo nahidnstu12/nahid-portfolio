@@ -4,10 +4,10 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { Section, Button } from '@/components/ui';
 import { FadeIn, StaggerContainer } from '@/components/animations';
-import { ArrowDownIcon, ArrowUpRightIcon, StarIcon } from '@/components/icons';
+import { ArrowDownIcon, ArrowUpRightIcon, StarIcon, DocumentIcon } from '@/components/icons';
 import { memojiImages, otherImages } from '@/assets/images';
 import { scrollToElement } from '@/utils';
-import { PERSONAL_INFO } from '@/constants/personal-info';
+import { personalInfo } from '@/data/personalData.js';
 
 // Star component for background decoration
 const Star = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
@@ -39,6 +39,10 @@ export const HeroSection = () => {
     scrollToElement('contact');
   };
 
+  const handleOpenResume = () => {
+    window.open('https://drive.google.com/file/d/1bI8XDpcuSbxJNSzzWLaH63R5mIrQphYB/view?usp=sharing', '_blank');
+  };
+
   return (
     <Section id="home" className="min-h-screen flex items-center relative overflow-hidden">
       {/* Background grain texture */}
@@ -55,7 +59,7 @@ export const HeroSection = () => {
       {/* Solar/Space themed background */}
       <div className="absolute inset-0">
         {/* Main gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/10 to-indigo-900/20" />
+        <div className="absolute inset-0 bg-linear-to-br from-purple-900/20 via-blue-900/10 to-indigo-900/20" />
 
         {/* Solar glow effect */}
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-radial from-yellow-400/10 via-orange-500/5 to-transparent rounded-full blur-3xl" />
@@ -100,7 +104,7 @@ export const HeroSection = () => {
               {/* Solar glow behind avatar */}
               <div className="absolute inset-0 bg-gradient-radial from-yellow-400/20 via-orange-500/10 to-transparent rounded-full blur-xl scale-150" />
 
-              <div className="relative w-full h-full bg-gradient-to-br from-yellow-400/10 to-orange-500/10 rounded-full border border-yellow-400/20">
+              <div className="relative w-full h-full bg-linear-to-br from-yellow-400/10 to-orange-500/10 rounded-full border border-yellow-400/20">
                 <Image
                   src={memojiImages.computer}
                   alt="Avatar"
@@ -112,7 +116,7 @@ export const HeroSection = () => {
 
               {/* Orbiting elements */}
               <motion.div
-                className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full"
+                className="absolute -top-2 -right-2 w-6 h-6 bg-linear-to-br from-yellow-400 to-orange-500 rounded-full"
                 animate={{
                   rotate: 360,
                 }}
@@ -123,7 +127,7 @@ export const HeroSection = () => {
                 }}
               />
               <motion.div
-                className="absolute -bottom-2 -left-2 w-4 h-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full"
+                className="absolute -bottom-2 -left-2 w-4 h-4 bg-linear-to-br from-blue-400 to-purple-500 rounded-full"
                 animate={{
                   rotate: -360,
                 }}
@@ -141,15 +145,22 @@ export const HeroSection = () => {
             <h1 className="heading-1 mb-6">
               <span className="block text-white">Hi, I'm</span>
               <span className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
-                {PERSONAL_INFO.name}
+                {personalInfo.name}
               </span>
             </h1>
           </FadeIn>
 
           {/* Subtitle */}
+          <FadeIn delay={0.5}>
+            <h2 className="text-2xl md:text-3xl font-bold text-emerald-400 mb-6">
+              {personalInfo.title}
+            </h2>
+          </FadeIn>
+
+          {/* Description */}
           <FadeIn delay={0.6}>
             <p className="body-large text-gray-300 mb-8 max-w-2xl mx-auto">
-              {PERSONAL_INFO.profile}
+              {personalInfo.careerObjective.substring(0, 180)}...
             </p>
           </FadeIn>
 
@@ -158,7 +169,7 @@ export const HeroSection = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
               <Button
                 onClick={handleScrollToProjects}
-                className="group bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg shadow-yellow-500/25"
+                className="group bg-linear-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white shadow-lg shadow-yellow-500/25"
               >
                 <StarIcon className="w-4 h-4" />
                 View My Work
@@ -173,6 +184,16 @@ export const HeroSection = () => {
                 Let's Connect
                 <ArrowUpRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </Button>
+
+              <Button
+                variant="secondary"
+                onClick={handleOpenResume}
+                className="group border-emerald-400/30 hover:border-emerald-400/50 hover:bg-emerald-400/10"
+              >
+                <DocumentIcon className="w-4 h-4" />
+                View Resume
+                <ArrowUpRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </Button>
             </div>
           </FadeIn>
 
@@ -182,7 +203,7 @@ export const HeroSection = () => {
 
       {/* Additional decorative planets/celestial bodies */}
       <motion.div
-        className="absolute top-1/6 left-1/12 w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full opacity-60"
+        className="absolute top-1/6 left-1/12 w-8 h-8 bg-linear-to-br from-purple-400 to-pink-500 rounded-full opacity-60"
         animate={{
           y: [0, -20, 0],
           x: [0, 10, 0],
@@ -194,7 +215,7 @@ export const HeroSection = () => {
         }}
       />
       <motion.div
-        className="absolute bottom-1/6 right-1/12 w-6 h-6 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full opacity-50"
+        className="absolute bottom-1/6 right-1/12 w-6 h-6 bg-linear-to-br from-cyan-400 to-blue-500 rounded-full opacity-50"
         animate={{
           y: [0, 15, 0],
           x: [0, -8, 0],
@@ -207,7 +228,7 @@ export const HeroSection = () => {
         }}
       />
       <motion.div
-        className="absolute top-2/3 left-1/6 w-4 h-4 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full opacity-40"
+        className="absolute top-2/3 left-1/6 w-4 h-4 bg-linear-to-br from-green-400 to-emerald-500 rounded-full opacity-40"
         animate={{
           y: [0, -12, 0],
           scale: [1, 1.2, 1],

@@ -6,7 +6,10 @@ import { PERSONAL_INFO } from "./personal-info";
 export const NAV_ITEMS: NavItem[] = [
 	{ name: "Home", href: "#home" },
 	{ name: "About", href: "#about" },
+	{ name: "Experience", href: "#experience" },
+	{ name: "Education", href: "#education" },
 	{ name: "Projects", href: "#projects" },
+	{ name: "Skills", href: "#skills" },
 	{ name: "Contact", href: "#contact" },
 ];
 
@@ -132,14 +135,14 @@ export const SOCIAL_LINKS: SocialLink[] = [
 		icon: "linkedin",
 	},
 	{
-		name: "WhatsApp",
-		url: PERSONAL_INFO.socialLinks.whatsapp,
-		icon: "whatsapp",
+		name: "GitHub",
+		url: PERSONAL_INFO.socialLinks.github,
+		icon: "github",
 	},
 	{
-		name: "Messenger",
-		url: PERSONAL_INFO.socialLinks.messenger,
-		icon: "messenger",
+		name: "Portfolio",
+		url: PERSONAL_INFO.socialLinks.portfolio,
+		icon: "portfolio",
 	},
 ];
 

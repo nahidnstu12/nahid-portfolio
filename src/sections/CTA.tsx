@@ -22,7 +22,7 @@ export const CTASection = () => {
 			</div>
 
 			{/* Gradient background */}
-			<div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-sky-500/10" />
+			<div className="absolute inset-0 bg-linear-to-br from-emerald-500/10 via-transparent to-sky-500/10" />
 
 			{/* Floating elements */}
 			<div className="absolute inset-0">
@@ -104,7 +104,7 @@ export const CTASection = () => {
 							<motion.div className="text-center group" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
 								<div className="relative">
 									<div className="text-4xl md:text-5xl font-black text-white mb-2 block drop-shadow-2xl">{PERSONAL_INFO.stats.projectsCompleted}</div>
-									<motion.div className="absolute -inset-2 bg-gradient-to-r from-emerald-500/20 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
+									<motion.div className="absolute -inset-2 bg-linear-to-r from-emerald-500/20 to-blue-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
 								</div>
 								<div className="text-gray-300 text-sm font-medium">Projects Completed</div>
 							</motion.div>
@@ -112,7 +112,7 @@ export const CTASection = () => {
 							<motion.div className="text-center group" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
 								<div className="relative">
 									<div className="text-4xl md:text-5xl font-black text-white mb-2 block drop-shadow-2xl">{PERSONAL_INFO.stats.technologies}</div>
-									<motion.div className="absolute -inset-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
+									<motion.div className="absolute -inset-2 bg-linear-to-r from-blue-500/20 to-purple-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
 								</div>
 								<div className="text-gray-300 text-sm font-medium">Technologies</div>
 							</motion.div>
@@ -120,7 +120,7 @@ export const CTASection = () => {
 							<motion.div className="text-center group" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
 								<div className="relative">
 									<div className="text-4xl md:text-5xl font-black text-white mb-2 block drop-shadow-2xl">{PERSONAL_INFO.stats.experience}</div>
-									<motion.div className="absolute -inset-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
+									<motion.div className="absolute -inset-2 bg-linear-to-r from-purple-500/20 to-pink-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
 								</div>
 								<div className="text-gray-300 text-sm font-medium">Years Experience</div>
 							</motion.div>
@@ -128,7 +128,7 @@ export const CTASection = () => {
 							<motion.div className="text-center group" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
 								<div className="relative">
 									<div className="text-4xl md:text-5xl font-black text-white mb-2 block drop-shadow-2xl">{PERSONAL_INFO.stats.clientSatisfaction}</div>
-									<motion.div className="absolute -inset-2 bg-gradient-to-r from-pink-500/20 to-emerald-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
+									<motion.div className="absolute -inset-2 bg-linear-to-r from-pink-500/20 to-emerald-500/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" initial={false} />
 								</div>
 								<div className="text-gray-300 text-sm font-medium">Client Satisfaction</div>
 							</motion.div>
