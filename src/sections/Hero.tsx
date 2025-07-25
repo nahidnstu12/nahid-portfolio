@@ -1,23 +1,34 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { Section, Button } from '@/components/ui';
-import { FadeIn, StaggerContainer } from '@/components/animations';
-import { ArrowDownIcon, ArrowUpRightIcon, StarIcon, DocumentIcon } from '@/components/icons';
-import { memojiImages, otherImages } from '@/assets/images';
-import { scrollToElement } from '@/utils';
-import { personalInfo } from '@/data/personalData.js';
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { Section, Button } from "@/components/ui";
+import { FadeIn, StaggerContainer } from "@/components/animations";
+import {
+  ArrowDownIcon,
+  ArrowUpRightIcon,
+  StarIcon,
+  DocumentIcon,
+} from "@/components/icons";
+import { memojiImages, otherImages } from "@/assets/images";
+import { scrollToElement } from "@/utils";
+import { personalInfo } from "@/data/personalData.js";
 
 // Star component for background decoration
-const Star = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
+const Star = ({
+  className,
+  delay = 0,
+}: {
+  className?: string;
+  delay?: number;
+}) => (
   <motion.div
     className={`absolute ${className}`}
     initial={{ opacity: 0, scale: 0 }}
     animate={{
       opacity: [0, 1, 0.5, 1],
       scale: [0, 1, 0.8, 1],
-      rotate: [0, 180, 360]
+      rotate: [0, 180, 360],
     }}
     transition={{
       duration: 4,
@@ -32,19 +43,25 @@ const Star = ({ className, delay = 0 }: { className?: string; delay?: number }) 
 
 export const HeroSection = () => {
   const handleScrollToProjects = () => {
-    scrollToElement('projects');
+    scrollToElement("projects");
   };
 
   const handleScrollToContact = () => {
-    scrollToElement('contact');
+    scrollToElement("contact");
   };
 
   const handleOpenResume = () => {
-    window.open('https://drive.google.com/file/d/1bI8XDpcuSbxJNSzzWLaH63R5mIrQphYB/view?usp=sharing', '_blank');
+    window.open(
+      "https://drive.google.com/file/d/1bI8XDpcuSbxJNSzzWLaH63R5mIrQphYB/view?usp=sharing",
+      "_blank"
+    );
   };
 
   return (
-    <Section id="home" className="min-h-screen flex items-center relative overflow-hidden">
+    <Section
+      id="home"
+      className="min-h-screen flex items-center relative overflow-hidden"
+    >
       {/* Background grain texture */}
       <div className="absolute inset-0 opacity-5">
         <Image
@@ -178,15 +195,6 @@ export const HeroSection = () => {
 
               <Button
                 variant="secondary"
-                onClick={handleScrollToContact}
-                className="group border-yellow-400/30 hover:border-yellow-400/50 hover:bg-yellow-400/10"
-              >
-                Let's Connect
-                <ArrowUpRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-              </Button>
-
-              <Button
-                variant="secondary"
                 onClick={handleOpenResume}
                 className="group border-emerald-400/30 hover:border-emerald-400/50 hover:bg-emerald-400/10"
               >
@@ -194,10 +202,17 @@ export const HeroSection = () => {
                 View Resume
                 <ArrowUpRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
               </Button>
+
+              <Button
+                variant="secondary"
+                onClick={handleScrollToContact}
+                className="group border-yellow-400/30 hover:border-yellow-400/50 hover:bg-yellow-400/10"
+              >
+                Let's Connect
+                <ArrowUpRightIcon className="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </Button>
             </div>
           </FadeIn>
-
-
         </StaggerContainer>
       </div>
 

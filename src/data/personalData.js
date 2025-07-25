@@ -1,38 +1,32 @@
-import { 
-  SiNextdotjs, 
-  SiReact, 
-  SiLaravel, 
-  SiVuedotjs, 
-  SiJavascript, 
-  SiTypescript, 
-  SiPostgresql, 
-  SiDocker, 
-  SiPrisma, 
-  SiTailwindcss,
-  SiNodedotjs,
+import {
+  SiDocker,
+  SiExpress,
+  SiFigma,
+  SiGit,
+  SiGithub,
+  SiJavascript,
+  SiJest,
+  SiJira,
+  SiLaravel,
   SiMongodb,
   SiMysql,
-  SiRedis,
-  SiGit,
-  SiPhp,
-  SiExpress,
   SiNestjs,
-  SiMaterialui,
-  SiRedux,
-  SiJest,
-  SiTypeorm,
-  SiGithub,
-  SiGitlab,
-  SiLinkedin,
-  SiPostman,
-  SiVercel,
-  SiFigma,
-  SiStrapi,
+  SiNextdotjs,
+  SiNodedotjs,
   SiNotion,
-  SiJira,
-  SiChrome,
-  SiOracle,
-  SiRabbitmq
+  SiPhp,
+  SiPostgresql,
+  SiPostman,
+  SiPrisma,
+  SiReact,
+  SiRedis,
+  SiRedux,
+  SiStrapi,
+  SiTailwindcss,
+  SiTypeorm,
+  SiTypescript,
+  SiVercel,
+  SiVitest
 } from "react-icons/si";
 
 // Personal Information
@@ -135,8 +129,9 @@ export const skills = {
     // { name: "Material UI", icon: SiMaterialui, level: "Advanced" },
     { name: "SWR", icon: null, level: "Advanced" },
     { name: "Jest", icon: SiJest, level: "Intermediate" },
+    { name: "Vitest", icon: SiVitest, level: "Intermediate" },
     { name: "Laravel", icon: SiLaravel, level: "Intermediate" },
-    { name: "Vue.js", icon: SiVuedotjs, level: "Intermediate" }
+    // { name: "Vue.js", icon: SiVuedotjs, level: "Intermediate" }
   ],
   
   backend: [
@@ -148,7 +143,7 @@ export const skills = {
     { name: "Mongoose", icon: SiMongodb, level: "Advanced" },
     { name: "MongoDB", icon: SiMongodb, level: "Advanced" },
     { name: "Redis", icon: SiRedis, level: "Intermediate" },
-    { name: "Oracle", icon: SiOracle, level: "Intermediate" }
+    // { name: "Oracle", icon: SiOracle, level: "Intermediate" }
   ],
   
   tools: [
@@ -160,7 +155,7 @@ export const skills = {
     { name: "MongoDB Compass", icon: SiMongodb, level: "Advanced" },
     // { name: "Chrome Dev Tool", icon: SiChrome, level: "Advanced" },
     { name: "Vercel", icon: SiVercel, level: "Advanced" },
-    { name: "MinIO", icon: null, level: "Intermediate" }
+    { name: "MinIO", icon: null, level: "Familiar" }
   ],
   
   others: [
@@ -193,10 +188,10 @@ export const projects = [
   {
     id: 1,
     title: "DIGITAL LAND RECORD AND MANAGEMENT SYSTEM (DLRMS)",
-    type: "Government Project",
+    type: "Softbd",
     status: "Live",
     duration: "April 2024 - Dec 2024",
-    liveUrl: "#",
+    liveUrl: "https://dlrms.land.gov.bd/",
     description: [
       "Worked on a large-scale government project aimed at digitizing land records and improving administrative workflows.",
       "Developed features for khatian entry from the citizen panel and streamlined the processing workflow for DLRMS office administration.",
@@ -216,7 +211,7 @@ export const projects = [
   {
     id: 2,
     title: "RADIUS DIRECTORY",
-    type: "SaaS Product",
+    type: "RadiusTheme",
     status: "Development",
     duration: "Jan 2025 - Current",
     liveUrl: "#",
@@ -236,13 +231,13 @@ export const projects = [
       "Container-based layout logic"
     ],
     techStack: ["Next.js 15", "React", "Node.js", "Prisma", "PostgreSQL", "Zustand", "Tailwind CSS", "shadcn/ui", "TypeScript"],
-    category: "SaaS",
+    category: "SaaS Product",
     image: "/api/placeholder/600/400"
   },
   {
     id: 3,
     title: "NATIONAL PORTAL FRAMEWORK (NPF)",
-    type: "Government Project",
+    type: "Softbd",
     status: "Development",
     duration: "Dec 2023 – Dec 2024",
     liveUrl: "#",
@@ -268,10 +263,10 @@ export const projects = [
   {
     id: 4,
     title: "FUTURE NATION",
-    type: "Government Project",
+    type: "Softbd",
     status: "Live",
-    duration: "April 2024 - Dec 2024",
-    liveUrl: "#",
+    duration: "April 2023 - Dec 2023",
+    liveUrl: "https://platform.futurenation.gov.bd/",
     description: [
       "Developed interactive e-learning platform: Built engaging course modules with content provider tools and integrated BigBlueButton for live class and live class routine, collaborative learning experiences.",
       "Enhanced skill development: Implemented SCORM compliance for uploading interactive project modules, enabling deeper dives into practical applications.",
@@ -285,8 +280,8 @@ export const projects = [
       "Step-by-step user onboarding",
       "BigBlueButton live class integration"
     ],
-    techStack: ["React", "NextJs", "TypeScript", "MUI", "NestJS", "Oracle", "TypeORM", "Redis", "RabbitMQ"],
-    category: "Government",
+    techStack: ["React", "NextJs", "TypeScript", "MUI", "SWR", "NestJS", "TypeORM", "Redis", "RabbitMQ"],
+    category: "LMS & Job Portal",
     image: "/api/placeholder/600/400"
   },
   {
@@ -294,8 +289,8 @@ export const projects = [
     title: "School",
     type: "SaaS Product",
     status: "Development",
-    duration: "Jan 2025 - Current",
-    liveUrl: "#",
+    duration: "Jan 2024 - Current",
+    liveUrl: "https://school.pioneersgroupbd.com/",
     description: [
       "Developed comprehensive school management system with integrated student information, attendance tracking, and academic performance monitoring.",
       "Built parent-teacher communication portal with real-time notifications, grade reporting, and assignment tracking capabilities.",
@@ -310,17 +305,17 @@ export const projects = [
       "Timetable and resource allocation",
       "Role-based access control"
     ],
-    techStack: ["Next.js 15", "React", "Node.js", "Prisma", "PostgreSQL", "Zustand", "Tailwind CSS", "shadcn/ui", "TypeScript"],
+    techStack: ["Laravel", "Mysql", "Laravel Blade", "React Native", "SCM", "Lando"],
     category: "SaaS",
     image: "/api/placeholder/600/400"
   },
   {
     id: 6,
     title: "Team Docs",
-    type: "Government Project",
+    type: "Personal Project",
     status: "Development",
-    duration: "Dec 2023 – Dec 2024",
-    liveUrl: "#",
+    duration: "Jan 2025 – Current",
+    liveUrl: "https://team-docs.vercel.app/",
     description: [
       "Developed collaborative documentation platform for government teams with real-time editing, version control, and approval workflows.",
       "Built document management system with hierarchical organization, advanced search capabilities, and secure access controls.",
@@ -333,44 +328,46 @@ export const projects = [
       "Document management and organization",
       "Team collaboration tools",
       "Government template library",
-      "Audit trail and compliance"
+      "Audit trail and compliance",
+      "Mentor new developers"
     ],
-    techStack: ["Express.js", "EJS", "React", "Node.js", "Shadow DOM", "XML", "MongoDB", "MinIO", "NestJS", "Next.js", "TypeScript"],
-    category: "Government",
+    techStack: [ "Next.js", "React", "TypeScript", "ShadCN", "Postgres", "Server Actions"],
+    category: "Personal",
     image: "/api/placeholder/600/400"
   },
   {
     id: 7,
     title: "Ecom-Microservice",
-    type: "Government Project",
+    type: "Personal Project",
     status: "Live",
     duration: "April 2024 - Dec 2024",
-    liveUrl: "#",
+    liveUrl: "https://www.postman.com/interstellar-sunset-878874/beast-com/collection/o1hq8nj/services?action=share&source=copy-link&creator=13406744",
     description: [
+      "This is a personal project that I developed for my own use. I used this project to learn about microservices architecture and how to build a scalable e-commerce platform.",
+      "I create service to service communication using postman collection manually to understand the microservices architecture.",
       "Architected and developed scalable microservices-based e-commerce platform with distributed system architecture and inter-service communication.",
       "Built independent services for user management, product catalog, order processing, payment gateway, and inventory management.",
       "Implemented event-driven architecture with message queues for reliable service communication and data consistency.",
       "Designed API gateway with load balancing, rate limiting, and security middleware for unified service access.",
-      "Integrated monitoring, logging, and health check systems for comprehensive system observability and maintenance."
+      // "Integrated monitoring, logging, and health check systems for comprehensive system observability and maintenance."
     ],
     features: [
       "Microservices architecture",
       "Event-driven communication",
       "API gateway with load balancing",
       "Distributed system design",
-      "Comprehensive monitoring"
     ],
-    techStack: ["React", "NextJs", "TypeScript", "MUI", "NestJS", "Oracle", "TypeORM", "Redis", "RabbitMQ"],
-    category: "Government",
+    techStack: ["Express.js", "Node.js", "Microservices", "Docker", "RabbitMQ", "Redis", "Postgres", "TypeScript", "RestAPI", "Konga"],
+    category: "Personal",
     image: "/api/placeholder/600/400"
   },
   {
     id: 8,
     title: "NISE",
-    type: "SaaS Product",
-    status: "Development",
-    duration: "Jan 2025 - Current",
-    liveUrl: "#",
+    type: "Softbd",
+    status: "Live",
+    duration: "Jan 2022 - Nov 2024",
+    liveUrl: "https://nise.gov.bd/",
     description: [
       "Developed apprenticeship module for a youth scholarship program, provided different topics on skills, enabling applications, and granting certificates and financial benefits upon completion.",
       "Designed multiple enrollment feature for seamless switching between course batches, handling payment structures and availability across sectors.",
@@ -384,16 +381,16 @@ export const projects = [
       "NASCIB & SMEF member onboarding",
       "Personalized task dashboards"
     ],
-    techStack: ["Next.js 15", "React", "Node.js", "Prisma", "PostgreSQL", "Zustand", "Tailwind CSS", "shadcn/ui", "TypeScript"],
+    techStack: ["Next.js", "React", "Node.js", "TypeScript", "SWR", "Material UI", "Laravel", "MySQL", "Microservices", "Docker", "RabbitMQ", "Redis"],
     category: "SaaS",
     image: "/api/placeholder/600/400"
   },
   {
     id: 9,
     title: "Scholars (SEM)",
-    type: "Government Project",
+    type: "Sass Project",
     status: "Development",
-    duration: "Dec 2023 – Dec 2024",
+    duration: "May 2025 – Current",
     liveUrl: "#",
     description: [
       "Developed comprehensive scholarship management system for government educational programs with application processing and evaluation workflows.",
@@ -409,8 +406,8 @@ export const projects = [
       "Evaluation and scoring system",
       "Student portal and communication"
     ],
-    techStack: ["Express.js", "EJS", "React", "Node.js", "Shadow DOM", "XML", "MongoDB", "MinIO", "NestJS", "Next.js", "TypeScript"],
-    category: "Government",
+    techStack: ["Go", "React", "Vite", "ShadCN",  "Postgres", "TypeScript", "RestAPI", "Docker", "RTK Query"],
+    category: "SasS",
     image: "/api/placeholder/600/400"
   }
 ];
