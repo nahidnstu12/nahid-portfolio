@@ -24,7 +24,9 @@ jobs:
         bun-version: latest
 
     - name: Install dependencies
-      run: bun install --frozen-lockfile
+      run: bun install --frozen-lockfile --no-cache
+      env:
+        NODE_OPTIONS: "--max-old-space-size=2048"
 
     - name: Build Next.js app
       env:
