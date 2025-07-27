@@ -1,39 +1,62 @@
-name: Next.js CI/CD
+name: Next.js CI/CD (Build on GitHub)
 
 on:
   push:
     branches: [ "master" ]
 
 jobs:
-  deploy:
-    runs-on: self-hosted
+  build-and-deploy:
+    runs-on: ubuntu-latest
     timeout-minutes: 30
 
     steps:
+    # 1. Checkout code
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # 2. Setup Node.js
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18.x'
 
+    # 3. Setup Bun
     - name: Install Bun
       uses: oven-sh/setup-bun@v1
       with:
         bun-version: latest
 
+    # 4. Install and build
     - name: Install dependencies
-      run: bun install --frozen-lockfile --no-cache
-      env:
-        NODE_OPTIONS: "--max-old-space-size=2048"
+      run: bun install --frozen-lockfile
 
     - name: Build Next.js app
-      env:
-        NODE_ENV: production
       run: bun run build
 
-    - name: Restart Next.js app with PM2
+    # 5. Create archive of necessary files
+    - name: Archive files
       run: |
-        pm2 delete all || true
-        pm2 start "bun run start -- -p 3000"
+        tar -czf nextjs-app.tar.gz .next node_modules package.json next.config.js
+
+    # 6. Deploy to EC2 via SSH
+    - name: Copy files to EC2
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        source: "nextjs-app.tar.gz"
+        target: "~/app"
+
+    # 7. SSH into EC2 and restart PM2
+    - name: SSH and restart app
+      uses: appleboy/ssh-action@v0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_KEY }}
+        script: |
+          cd ~/app
+          tar -xzf nextjs-app.tar.gz
+          pm2 delete all || true
+          pm2 start "bun run start -- -p 3000"
