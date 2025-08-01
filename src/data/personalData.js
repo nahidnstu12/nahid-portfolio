@@ -45,11 +45,12 @@ export const personalInfo = {
   
   // Social Links
   socialLinks: {
-    github: "https://github.com/nahid-dev",
-    gitlab: "https://gitlab.com/nahid-dev",
-    linkedin: "https://linkedin.com/in/nahid-dev",
-    portfolio: "https://nahid-dev.vercel.app",
-    leetcode: "https://leetcode.com/nahid-dev"
+    github: "https://github.com/nahidnstu12",
+    gitlab: "https://gitlab.com/nahid_dev",
+    linkedin: "https://www.linkedin.com/in/nahid-dev/",
+    portfolio: "https://nahid-portfolio.vercel.app/",
+    leetcode: "https://leetcode.com/nahid-dev",
+    whatsapp: "https://wa.me/8801832409825"
   },
   
   // Career Objective

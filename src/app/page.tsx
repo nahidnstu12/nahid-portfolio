@@ -1,5 +1,5 @@
 import { Header } from '@/sections/Header';
-import { HeroSection } from '@/sections/Hero';
+import HeroSection from '@/sections/Hero';
 import { AboutSection } from '@/sections/About';
 import { Experience } from '@/sections/Experience';
 import { Education } from '@/sections/Education';

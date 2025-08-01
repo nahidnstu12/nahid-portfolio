@@ -1,14 +1,14 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Section, Card, Button } from "@/components/ui";
-import { FadeIn, StaggerContainer } from "@/components/animations";
-import { ArrowUpRightIcon, LinkedInIcon, WhatsAppIcon, MessengerIcon, GmailIcon } from "@/components/icons";
-import { otherImages } from "@/assets/images";
-import { CONTACT_INFO, SOCIAL_LINKS } from "@/constants";
 import { sendEmail } from "@/actions/SendEmail";
+import { FadeIn, StaggerContainer } from "@/components/animations";
+import { ArrowUpRightIcon, GmailIcon, LinkedInIcon, MessengerIcon, WhatsAppIcon } from "@/components/icons";
+import { Button, Card, Section } from "@/components/ui";
+import { CONTACT_INFO, SOCIAL_LINKS } from "@/constants";
+import { PERSONAL_INFO } from "@/constants/personal-info";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRef, useState, useTransition } from "react";
 
 export const ContactSection = () => {
 	const formRef = useRef<HTMLFormElement>(null);
@@ -31,9 +31,9 @@ export const ContactSection = () => {
 	return (
 		<Section id="contact" className="relative">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			<div className="relative z-10">
 				<StaggerContainer>
@@ -130,18 +130,18 @@ export const ContactSection = () => {
 									<div className="grow">
 										<h3 className="heading-3 mb-6">Get in Touch</h3>
 										<div className="space-y-6 mb-8">
-											<div>
+											{/* <div>
 												<h4 className="font-semibold text-white mb-2">Email</h4>
 												<a href={`mailto:${CONTACT_INFO.email}`} className="text-gray-400 hover:text-emerald-400 transition-colors duration-200">
 													{CONTACT_INFO.email}
 												</a>
-											</div>
-											<div>
+											</div> */}
+											{/* <div>
 												<h4 className="font-semibold text-white mb-2">GitHub</h4>
-												<a href="https://github.com/nishatislam04" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors duration-200">
-													github.com/nishatislam04
+												<a href="https://github.com/nahidnstu12" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors duration-200">
+													github.com/nahidnstu12
 												</a>
-											</div>
+											</div> */}
 											<div>
 												<h4 className="font-semibold text-white mb-2">Call Me</h4>
 												<p className="text-gray-400">{CONTACT_INFO.phone}</p>
@@ -165,7 +165,7 @@ export const ContactSection = () => {
 									<div className="mt-8 pt-8 border-t border-gray-700/50">
 										<h4 className="font-semibold text-white mb-4">Connect With Me</h4>
 										<div className="grid grid-cols-2 gap-3">
-											{SOCIAL_LINKS.map((social) => {
+											{PERSONAL_INFO.SOCIAL_LINKS.map((social) => {
 												const getIcon = () => {
 													switch (social.icon) {
 														case "gmail":
@@ -182,17 +182,10 @@ export const ContactSection = () => {
 												};
 
 												return (
-													<motion.a
-														key={social.name}
-														href={social.url}
-														target="_blank"
-														rel="noopener noreferrer"
-														className="flex items-center gap-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-emerald-500/30 transition-all duration-300 group"
-														whileHover={{ scale: 1.02, y: -2 }}
-														whileTap={{ scale: 0.98 }}>
+													<Link key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700/50 hover:border-emerald-500/30 transition-all duration-300 group">
 														{getIcon()}
 														<span className="text-sm text-gray-300 group-hover:text-white transition-colors duration-300">{social.name}</span>
-													</motion.a>
+													</Link>
 												);
 											})}
 										</div>

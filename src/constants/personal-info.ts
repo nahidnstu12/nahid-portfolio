@@ -30,6 +30,29 @@ export const PERSONAL_INFO = {
 
 	// Achievements/Stats
 	stats: personalInfo.stats,
+
+		SOCIAL_LINKS: [
+		{
+			name: "Gmail",
+			url: `mailto:nahid.dev19@gmail.com`,
+			icon: "gmail",
+		},
+		{
+			name: "LinkedIn",
+			url: personalInfo.socialLinks.linkedin,
+			icon: "linkedin",
+		},
+		{
+			name: "WhatsApp",
+			url: personalInfo.socialLinks.whatsapp,
+			icon: "whatsapp",
+		},
+		// {
+		// 	name: "Messenger",
+		// 	url: "https://m.me/nishat.mazumder.004",
+		// 	icon: "messenger",
+		// },
+	],
 };
 
 // Export individual items for easier access

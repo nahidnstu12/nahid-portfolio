@@ -1,13 +1,13 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Section, Button } from "@/components/ui";
+import { memojiImages } from "@/assets/images";
 import { FadeIn } from "@/components/animations";
 import { ArrowUpRightIcon, SparkleIcon } from "@/components/icons";
-import { otherImages, memojiImages } from "@/assets/images";
-import { scrollToElement } from "@/utils";
+import { Button, Section } from "@/components/ui";
 import { PERSONAL_INFO } from "@/constants/personal-info";
+import { scrollToElement } from "@/utils";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 export const CTASection = () => {
 	const handleContactClick = () => {
@@ -17,9 +17,9 @@ export const CTASection = () => {
 	return (
 		<Section className="relative overflow-hidden">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			{/* Gradient background */}
 			<div className="absolute inset-0 bg-linear-to-br from-emerald-500/10 via-transparent to-sky-500/10" />

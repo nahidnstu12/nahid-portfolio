@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
-import { projects } from "@/data/personalData.js";
 import { projectImages } from "@/assets/images";
-import { PortfolioProject } from "@/types";
 import { ProjectModal } from "@/components/ProjectModal";
+import { projects } from "@/data/personalData.js";
+import { PortfolioProject } from "@/types";
+import { useState } from "react";
 
 // Transform projects data to match PortfolioProject interface
 const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
@@ -22,12 +22,11 @@ const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
 
 
 
+import { FadeIn, StaggerContainer } from "@/components/animations";
+import { ArrowUpRightIcon } from "@/components/icons";
+import { Button, Card, CardContent, Section } from "@/components/ui";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Section, Card, CardContent, Button } from "@/components/ui";
-import { FadeIn, StaggerContainer } from "@/components/animations";
-import { ArrowUpRightIcon, GitHubIcon } from "@/components/icons";
-import { otherImages } from "@/assets/images";
 
 const ProjectCard = ({ project, index, onOpenModal }: { project: PortfolioProject; index: number; onOpenModal: (project: any) => void }) => {
 	return (
@@ -143,9 +142,9 @@ export const ProjectsSection = () => {
 	return (
 		<Section id="projects" className="relative">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			<div className="relative z-10">
 				<StaggerContainer>

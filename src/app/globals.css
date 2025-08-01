@@ -41,7 +41,7 @@
 
 	/* Force dark theme by default */
 	html {
-		color-scheme: dark;
+		color-scheme: light;
 	}
 
 	/* Custom scrollbar */

@@ -1,11 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Section } from "@/components/ui";
 import { FadeIn, StaggerContainer } from "@/components/animations";
-import { otherImages } from "@/assets/images";
+import { Section } from "@/components/ui";
 import { skills } from "@/data/personalData.js";
+import { motion } from "framer-motion";
 
 // Category color mapping
 const categoryColors = {
@@ -71,9 +69,9 @@ export const SkillsSection = () => {
 	return (
 		<Section id="skills" className="relative overflow-hidden">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			{/* Animated background shapes */}
 			<div className="absolute inset-0">
