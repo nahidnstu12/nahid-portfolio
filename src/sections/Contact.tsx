@@ -4,7 +4,7 @@ import { sendEmail } from "@/actions/SendEmail";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { ArrowUpRightIcon, GmailIcon, LinkedInIcon, MessengerIcon, WhatsAppIcon } from "@/components/icons";
 import { Button, Card, Section } from "@/components/ui";
-import { CONTACT_INFO, SOCIAL_LINKS } from "@/constants";
+import { CONTACT_INFO } from "@/constants";
 import { PERSONAL_INFO } from "@/constants/personal-info";
 import { motion } from "framer-motion";
 import Link from "next/link";

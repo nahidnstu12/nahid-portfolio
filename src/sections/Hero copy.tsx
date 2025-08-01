@@ -10,7 +10,7 @@ import {
   StarIcon,
   DocumentIcon,
 } from "@/components/icons";
-import { memojiImages, otherImages } from "@/assets/images";
+import { memojiImages} from "@/assets/images";
 import { scrollToElement } from "@/utils";
 import { personalInfo } from "@/data/personalData.js";
 
@@ -64,7 +64,7 @@ export const HeroSection = () => {
       className="min-h-screen flex items-center relative overflow-hidden"
     >
       {/* Background grain texture */}
-      <div className="absolute inset-0 opacity-5">
+      {/* <div className="absolute inset-0 opacity-5">
         <Image
           src={otherImages.grain}
           alt=""
@@ -72,7 +72,7 @@ export const HeroSection = () => {
           className="object-cover"
           priority
         />
-      </div>
+      </div> */}
 
       {/* Solar/Space themed background */}
       <div className="absolute inset-0">
@@ -122,7 +122,7 @@ export const HeroSection = () => {
               {/* Solar glow behind avatar */}
               <div className="absolute inset-0 bg-gradient-radial from-yellow-400/20 via-orange-500/10 to-transparent rounded-full blur-xl scale-150" />
 
-              <div className="relative w-full h-full bg-linear-to-br from-yellow-400/10 to-orange-500/10 rounded-full border border-yellow-400/20">
+              {/* <div className="relative w-full h-full bg-linear-to-br from-yellow-400/10 to-orange-500/10 rounded-full border border-yellow-400/20">
                 <Image
                   src={memojiImages.computer}
                   alt="Avatar"
@@ -130,7 +130,7 @@ export const HeroSection = () => {
                   className="object-contain p-2"
                   priority
                 />
-              </div>
+              </div> */}
 
               {/* Orbiting elements */}
               <motion.div

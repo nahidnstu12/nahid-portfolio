@@ -1,13 +1,12 @@
 "use client";
 
-import { memojiImages } from "@/assets/images";
+import profilePicture from "@/assets/images/profile.png";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { CheckCircleIcon } from "@/components/icons";
 import { Card, Section } from "@/components/ui";
 import { personalInfo, techStack } from "@/data/personalData.js";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import profilePicture from "@/assets/images/profile.png";
 // Tech stack icons with proper icons and colors
 const TechIcon = ({ tech }: { tech: any }) => {
 	const Icon = tech.icon;

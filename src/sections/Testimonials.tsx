@@ -44,7 +44,7 @@ import Image from "next/image";
 import { Section, Card, CardContent } from "@/components/ui";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { CheckCircleIcon } from "@/components/icons";
-import { otherImages } from "@/assets/images";
+// import { otherImages } from "@/assets/images";
 import { PortfolioTestimonial } from "@/types";
 
 const TestimonialCard = ({ testimonial, index }: { testimonial: PortfolioTestimonial; index: number }) => {
@@ -84,9 +84,9 @@ export const TestimonialsSection = () => {
 	return (
 		<Section id="testimonials" className="relative">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			<div className="relative z-10">
 				<StaggerContainer>
