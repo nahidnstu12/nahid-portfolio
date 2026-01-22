@@ -152,7 +152,7 @@ export const AboutSection = () => {
 												whileHover={{ 
 													scale: 1.05, 
 													y: -8,
-													rotate: [0, -1, 1, 0]
+													rotate: 5
 												}}
 												whileTap={{ scale: 0.95 }}
 											>
