@@ -1,15 +1,13 @@
 import {
-  SiNextdotjs,
-  SiReact,
-  SiLaravel,
-  SiVuedotjs,
-  SiJavascript,
-  SiTypescript,
-  SiPostgresql,
   SiDocker,
-  SiPrisma,
-  SiTailwindcss,
-  SiNodedotjs,
+  SiExpress,
+  SiFigma,
+  SiGit,
+  SiGithub,
+  SiJavascript,
+  SiJest,
+  SiJira,
+  SiLaravel,
   SiMongodb,
   SiMysql,
   SiNestjs,
@@ -32,6 +30,12 @@ import {
 } from "react-icons/si";
 
 // Radius Directory project images
+import ecom from "@/assets/projects/ecom-microservice.png";
+import fnCourse from "@/assets/projects/fn-course.png";
+import fnHome from "@/assets/projects/fn-home.png";
+import landHome from "@/assets/projects/land-home.png";
+import niseHome from "@/assets/projects/nise-home.png";
+import npfHome from "@/assets/projects/npf-home.png";
 import rdAccount from "@/assets/projects/rd-account.png";
 import rdBuilderPage from "@/assets/projects/rd-builder-page.png";
 import rdHome from "@/assets/projects/rd-home.png";
@@ -39,17 +43,11 @@ import rdMenu from "@/assets/projects/rd-menu.png";
 import rdSettings from "@/assets/projects/rd-settings.png";
 import rdSingleListing from "@/assets/projects/rd-single-listing.png";
 import rdTemplate from "@/assets/projects/rd-template.png";
-import landHome from "@/assets/projects/land-home.png";
-import fnHome from "@/assets/projects/fn-home.png";
-import fnCourse from "@/assets/projects/fn-course.png";
-import npfHome from "@/assets/projects/npf-home.png";
-import schoolHome from "@/assets/projects/school-home.png";
 import schoolAdmin from "@/assets/projects/school-admin.png";
-import ecom from "@/assets/projects/ecom-microservice.png";
-import niseHome from "@/assets/projects/nise-home.png";
+import schoolHome from "@/assets/projects/school-home.png";
 import semHome from "@/assets/projects/sem-home.png";
-import semRegister from "@/assets/projects/sem-register.png";
 import semPay from "@/assets/projects/sem-pay.png";
+import semRegister from "@/assets/projects/sem-register.png";
 
 // Personal Information
 export const personalInfo = {

@@ -8,8 +8,11 @@ import memojiSmile from "./memoji-smile.png";
 import profilePicture from "./profile-2.png";
 
 // Other images
-import grain from "./grain.jpg";
-import map from "./map.png";
+import memojiAvatar2 from "./memoji-avatar-2.png";
+import memojiAvatar3 from "./memoji-avatar-3.png";
+import memojiAvatar4 from "./memoji-avatar-4.png";
+import memojiAvatar5 from "./memoji-avatar-5.png";
+import memojiComputer from "./memoji-computer.png";
 
 export const projectImages = {
 	organizationCover,

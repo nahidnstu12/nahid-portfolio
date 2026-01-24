@@ -1,5 +1,6 @@
 "use client";
 
+import { memojiImages } from "@/assets/images";
 import profilePicture from "@/assets/images/profile.png";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { CheckCircleIcon } from "@/components/icons";

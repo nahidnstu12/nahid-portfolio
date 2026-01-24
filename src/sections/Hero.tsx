@@ -66,19 +66,19 @@ export default function HeroSection() {
               <div className="animate-ping-large rounded-full bg-green-500 absolute inset-0"></div>
             </div>
             <div className="text-sm font-semibold">
-			{personalInfo.name}
+              {personalInfo.name}
             </div>
           </div>
         </div>
         <div className="max-w-2xl mx-auto">
           <h1 className="font-serif text-3xl text-center mt-8 tracking-wide md:text-5xl">
-		  {personalInfo.title}
+            {personalInfo.title}
           </h1>
           <p className="mt-4 text-center text-white/60 md:text-base  mx-auto">
             {PERSONAL_INFO.profile}
           </p>
         </div>
-		
+
         <div className="flex flex-col items-center mt-8 gap-4 md:flex-row justify-center z-50 relative">
           <FadeIn delay={0.8}>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">

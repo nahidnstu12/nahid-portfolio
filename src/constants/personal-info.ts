@@ -44,7 +44,7 @@ export const PERSONAL_INFO = {
 		},
 		{
 			name: "WhatsApp",
-			url: personalInfo.socialLinks.whatsapp,
+			url: `https://wa.me/${personalInfo.contact.phone}`,
 			icon: "whatsapp",
 		},
 		// {

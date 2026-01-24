@@ -1,12 +1,14 @@
 "use client";
 import { projectImages } from "@/assets/images";
-import { ProjectModal } from "@/components/ProjectModal";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Section, Card, CardContent, Button } from "@/components/ui";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { ArrowUpRightIcon } from "@/components/icons";
-import { otherImages } from "@/assets/images";
+import { ProjectModal } from "@/components/ProjectModal";
+import { Button, Card, CardContent, Section } from "@/components/ui";
+import { projects } from "@/data/personalData";
+import { PortfolioProject } from "@/types";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { useState } from "react";
 
 // Transform projects data to match PortfolioProject interface
 const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
