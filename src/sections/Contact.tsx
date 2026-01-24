@@ -31,9 +31,9 @@ export const ContactSection = () => {
 	return (
 		<Section id="contact" className="relative">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			<div className="relative z-10">
 				<StaggerContainer>
@@ -138,8 +138,8 @@ export const ContactSection = () => {
 											</div>
 											<div>
 												<h4 className="font-semibold text-white mb-2">GitHub</h4>
-												<a href="https://github.com/nishatislam04" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors duration-200">
-													github.com/nishatislam04
+												<a href="https://github.com/nahidnstu12" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-emerald-400 transition-colors duration-200">
+													github.com/nahidnstu12
 												</a>
 											</div>
 											<div>

@@ -1,18 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import { projects } from "@/data/personalData.js";
 import { projectImages } from "@/assets/images";
-import { PortfolioProject } from "@/types";
-import { ProjectModal } from "@/components/ProjectModal";
-import { motion } from "framer-motion";
-import Image from "next/image";
-import { Section, Card, CardContent, Button } from "@/components/ui";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { ArrowUpRightIcon } from "@/components/icons";
-import { Header } from "@/sections/Header";
+import { ProjectModal } from "@/components/ProjectModal";
+import { Button, Card, CardContent, Section } from "@/components/ui";
+import { projects } from "@/data/personalData.js";
 import { Footer } from "@/sections/Footer";
+import { PortfolioProject } from "@/types";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 // Transform projects data
 const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
@@ -21,7 +20,7 @@ const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
 	title: project.title,
 	results: project.features.map(feature => ({ title: feature })),
 	link: project.liveUrl || "#",
-	image: projectImages.organizationCover,
+	image: project.image || projectImages.organizationCover,
 	technologies: project.techStack,
 	description: project.description.join(" "),
 	hasLiveDemo: project.status === "Live",
@@ -192,7 +191,7 @@ export default function ProjectsPage() {
 
 	return (
 		<>
-			<Header />
+			{/* <Header /> */}
 			<main className="min-h-screen bg-gray-900">
 				<Section className="relative py-24 md:py-32">
 					{/* Clean Background */}

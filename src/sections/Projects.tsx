@@ -14,25 +14,26 @@ import { otherImages } from "@/assets/images";
 // Transform projects data to match PortfolioProject interface
 const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
 	company: project.type,
-	year: project.duration.split(' - ')[1]?.split(' ')[1] || "2024",
+	year: project.duration || "2024",
+	// year: project.duration.split(' - ')[1]?.split(' ')[1] || "2024",
 	title: project.title,
 	results: project.features.map(feature => ({ title: feature })),
 	link: project.liveUrl || "#",
-	image: projectImages.organizationCover,
+	image: project.image || projectImages.organizationCover,
 	technologies: project.techStack,
 	description: project.description.join(" "),
 	hasLiveDemo: project.status === "Live",
 	isComingSoon: project.status === "Development",
-	isPrivate: project.type === "Government Project"
+	// isPrivate: project.type === "Government Project"
 }));
 
 // Get top 4 featured projects (prioritize Live projects, then by index)
 const featuredProjects = portfolioProjects
-	.sort((a, b) => {
-		if (a.hasLiveDemo && !b.hasLiveDemo) return -1;
-		if (!a.hasLiveDemo && b.hasLiveDemo) return 1;
-		return 0;
-	})
+	// .sort((a, b) => {
+	// 	if (a.hasLiveDemo && !b.hasLiveDemo) return -1;
+	// 	if (!a.hasLiveDemo && b.hasLiveDemo) return 1;
+	// 	return 0;
+	// })
 	.slice(0, 4);
 
 // Horizontal Project Card - Optimized for showcase
@@ -66,7 +67,7 @@ const FeaturedProjectCard = ({ project, index, onOpenModal }: { project: Portfol
 						
 						{/* Status Badge */}
 						<div className="absolute top-4 right-4 z-10">
-							{project.hasLiveDemo && !project.isPrivate && (
+							{project.hasLiveDemo  && (
 								<span className="px-3 py-1.5 text-xs font-semibold bg-emerald-500/30 backdrop-blur-md text-emerald-300 rounded-full border border-emerald-400/40 shadow-lg">
 									● Live
 								</span>
@@ -76,11 +77,11 @@ const FeaturedProjectCard = ({ project, index, onOpenModal }: { project: Portfol
 									Coming Soon
 								</span>
 							)}
-							{project.isPrivate && (
+							{/* {project.isPrivate && (
 								<span className="px-3 py-1.5 text-xs font-semibold bg-gray-500/30 backdrop-blur-md text-gray-300 rounded-full border border-gray-400/40 shadow-lg">
 									Private
 								</span>
-							)}
+							)} */}
 						</div>
 
 						{/* Hover Effect */}
@@ -155,7 +156,7 @@ const FeaturedProjectCard = ({ project, index, onOpenModal }: { project: Portfol
 
 						{/* Action Buttons */}
 						<div className="flex gap-3 pt-6 mt-6 border-t border-gray-700/30">
-							{!project.isPrivate && project.hasLiveDemo ? (
+							{project.link ? (
 								<Button
 									size="md"
 									variant="primary"
@@ -171,12 +172,12 @@ const FeaturedProjectCard = ({ project, index, onOpenModal }: { project: Portfol
 							) : null}
 							<Button
 								size="md"
-								variant={project.hasLiveDemo ? "secondary" : "primary"}
+								variant={project.link ? "secondary" : "primary"}
 								onClick={(e) => {
 									e.stopPropagation();
 									onOpenModal(project);
 								}}
-								className={project.hasLiveDemo ? "flex-1" : "w-full"}
+								className={project.link ? "flex-1" : "w-full"}
 							>
 								View Details
 								<ArrowUpRightIcon className="w-4 h-4" />

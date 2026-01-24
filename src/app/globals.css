@@ -60,6 +60,16 @@
 	::-webkit-scrollbar-thumb:hover {
 		@apply bg-gray-500;
 	}
+
+	/* Hide scrollbar for auto-scroll containers */
+	.scrollbar-hide {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
 }
 
 @layer components {

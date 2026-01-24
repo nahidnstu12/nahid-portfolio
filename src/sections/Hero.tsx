@@ -46,7 +46,7 @@ export const HeroSection = () => {
   return (
     <Section id="home" className="min-h-screen flex items-center relative overflow-hidden">
       {/* Background grain texture */}
-      <div className="absolute inset-0 opacity-5">
+      {/* <div className="absolute inset-0 opacity-5">
         <Image
           src={otherImages.grain}
           alt=""
@@ -54,7 +54,7 @@ export const HeroSection = () => {
           className="object-cover"
           priority
         />
-      </div>
+      </div> */}
 
       {/* Solar/Space themed background */}
       <div className="absolute inset-0">

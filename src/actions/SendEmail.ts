@@ -1,7 +1,7 @@
 "use server";
 
-import { resend } from "@/lib/resend";
-import { PERSONAL_INFO } from "@/constants/personal-info";
+import { personalInfo } from "@/data/personalData";
+import { transporter } from "@/lib/nodemailer";
 
 interface EmailResponse {
 	success: boolean;
@@ -70,12 +70,24 @@ export async function sendEmail(_prevState: EmailResponse | null, formData: Form
 			};
 		}
 
-		// Send email using Resend
-		const result = await resend.emails.send({
-			from: "Portfolio Contact <onboarding@resend.dev>",
-			to: PERSONAL_INFO.email, // Use your actual email from constants
-			subject: `New Portfolio Contact from ${name}`,
+		// Verify SMTP connection first
+		try {
+			await transporter.verify();
+		} catch (verifyError) {
+			console.error("SMTP verification failed:", verifyError);
+			return {
+				success: false,
+				error: "Email service is currently unavailable. Please contact me directly at " + personalInfo.contact.email,
+			};
+		}
+
+		// Send email using SMTP
+		const recipientEmail = personalInfo.contact.email;
+		const mailOptions = {
+			from: `${process.env.MAIL_FROM_NAME || "Portfolio Contact"} <${process.env.MAIL_FROM_ADDRESS || process.env.MAIL_USERNAME}>`,
+			to: recipientEmail,
 			replyTo: email,
+			subject: `New Portfolio Contact from ${name}`,
 			html: `
 				<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
 					<div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
@@ -105,15 +117,57 @@ export async function sendEmail(_prevState: EmailResponse | null, formData: Form
 					</div>
 				</div>
 			`,
+		};
+
+		const result = await transporter.sendMail(mailOptions);
+
+		console.log("Email send result:", {
+			messageId: result.messageId,
+			accepted: result.accepted,
+			rejected: result.rejected,
+			response: result.response,
+			pending: result.pending,
 		});
 
-		if (result.error) {
-			console.error("Resend API error:", result.error);
+		// Check if email was rejected or not accepted
+		if (result.rejected && result.rejected.length > 0) {
+			console.error("SMTP send rejected:", {
+				rejected: result.rejected,
+				response: result.response,
+			});
 			return {
 				success: false,
-				error: "Failed to send email. Please try again or contact me directly.",
+				error: `Email was rejected by server: ${result.rejected.join(", ")}. Please contact me directly at ${recipientEmail}`,
 			};
 		}
+
+		// Check if email was accepted
+		if (!result.accepted || result.accepted.length === 0) {
+			console.error("SMTP send failed - no accepted recipients:", {
+				accepted: result.accepted,
+				rejected: result.rejected,
+				response: result.response,
+			});
+			return {
+				success: false,
+				error: "Email was not accepted by server. Please try again or contact me directly at " + recipientEmail,
+			};
+		}
+
+		// Check if messageId exists (indicates successful queuing)
+		if (!result.messageId) {
+			console.error("SMTP send failed - no messageId:", {
+				accepted: result.accepted,
+				rejected: result.rejected,
+				response: result.response,
+			});
+			return {
+				success: false,
+				error: "Failed to queue email. Please try again or contact me directly at " + recipientEmail,
+			};
+		}
+
+		console.log("Email successfully sent to:", result.accepted);
 
 		return {
 			success: true,
@@ -121,26 +175,37 @@ export async function sendEmail(_prevState: EmailResponse | null, formData: Form
 		};
 	} catch (error) {
 		console.error("Email sending error:", error);
-
-		// Handle specific Resend errors
+		
+		// Log full error details for debugging
 		if (error instanceof Error) {
-			if (error.message.includes("API key")) {
+			console.error("Error name:", error.name);
+			console.error("Error message:", error.message);
+			console.error("Error stack:", error.stack);
+			
+			// Handle specific SMTP errors
+			if (error.message.includes("authentication") || error.message.includes("credentials") || error.message.includes("Invalid login")) {
 				return {
 					success: false,
-					error: "Email service configuration error. Please contact me directly.",
+					error: "Email service authentication failed. Please contact me directly at " + personalInfo.contact.email,
 				};
 			}
-			if (error.message.includes("rate limit")) {
+			if (error.message.includes("connection") || error.message.includes("timeout") || error.message.includes("ECONNREFUSED")) {
 				return {
 					success: false,
-					error: "Too many requests. Please wait a moment and try again.",
+					error: "Cannot connect to email server. Please try again later or contact me directly.",
+				};
+			}
+			if (error.message.includes("ENOTFOUND") || error.message.includes("getaddrinfo")) {
+				return {
+					success: false,
+					error: "Email server not found. Please contact me directly at " + personalInfo.contact.email,
 				};
 			}
 		}
 
 		return {
 			success: false,
-			error: "An unexpected error occurred. Please try again or contact me directly.",
+			error: `An unexpected error occurred: ${error instanceof Error ? error.message : "Unknown error"}. Please contact me directly at ${personalInfo.contact.email}`,
 		};
 	}
 }

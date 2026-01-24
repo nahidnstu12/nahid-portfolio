@@ -139,11 +139,11 @@ export const SOCIAL_LINKS: SocialLink[] = [
 		url: PERSONAL_INFO.socialLinks.github,
 		icon: "github",
 	},
-	{
-		name: "Portfolio",
-		url: PERSONAL_INFO.socialLinks.portfolio,
-		icon: "portfolio",
-	},
+	// {
+	// 	name: "LeetCode",
+	// 	url: PERSONAL_INFO.socialLinks.leetcode,
+	// 	icon: "leetcode",
+	// },
 ];
 
 // Tape section scrolling text

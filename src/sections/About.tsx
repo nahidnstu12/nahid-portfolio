@@ -63,9 +63,9 @@ export const AboutSection = () => {
 	return (
 		<Section id="about" className="relative">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			<div className="relative z-10">
 				<StaggerContainer>
@@ -125,7 +125,7 @@ export const AboutSection = () => {
 									<motion.div className="relative w-64 h-64 mx-auto" whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
 										<div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-sky-500/20 rounded-full blur-xl" />
 										<div className="relative w-full h-full bg-gray-800/50 rounded-full border border-white/10 overflow-hidden">
-											<Image src={memojiImages.smile} alt="About me" fill className="object-contain p-4" />
+											<Image src={memojiImages.avatar1} alt="About me" fill className="object-cover " />
 										</div>
 									</motion.div>
 								</div>

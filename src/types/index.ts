@@ -17,7 +17,7 @@ export interface PortfolioProject {
 	title: string;
 	results: { title: string }[];
 	link: string;
-	image: StaticImageData;
+	image: any;
 	technologies?: string[];
 	description?: string;
 	hasLiveDemo?: boolean;

@@ -17,9 +17,9 @@ export const CTASection = () => {
 	return (
 		<Section className="relative overflow-hidden">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			{/* Gradient background */}
 			<div className="absolute inset-0 bg-linear-to-br from-emerald-500/10 via-transparent to-sky-500/10" />

@@ -71,9 +71,9 @@ export const SkillsSection = () => {
 	return (
 		<Section id="skills" className="relative overflow-hidden">
 			{/* Background elements */}
-			<div className="absolute inset-0 opacity-5">
+			{/* <div className="absolute inset-0 opacity-5">
 				<Image src={otherImages.grain} alt="" fill className="object-cover" />
-			</div>
+			</div> */}
 
 			{/* Animated background shapes */}
 			<div className="absolute inset-0">
