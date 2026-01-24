@@ -11,6 +11,9 @@ const nextConfig = {
 		imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
 	},
 
+	// Turbopack configuration (empty to silence warning while using webpack)
+	turbopack: {},
+
 	webpack(config) {
 		// Grab the existing rule that handles SVG imports
 		const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.(".svg"));

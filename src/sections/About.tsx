@@ -1,7 +1,6 @@
 "use client";
 
 import { memojiImages } from "@/assets/images";
-import profilePicture from "@/assets/images/profile.png";
 import { FadeIn, StaggerContainer } from "@/components/animations";
 import { CheckCircleIcon } from "@/components/icons";
 import { Card, Section } from "@/components/ui";
@@ -25,7 +24,8 @@ const TechIcon = ({ tech }: { tech: any }) => {
 	
 	const colorClass = categoryColors[tech.category as keyof typeof categoryColors] || "from-gray-500 to-gray-700";
 	
-	if (!Icon) {
+	// Check if Icon is a valid React component (function or class)
+	if (!Icon || typeof Icon !== 'function') {
 		// Fallback for technologies without icons
 		return (
 			<div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colorClass} flex items-center justify-center shadow-lg`}>

@@ -19,7 +19,8 @@ const TechIcon = ({ skill, categoryKey }: { skill: any; categoryKey: string }) =
 	const Icon = skill.icon;
 	const colorClass = categoryColors[categoryKey as keyof typeof categoryColors] || "from-gray-500 to-gray-700";
 	
-	if (!Icon) {
+	// Check if Icon is a valid React component (function or class)
+	if (!Icon || typeof Icon !== 'function') {
 		return (
 			<div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${colorClass} flex items-center justify-center`}>
 				<span className="text-white text-xs font-bold">{skill.name.slice(0, 2).toUpperCase()}</span>

@@ -1,6 +1,6 @@
 "use client";
 
-import StarIcon from "@/assets/icons/star.svg";
+import { StarIcon } from "@/components/icons";
 
 // Words for the tape - matching typical design samples
 const tapeWords = ["PERFORMANT", "ACCESSIBLE", "SECURE", "INTERACTIVE", "SCALABLE", "RESPONSIVE", "USABLE", "RELIABLE", "PERFORMANT", "ACCESSIBLE", "SECURE", "INTERACTIVE", "SCALABLE", "RESPONSIVE", "USABLE", "RELIABLE"];
