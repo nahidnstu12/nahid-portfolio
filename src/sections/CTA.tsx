@@ -33,6 +33,7 @@ export const CTASection = () => {
 						rotate: [0, 5, 0],
 					}}
 					transition={{
+						type: "tween",
 						duration: 6,
 						repeat: Infinity,
 						ease: "easeInOut",
@@ -47,6 +48,7 @@ export const CTASection = () => {
 						rotate: [0, -5, 0],
 					}}
 					transition={{
+						type: "tween",
 						duration: 4,
 						repeat: Infinity,
 						ease: "easeInOut",
@@ -62,6 +64,7 @@ export const CTASection = () => {
 						rotate: [0, 10, 0],
 					}}
 					transition={{
+						type: "tween",
 						duration: 5,
 						repeat: Infinity,
 						ease: "easeInOut",

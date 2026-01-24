@@ -125,7 +125,7 @@ export const AboutSection = () => {
 									<div className="relative w-64 h-64 mx-auto transform transition-transform duration-500 hover:scale-105">
 										<div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-sky-500/20 rounded-full blur" />
 										<div className="relative w-full h-full bg-gray-800/50 rounded-full border border-white/10 overflow-hidden">
-											<Image src={profilePicture} alt="About me" className="object-contain" width={600} height={800} loading="lazy" quality={100}  />
+											<Image src={memojiImages.avatar1} alt="About me" fill className="object-cover " />
 										</div>
 									</div>
 								</div>
@@ -152,7 +152,7 @@ export const AboutSection = () => {
 												whileHover={{ 
 													scale: 1.05, 
 													y: -8,
-													rotate: [0, -1, 1, 0]
+													rotate: 5
 												}}
 												whileTap={{ scale: 0.95 }}
 											>

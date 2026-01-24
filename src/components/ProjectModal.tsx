@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
@@ -34,13 +34,12 @@ interface ProjectModalProps {
 
 export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
+  const scrollAnimationRef = useRef<number | null>(null);
   
   // Default images if none provided
-  const images: ProjectImage[] = project.images || [
-    { src: "/api/placeholder/800/600", alt: "Project Screenshot 1" },
-    { src: "/api/placeholder/800/600", alt: "Project Screenshot 2" },
-    { src: "/api/placeholder/800/600", alt: "Project Screenshot 3" },
-  ];
+  const images: ProjectImage[] = project.images || [];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -52,6 +51,64 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
 
   const goToImage = (index: number) => {
     setCurrentImageIndex(index);
+  };
+
+  // Reset scroll position when image changes
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTop = 0;
+    }
+  }, [currentImageIndex]);
+
+  // Auto-scroll animation on hover
+  const handleMouseEnter = () => {
+    if (!scrollContainerRef.current || !imageRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    const image = imageRef.current;
+    const containerHeight = container.clientHeight;
+    const imageHeight = image.scrollHeight;
+    const scrollableDistance = imageHeight - containerHeight;
+
+    // Only animate if image is taller than container
+    if (scrollableDistance > 0) {
+      const startScroll = container.scrollTop;
+      const duration = 3000; // 3 seconds
+      const startTime = Date.now();
+
+      const animateScroll = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Ease-in-out easing function
+        const easeProgress = progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        container.scrollTop = startScroll + (scrollableDistance * easeProgress);
+
+        if (progress < 1) {
+          scrollAnimationRef.current = requestAnimationFrame(animateScroll);
+        }
+      };
+
+      scrollAnimationRef.current = requestAnimationFrame(animateScroll);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (scrollAnimationRef.current) {
+      cancelAnimationFrame(scrollAnimationRef.current);
+      scrollAnimationRef.current = null;
+    }
+    
+    // Smooth scroll back to top
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
@@ -80,8 +137,8 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
                 <div className="flex items-center gap-4 mt-2 text-sm text-gray-300">
                   <span>{project.year}</span>
                   <span>•</span>
-                  <span>{project.duration}</span>
-                  <span>•</span>
+                  {/* <span>{project.duration}</span>
+                  <span>•</span> */}
                   <span className={`px-2 py-1 rounded-full text-xs ${
                     project.status === "Live" 
                       ? "bg-green-500/20 text-green-400 border border-green-500/30"
@@ -105,16 +162,28 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
               {/* Image Slider */}
               <div className="lg:w-1/2 p-6">
                 <div className="relative h-full bg-gray-800 rounded-lg overflow-hidden">
-                  {/* Main Image */}
-                  <div className="relative h-full">
-                    <Image
-                      src={images[currentImageIndex].src}
-                      alt={images[currentImageIndex].alt}
-                      fill
-                      className="object-cover"
-                    />
+                  {/* Main Image - Scrollable Container with Auto-scroll */}
+                  <div 
+                    ref={scrollContainerRef}
+                    className="relative h-full overflow-y-auto overflow-x-hidden scrollbar-hide cursor-ns-resize"
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <div 
+                      ref={imageRef}
+                      className="relative min-h-full flex items-start justify-center p-2"
+                    >
+                      <Image
+                        src={images[currentImageIndex].src}
+                        alt={images[currentImageIndex].alt}
+                        width={800}
+                        height={1200}
+                        className="object-contain w-full h-auto"
+                        style={{ maxWidth: '100%' }}
+                      />
+                    </div>
                     {images[currentImageIndex].caption && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 mt-2 pointer-events-none z-10">
                         <p className="text-white text-sm">{images[currentImageIndex].caption}</p>
                       </div>
                     )}

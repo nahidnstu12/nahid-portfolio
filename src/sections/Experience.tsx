@@ -24,18 +24,20 @@ export const Experience = () => {
                 <div className="ml-16 bg-gray-800/50 backdrop-blur-sm rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow border border-gray-700/50">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
                     <div>
-                      <h3 className="text-xl font-bold text-white">{job.position}</h3>
+                      <div className="flex items-center gap-2">
+                      <h3 className="text-xl font-bold text-white">{job.position}</h3> {job.current && (
+                        <span className="bg-emerald-500/20 text-emerald-400 text-xs px-2 py-1 rounded-full border border-emerald-500/30">
+                            Current
+                          </span>
+                        )}
+                      </div>
                       <p className="text-emerald-400 font-semibold">{job.company}</p>
                       <p className="text-gray-300 text-sm">{job.type}</p>
                       <p className="text-gray-300 text-sm">{job.location}</p>
                     </div>
                     <div className="flex items-center gap-2 mt-2 md:mt-0">
                       <span className="text-gray-300 font-medium">{job.duration}</span>
-                      {job.current && (
-                        <span className="bg-emerald-500/20 text-emerald-400 text-xs px-2 py-1 rounded-full border border-emerald-500/30">
-                          Current
-                        </span>
-                      )}
+                      
                     </div>
                   </div>
                   

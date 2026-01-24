@@ -1,13 +1,15 @@
 import {
-  SiDocker,
-  SiExpress,
-  SiFigma,
-  SiGit,
-  SiGithub,
-  SiJavascript,
-  SiJest,
-  SiJira,
+  SiNextdotjs,
+  SiReact,
   SiLaravel,
+  SiVuedotjs,
+  SiJavascript,
+  SiTypescript,
+  SiPostgresql,
+  SiDocker,
+  SiPrisma,
+  SiTailwindcss,
+  SiNodedotjs,
   SiMongodb,
   SiMysql,
   SiNestjs,
@@ -29,12 +31,32 @@ import {
   SiVitest
 } from "react-icons/si";
 
+// Radius Directory project images
+import rdAccount from "@/assets/projects/rd-account.png";
+import rdBuilderPage from "@/assets/projects/rd-builder-page.png";
+import rdHome from "@/assets/projects/rd-home.png";
+import rdMenu from "@/assets/projects/rd-menu.png";
+import rdSettings from "@/assets/projects/rd-settings.png";
+import rdSingleListing from "@/assets/projects/rd-single-listing.png";
+import rdTemplate from "@/assets/projects/rd-template.png";
+import landHome from "@/assets/projects/land-home.png";
+import fnHome from "@/assets/projects/fn-home.png";
+import fnCourse from "@/assets/projects/fn-course.png";
+import npfHome from "@/assets/projects/npf-home.png";
+import schoolHome from "@/assets/projects/school-home.png";
+import schoolAdmin from "@/assets/projects/school-admin.png";
+import ecom from "@/assets/projects/ecom-microservice.png";
+import niseHome from "@/assets/projects/nise-home.png";
+import semHome from "@/assets/projects/sem-home.png";
+import semRegister from "@/assets/projects/sem-register.png";
+import semPay from "@/assets/projects/sem-pay.png";
+
 // Personal Information
 export const personalInfo = {
   name: "Mazharul Islam Nahid",
   title: "Software Engineer",
   subtitle: "Full Stack Web Developer",
-  
+
   // Contact Information
   contact: {
     phone: "01832409825",
@@ -42,20 +64,19 @@ export const personalInfo = {
     location: "Dhaka, Bangladesh",
     availability: "Available for new opportunities"
   },
-  
+
   // Social Links
   socialLinks: {
     github: "https://github.com/nahidnstu12",
-    gitlab: "https://gitlab.com/nahid_dev",
-    linkedin: "https://www.linkedin.com/in/nahid-dev/",
+    gitlab: "https://gitlab.com/nahid-dev",
+    linkedin: "https://linkedin.com/in/nahid-dev",
     portfolio: "https://nahid-portfolio.vercel.app/",
-    leetcode: "https://leetcode.com/nahid-dev",
-    whatsapp: "https://wa.me/8801832409825"
+    leetcode: "https://leetcode.com/nahid-dev"
   },
-  
+
   // Career Objective
   careerObjective: "Full-stack developer with 3+ years of experience in React.js, Next.js, UI/UX optimization, and back-end development using Express. Skilled in building high-performance single-page applications and developing robust REST APIs to enhance user engagement and streamline interfaces. Passionate about continuous learning and contributing to innovative, collaborative development teams.",
-  
+
   // Statistics
   stats: {
     experience: "3+",
@@ -67,6 +88,8 @@ export const personalInfo = {
 
 // Work Experience
 export const workExperience = [
+
+
   {
     id: 1,
     position: "Deputy Team Lead – Full Stack Developer",
@@ -75,17 +98,37 @@ export const workExperience = [
     duration: "Jan 2025 - Current",
     location: "Arma Majeda Malik Tower, Merul Badda, Dhaka 1212",
     description: [
-      "Leading development of the Radius Directory SaaS platform; core contributor to its custom Page Builder, inspired by Elementor.",
-      "Engineered a drag-and-drop container layout system with advanced styling options using Next.js 15, Zustand, Tailwind CSS, Prisma, and shadcn/ui.",
-      "Built modular widget architecture and a menu builder system, enhancing platform scalability and customization.",
-      "Developed frontend rendering pipelines and layout flexibility with real-time UX interactions and state management.",
-      "Mentored junior developers and oversaw code quality, onboarding, and project contribution workflows."
+      "Lead full-stack development of Radius Directory SaaS platform, architecting and implementing a custom Page Builder with drag-and-drop functionality similar to Elementor.",
+      "Design and develop scalable container layout system with advanced styling capabilities using Next.js 15, React, TypeScript, Zustand state management, Tailwind CSS, and Prisma ORM and PostgreSQL.",
+      "Architect and implement monetization system supporting pay-per-listing, membership subscriptions, and promotional packages with multi-gateway payment processing (Stripe, PayPal, SSLCommerz, offline).",
+      "Build order processing workflows with transaction management, billing address validation, and automated listing activation upon payment completion.",
+      "Implement Redis caching layer with hash-based cache keys and tag-based invalidation strategies, reducing database queries by 60% and improving page load times.",
+      "Architect modular widget system and menu builder infrastructure and template system, enabling platform extensibility and custom business logic implementation.",
+      "Build high-performance frontend rendering pipelines with real-time state synchronization and dynamic route resolving, optimizing user experience and interaction responsiveness.",
+      "Manage team of junior developers, conducting code reviews, establishing development workflows, and ensuring adherence to coding standards and best practices."
     ],
     achievements: [
-      "Boosted builder performance and user interaction via optimized drag-and-drop logic and layout engine.",
-      "Helped elevate Radius Directory to a top-selling product through feature innovation and platform stability."
+      "Optimized drag-and-drop performance by 40% through algorithmic improvements and efficient layout calculation, resulting in smoother user interactions.",
+      "Implemented Redis caching strategy reducing API response times by 60% and database load through intelligent cache invalidation patterns.",
+      "Contributed to Radius Directory becoming a top-selling product through feature development, bug resolution, and platform stability enhancements."
     ],
-    techStack: ["Next.js 15", "Node.js", "Zustand", "Prisma", "PostgreSQL", "Tailwind CSS", "shadcn/ui", "TypeScript", "React", "DnD", "SaaS", "Flexbox", "Figma"],
+    techStack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Zustand",
+      "Prisma",
+      "PostgreSQL",
+      "Redis",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Drag-and-Drop",
+      "RESTful APIs",
+      "Payment Integration",
+      "SaaS Architecture",
+      "Cache Optimization",
+    ],
     current: true
   },
   {
@@ -120,7 +163,7 @@ export const skills = {
     { name: "NodeJS", icon: SiNodedotjs, level: "Advanced" },
     { name: "PHP", icon: SiPhp, level: "Intermediate" }
   ],
-  
+
   frameworks: [
     { name: "React", icon: SiReact, level: "Expert" },
     { name: "Next.js", icon: SiNextdotjs, level: "Expert" },
@@ -134,7 +177,7 @@ export const skills = {
     { name: "Laravel", icon: SiLaravel, level: "Intermediate" },
     // { name: "Vue.js", icon: SiVuedotjs, level: "Intermediate" }
   ],
-  
+
   backend: [
     { name: "ExpressJS", icon: SiExpress, level: "Advanced" },
     { name: "NestJS", icon: SiNestjs, level: "Advanced" },
@@ -146,7 +189,7 @@ export const skills = {
     { name: "Redis", icon: SiRedis, level: "Intermediate" },
     // { name: "Oracle", icon: SiOracle, level: "Intermediate" }
   ],
-  
+
   tools: [
     { name: "Git", icon: SiGit, level: "Advanced" },
     { name: "Github", icon: SiGithub, level: "Advanced" },
@@ -158,7 +201,7 @@ export const skills = {
     { name: "Vercel", icon: SiVercel, level: "Advanced" },
     { name: "MinIO", icon: null, level: "Familiar" }
   ],
-  
+
   others: [
     { name: "Notion", icon: SiNotion, level: "Advanced" },
     { name: "Click Up", icon: null, level: "Advanced" },
@@ -207,7 +250,8 @@ export const projects = [
     ],
     techStack: ["React", "NextJs", "TypeScript", "MUI", "NestJS", "Oracle", "TypeORM", "Redis", "RabbitMQ"],
     category: "Government",
-    image: "/api/placeholder/600/400"
+    image: landHome,
+    images: [{ src: landHome, alt: "Land Home Page", caption: "Land home page showcasing the government project" },]
   },
   {
     id: 2,
@@ -215,25 +259,43 @@ export const projects = [
     type: "RadiusTheme",
     status: "Development",
     duration: "Jan 2025 - Current",
-    liveUrl: "#",
+    liveUrl: "https://radiusdirectory.net/",
     description: [
-      "Core contributor to one of RadiusTheme's top-selling SaaS products designed for dynamic directory and website creation.",
-      "Developed a fully custom drag-and-drop Page Builder module, inspired by Elementor, with container-based layout logic and real-time styling.",
-      "Implemented modular widget architecture, enabling scalable, reusable UI components.",
-      "Built an interactive Menu Builder system, optimized beyond WordPress models for performance and extensibility.",
-      "Integrated Next.js 15 App Router, Zustand, and shadcn/ui for dynamic rendering, layout control, and component styling.",
-      "Contributed to core UX features like container nesting, layout switching, flexbox controls, and dynamic background configuration."
+      "Core contributor to RadiusTheme's top-selling SaaS platform for dynamic directory and website creation, serving as a leading marketplace solution.",
+      "Architected and developed a fully custom drag-and-drop Page Builder system inspired by Elementor, featuring container-based layout logic, nested container support, flexbox controls, and real-time styling with live preview capabilities.",
+      "Built modular widget architecture with 30+ reusable UI components (headings, images, galleries, maps, forms, listings) enabling scalable, extensible page construction without code dependencies.",
+      "Designed and implemented Template Builder system supporting header/footer templates with conditional rendering logic, enabling site-wide template reuse and consistent branding across pages.",
+      "Developed interactive Menu Builder with drag-and-drop functionality, hierarchical menu structures, multi-level navigation support, and dynamic menu item configuration (pages, custom links, templates).",
+      "Engineered comprehensive monetization system supporting pay-per-listing, membership subscriptions, promotional packages, and renewal workflows with multi-gateway payment integration (Stripe, PayPal, SSLCommerz, offline).",
+      "Implemented order processing workflows with transaction management, billing address validation, automated listing activation, and membership quota tracking with priority-based plan distribution.",
+      "Architected Redis caching layer with hash-based cache keys, tag-based invalidation strategies (global, widget-specific, parameter-level), and Next.js unstable_cache wrapper with performance metrics, reducing database queries by 60% and improving API response times.",
+      "Built high-performance frontend rendering pipelines with parallel data prefetching, server-side rendering optimization, and real-time state synchronization using Next.js 15 App Router, Zustand, and React Server Components.",
+      "Integrated advanced UX features including container nesting, layout switching, responsive flexbox controls, dynamic background configuration, and drag-and-drop interactions using @dnd-kit library."
     ],
     features: [
-      "Custom drag-and-drop Page Builder",
-      "Modular widget architecture",
-      "Interactive Menu Builder",
-      "Real-time styling system",
-      "Container-based layout logic"
+      "Custom drag-and-drop Page Builder with container-based layouts",
+      "Modular widget architecture with 30+ reusable components",
+      "Template Builder system for header/footer templates",
+      "Interactive Menu Builder with hierarchical navigation",
+      "Monetization system (pay-per-listing, memberships, subscriptions)",
+      "Multi-gateway payment processing integration",
+      "Redis caching with tag-based invalidation",
+      "Real-time styling and live preview system",
+      "Order processing and transaction management",
+      "Performance-optimized rendering pipelines"
     ],
-    techStack: ["Next.js 15", "React", "Node.js", "Prisma", "PostgreSQL", "Zustand", "Tailwind CSS", "shadcn/ui", "TypeScript"],
-    category: "SaaS Product",
-    image: "/api/placeholder/600/400"
+    techStack: ["Next.js 15", "React", "TypeScript", "Node.js", "Prisma", "PostgreSQL", "Redis", "Zustand", "Tailwind CSS", "shadcn/ui", "@dnd-kit", "Payment APIs", "RESTful APIs", "SaaS Architecture"],
+    category: "SaaS",
+    image: rdHome,
+    images: [
+      { src: rdHome, alt: "Radius Directory Home Page", caption: "Home page showcasing the directory platform" },
+      { src: rdBuilderPage, alt: "Page Builder Interface", caption: "Custom drag-and-drop Page Builder with container-based layouts" },
+      { src: rdTemplate, alt: "Template Builder", caption: "Template Builder system for header/footer templates" },
+      { src: rdMenu, alt: "Menu Builder", caption: "Interactive Menu Builder with hierarchical navigation" },
+      { src: rdSingleListing, alt: "Single Listing Page", caption: "Individual listing page with detailed information" },
+      { src: rdAccount, alt: "Account Dashboard", caption: "User account dashboard and settings" },
+      { src: rdSettings, alt: "Settings Page", caption: "Platform settings and configuration" }
+    ]
   },
   {
     id: 3,
@@ -259,14 +321,15 @@ export const projects = [
     ],
     techStack: ["Express.js", "EJS", "React", "Node.js", "Shadow DOM", "XML", "MongoDB", "MinIO", "NestJS", "Next.js", "TypeScript"],
     category: "Government",
-    image: "/api/placeholder/600/400"
+    image: npfHome,
+    images: [{ src: npfHome, alt: "NPF Home Page", caption: "NPF home page showcasing the government project" },]
   },
   {
     id: 4,
     title: "FUTURE NATION",
-    type: "Softbd",
+    type: "Client Project",
     status: "Live",
-    duration: "April 2023 - Dec 2023",
+    duration: "April 2024 - Dec 2024",
     liveUrl: "https://platform.futurenation.gov.bd/",
     description: [
       "Developed interactive e-learning platform: Built engaging course modules with content provider tools and integrated BigBlueButton for live class and live class routine, collaborative learning experiences.",
@@ -281,16 +344,17 @@ export const projects = [
       "Step-by-step user onboarding",
       "BigBlueButton live class integration"
     ],
-    techStack: ["React", "NextJs", "TypeScript", "MUI", "SWR", "NestJS", "TypeORM", "Redis", "RabbitMQ"],
-    category: "LMS & Job Portal",
-    image: "/api/placeholder/600/400"
+    techStack: ["React", "NextJs", "TypeScript", "MUI", "NestJS", "Oracle", "TypeORM", "Redis", "RabbitMQ"],
+    category: "Client",
+    image: fnHome,
+    images: [{ src: fnHome, alt: "Future Nation Home Page", caption: "Future Nation home page showcasing the government project" }, { src: fnCourse, alt: "Future Nation Course Page", caption: "Future Nation course page showcasing the government project" }]
   },
   {
     id: 5,
     title: "School",
     type: "SaaS Product",
-    status: "Development",
-    duration: "Jan 2024 - Current",
+    status: "Live",
+    duration: "Jan 2023 - Current",
     liveUrl: "https://school.pioneersgroupbd.com/",
     description: [
       "Developed comprehensive school management system with integrated student information, attendance tracking, and academic performance monitoring.",
@@ -308,39 +372,39 @@ export const projects = [
     ],
     techStack: ["Laravel", "Mysql", "Laravel Blade", "React Native", "SCM", "Lando"],
     category: "SaaS",
-    image: "/api/placeholder/600/400"
+    image: schoolHome,
+    images: [{ src: schoolHome, alt: "School Home Page", caption: "School home page showcasing the government project" }, { src: schoolAdmin, alt: "School Admin Page", caption: "School admin page showcasing the government project" }]
   },
-  {
-    id: 6,
-    title: "Team Docs",
-    type: "Personal Project",
-    status: "Development",
-    duration: "Jan 2025 – Current",
-    liveUrl: "https://team-docs.vercel.app/",
-    description: [
-      "Developed collaborative documentation platform for government teams with real-time editing, version control, and approval workflows.",
-      "Built document management system with hierarchical organization, advanced search capabilities, and secure access controls.",
-      "Implemented team collaboration features including comments, mentions, task assignments, and notification systems.",
-      "Created template library with standardized government document formats and automated compliance checking.",
-      "Designed audit trail system for document changes, approvals, and access logs to ensure transparency and accountability."
-    ],
-    features: [
-      "Real-time collaborative editing",
-      "Document management and organization",
-      "Team collaboration tools",
-      "Government template library",
-      "Audit trail and compliance",
-      "Mentor new developers"
-    ],
-    techStack: [ "Next.js", "React", "TypeScript", "ShadCN", "Postgres", "Server Actions"],
-    category: "Personal",
-    image: "/api/placeholder/600/400"
-  },
+  // {
+  //   id: 6,
+  //   title: "Team Docs",
+  //   type: "Government Project",
+  //   status: "Development",
+  //   duration: "Dec 2023 – Dec 2024",
+  //   liveUrl: "#",
+  //   description: [
+  //     "Developed collaborative documentation platform for government teams with real-time editing, version control, and approval workflows.",
+  //     "Built document management system with hierarchical organization, advanced search capabilities, and secure access controls.",
+  //     "Implemented team collaboration features including comments, mentions, task assignments, and notification systems.",
+  //     "Created template library with standardized government document formats and automated compliance checking.",
+  //     "Designed audit trail system for document changes, approvals, and access logs to ensure transparency and accountability."
+  //   ],
+  //   features: [
+  //     "Real-time collaborative editing",
+  //     "Document management and organization",
+  //     "Team collaboration tools",
+  //     "Government template library",
+  //     "Audit trail and compliance"
+  //   ],
+  //   techStack: ["Express.js", "EJS", "React", "Node.js", "Shadow DOM", "XML", "MongoDB", "MinIO", "NestJS", "Next.js", "TypeScript"],
+  //   category: "Government",
+  //   image: "/api/placeholder/600/400"
+  // },
   {
     id: 7,
     title: "Ecom-Microservice",
     type: "Personal Project",
-    status: "Live",
+    status: "Completed",
     duration: "April 2024 - Dec 2024",
     liveUrl: "https://www.postman.com/interstellar-sunset-878874/beast-com/collection/o1hq8nj/services?action=share&source=copy-link&creator=13406744",
     description: [
@@ -358,16 +422,17 @@ export const projects = [
       "API gateway with load balancing",
       "Distributed system design",
     ],
-    techStack: ["Express.js", "Node.js", "Microservices", "Docker", "RabbitMQ", "Redis", "Postgres", "TypeScript", "RestAPI", "Konga"],
+    techStack: ["React", "NextJs", "TypeScript", "MUI", "NestJS", "Oracle", "TypeORM", "Redis", "RabbitMQ"],
     category: "Personal",
-    image: "/api/placeholder/600/400"
+    image: ecom,
+    images: [{ src: ecom, alt: "Ecom Microservice", caption: "Ecom microservice architecture" }]
   },
   {
     id: 8,
     title: "NISE",
-    type: "Softbd",
+    type: "SaaS Product",
     status: "Live",
-    duration: "Jan 2022 - Nov 2024",
+    duration: "Jan 2025 - Current",
     liveUrl: "https://nise.gov.bd/",
     description: [
       "Developed apprenticeship module for a youth scholarship program, provided different topics on skills, enabling applications, and granting certificates and financial benefits upon completion.",
@@ -384,12 +449,13 @@ export const projects = [
     ],
     techStack: ["Next.js", "React", "Node.js", "TypeScript", "SWR", "Material UI", "Laravel", "MySQL", "Microservices", "Docker", "RabbitMQ", "Redis"],
     category: "SaaS",
-    image: "/api/placeholder/600/400"
+    image: niseHome,
+    images: [{ src: niseHome, alt: "NISE Home Page", caption: "NISE home page showcasing the government project" }]
   },
   {
     id: 9,
     title: "Scholars (SEM)",
-    type: "Sass Project",
+    type: "SaaS Product",
     status: "Development",
     duration: "May 2025 – Current",
     liveUrl: "#",
@@ -407,9 +473,10 @@ export const projects = [
       "Evaluation and scoring system",
       "Student portal and communication"
     ],
-    techStack: ["Go", "React", "Vite", "ShadCN",  "Postgres", "TypeScript", "RestAPI", "Docker", "RTK Query"],
-    category: "SasS",
-    image: "/api/placeholder/600/400"
+    techStack: ["Express.js", "EJS", "React", "Node.js", "Shadow DOM", "XML", "MongoDB", "MinIO", "NestJS", "Next.js", "TypeScript"],
+    category: "SaaS",
+    image: semHome,
+    images: [{ src: semHome, alt: "SEM Home Page", caption: "SEM home page showcasing the government project" }, { src: semRegister, alt: "SEM Register Page", caption: "SEM register page showcasing the government project" }, { src: semPay, alt: "SEM Pay Page", caption: "SEM pay page showcasing the government project" }]
   }
 ];
 

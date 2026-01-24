@@ -31,26 +31,26 @@ export const CONTACT_INFO = {
 
 // Social links
 export const SOCIAL_LINKS: SocialLink[] = [
-  {
-    name: "Gmail",
-    url: `mailto:${PERSONAL_INFO.email}`,
-    icon: "gmail",
-  },
-  {
-    name: "LinkedIn",
-    url: PERSONAL_INFO.socialLinks.linkedin,
-    icon: "linkedin",
-  },
-  {
-    name: "GitHub",
-    url: PERSONAL_INFO.socialLinks.github,
-    icon: "github",
-  },
-  {
-    name: "Portfolio",
-    url: PERSONAL_INFO.socialLinks.portfolio,
-    icon: "portfolio",
-  },
+	{
+		name: "Gmail",
+		url: `mailto:${PERSONAL_INFO.email}`,
+		icon: "gmail",
+	},
+	{
+		name: "LinkedIn",
+		url: PERSONAL_INFO.socialLinks.linkedin,
+		icon: "linkedin",
+	},
+	{
+		name: "GitHub",
+		url: PERSONAL_INFO.socialLinks.github,
+		icon: "github",
+	},
+	// {
+	// 	name: "LeetCode",
+	// 	url: PERSONAL_INFO.socialLinks.leetcode,
+	// 	icon: "leetcode",
+	// },
 ];
 
 // Tape section scrolling text
