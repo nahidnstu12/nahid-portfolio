@@ -48,6 +48,14 @@ import schoolHome from "@/assets/projects/school-home.png";
 import semHome from "@/assets/projects/sem-home.png";
 import semPay from "@/assets/projects/sem-pay.png";
 import semRegister from "@/assets/projects/sem-register.png";
+import freelocityHome from "@/assets/projects/freelocity-home.png";
+import freelocityDashboard from "@/assets/projects/freelocity-dashboard.png";
+import pharmaPosSale from "@/assets/projects/pharma-pos-sale.png";
+import pharmaPosDashboard from "@/assets/projects/pharma-pos-dashboard.png";
+import pharmaPosPosLong from "@/assets/projects/pharma-pos-pos-long.png";
+import pharmaPosDashboardLong from "@/assets/projects/pharma-pos-dashboard-long.png";
+import pharmaPosCatalogLong from "@/assets/projects/pharma-pos-catalog-long.png";
+import pharmaPosPurchaseLong from "@/assets/projects/pharma-pos-purchase-long.png";
 
 // Personal Information
 export const personalInfo = {
@@ -475,6 +483,72 @@ export const projects = [
     category: "SaaS",
     image: semHome,
     images: [{ src: semHome, alt: "SEM Home Page", caption: "SEM home page showcasing the government project" }, { src: semRegister, alt: "SEM Register Page", caption: "SEM register page showcasing the government project" }, { src: semPay, alt: "SEM Pay Page", caption: "SEM pay page showcasing the government project" }]
+  },
+  {
+    id: 10,
+    title: "FREELOCITY",
+    type: "Client Project",
+    status: "Live",
+    duration: "Dec 2025 - May 2026",
+    liveUrl: "http://freelocity.bynarilab.com/",
+    description: [
+      "End-to-end solo build for a USA-based client: architected and delivered the full web platform and REST API for a two-sided freelance marketplace connecting buyers with skilled freelancers.",
+      "Designed system architecture spanning Laravel 12 API, Inertia.js + React 19 frontend, Sanctum auth, and role-based buyer/freelancer/admin flows with shared dashboard infrastructure.",
+      "Built marketplace core: service (gig) listings with category filters, tiered packages, portfolio galleries, featured services, and public gig discovery with search and slug-based routing.",
+      "Implemented buyer journey — browse and filter freelancers, real-time chat for scope discussion, secure checkout, order tracking, revisions, and completion workflows.",
+      "Implemented freelancer journey — service creation wizard (overview, packages, gallery, publish), project applications, order delivery, reviews, and payout management via Stripe Connect.",
+      "Integrated Stripe and PayPal payment flows with webhooks, platform commission (10% buyer / 20% freelancer), withdrawal processing, and admin payment oversight.",
+      "Engineered real-time messaging with Pusher, ImageKit media uploads, email verification, profile completion tracking, and admin moderation for gigs, orders, users, and chat."
+    ],
+    features: [
+      "Two-sided freelance marketplace (buyers & freelancers)",
+      "Gig listings with packages, gallery & category filters",
+      "Real-time chat & order tracking",
+      "Stripe Connect & PayPal checkout",
+      "Admin panel for gigs, orders & withdrawals",
+      "Full-stack architecture design (solo build)"
+    ],
+    techStack: ["Laravel 12", "React 19", "Inertia.js", "TypeScript", "Tailwind CSS 4", "MySQL", "Sanctum", "Stripe", "PayPal", "Pusher", "ImageKit", "Zustand", "Zod", "Radix UI"],
+    category: "Client",
+    image: freelocityHome,
+    images: [
+      { src: freelocityHome, alt: "Freelocity Home Page", caption: "Landing page with category browse and featured freelancer services" },
+      { src: freelocityDashboard, alt: "Freelocity How It Works & Orders", caption: "Buyer journey flow and order tracking dashboard with secure payments" }
+    ]
+  },
+  {
+    id: 11,
+    title: "PHARMA POS (Bynarilab)",
+    type: "Bynarilab Product",
+    status: "Live",
+    duration: "Apr 2026 - Current",
+    liveUrl: "https://pos.bynarilab.com/",
+    description: [
+      "Lead architect and solo full-stack builder for Bynarilab's pharmacy-focused POS SaaS — mobile-first point of sale for Bangladeshi drug stores with Bengali UX and HQ-administered master catalog.",
+      "Designed multi-tenant architecture: Laravel 12 REST API, React 19 SPA, Sanctum session auth, shop booking/onboarding wizard, and super-admin platform for tenants, plans, and master products.",
+      "Built 20,000+ master medicine catalog with generic/name search, import-from-catalog onboarding, custom SKU submission with HQ approval, and low-stock/out-of-stock alerts.",
+      "Implemented counter POS flow — cart with MRP-based discount (% or flat), cash and mobile-banking checkout, sale receipts, void with audit trail, and automatic inventory deduction.",
+      "Delivered purchase module: supplier selection, box/loose quantity, MRP and discount entry with auto cost calculation and stock replenishment.",
+      "Engineered day-closing workflow with cash drawer reconciliation, variance notes, and sales lock; subscription billing with trial timeline and bKash payment renewal.",
+      "Integrated Firebase phone verification, i18n (Bengali/English), Redux Toolkit state, audit log retention, and scheduled cleanup jobs for OTP, idempotency keys, and error events."
+    ],
+    features: [
+      "Pharmacy POS with 20K+ master medicine catalog",
+      "Shop onboarding, booking & HQ approval flows",
+      "MRP-based sales, voids & day closing",
+      "Purchase & supplier inventory management",
+      "Multi-tenant SaaS with subscription billing",
+      "Solo architecture design & full-stack delivery"
+    ],
+    techStack: ["Laravel 12", "React 19", "TypeScript", "Redux Toolkit", "Tailwind CSS 4", "MySQL", "Sanctum", "Firebase Auth", "i18next", "Vite", "Radix UI", "Multi-tenant SaaS"],
+    category: "SaaS",
+    image: pharmaPosSale,
+    images: [
+      { src: pharmaPosPosLong, alt: "Pharma POS Counter", caption: "POS counter — MRP discounts, cart, cash/bKash checkout" },
+      { src: pharmaPosDashboardLong, alt: "Pharma POS Dashboard", caption: "Dashboard — daily sales, stock alerts, close day" },
+      { src: pharmaPosCatalogLong, alt: "Pharma POS Catalog Onboarding", caption: "Catalog onboarding — 20K+ master medicines import" },
+      { src: pharmaPosPurchaseLong, alt: "Pharma POS Purchase & Sales History", caption: "Purchase & sales history — supplier purchase, voids, receipts" }
+    ]
   }
 ];
 
