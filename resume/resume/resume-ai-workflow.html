@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mazharul Islam Nahid — AI Workflow Engineer</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt; line-height: 1.4; color: #000; background: #fff;
+      max-width: 210mm; margin: 0 auto; padding: 14mm 16mm;
+    }
+    @media print {
+      body { padding: 0; }
+      a { color: #000; text-decoration: none; }
+      .block { break-inside: avoid; }
+    }
+    h1 { font-size: 20pt; font-weight: 700; }
+    .headline { font-size: 11pt; margin-top: 2px; }
+    .contact { margin-top: 8px; font-size: 9.5pt; line-height: 1.6; }
+    .contact a { color: #1155cc; text-decoration: none; }
+    section { margin-top: 12px; }
+    h2 {
+      font-size: 11pt; font-weight: 700; text-transform: uppercase;
+      border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 6px;
+    }
+    p, li { color: #111; }
+    .job { margin-bottom: 10px; }
+    .row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .title { font-weight: 700; }
+    .meta { font-size: 9.5pt; white-space: nowrap; }
+    .company { font-weight: 600; margin: 2px 0 4px; }
+    .company a { color: #1155cc; text-decoration: none; }
+    ul { margin: 0 0 0 18px; }
+    li { margin-bottom: 2px; }
+    .tech { font-size: 9.5pt; margin-top: 3px; }
+    .skill-line { margin-bottom: 3px; font-size: 10pt; }
+    .skill-line strong { font-weight: 700; }
+    a { color: #1155cc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header class="block">
+    <h1>Mazharul Islam Nahid</h1>
+    <p class="headline">Software Engineer</p>
+    <p class="contact">
+      01832409825 |
+      <a href="mailto:nahid.dev19@gmail.com">nahid.dev19@gmail.com</a> |
+      <a href="https://github.com/nahidnstu12">GitHub</a> |
+      <a href="https://www.linkedin.com/in/nahid-dev/">LinkedIn</a> |
+      <a href="https://nahid-portfolio.vercel.app/">Portfolio</a>
+    </p>
+  </header>
+
+  <section class="block">
+    <h2>Summary</h2>
+    <p>
+      Software engineer with 4+ years building web apps, server automation, and deployment workflows.
+      Currently lead full-stack work on Radius Directory, a multi-tenant SaaS — server setup, app
+      deployment, and scheduled jobs via a central Redis worker. Use Claude and Cursor daily for
+      spec-driven development — writing specs, JSON-structured prompts, code generation, and review.
+      Previously built the National Portal Framework theme engine (54,000+ government sites) and
+      front-end features for Bangladesh's digital land record system.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Deputy Team Lead – Full Stack Developer</span>
+        <span class="meta">Jan 2025 – Present</span>
+      </div>
+      <p class="company"><a href="https://radiustheme.com">RadiusTheme</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Lead <a href="https://bikribd.com/">Radius Directory</a> — multi-tenant classified listing and business directory SaaS</li>
+        <li>Handle server automation and production app deployment for the platform</li>
+        <li>Run all scheduled jobs across tenants through a central Redis worker — membership alerts, listing cleanup, stats, backups, and health checks</li>
+        <li>Built Page Builder, payment flows (Stripe, SSLCommerz, PayPal), and reporting dashboards</li>
+        <li>Practice spec-driven development with Claude and Cursor — draft feature specs, use JSON prompting for structured outputs, then implement and review with AI assistance</li>
+        <li>Mentor junior developers through code reviews, pair programming, and sprint planning</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, Node.js, TypeScript, Prisma, PostgreSQL, Redis</p>
+    </article>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Software Engineer</span>
+        <span class="meta">May 2022 – Dec 2024</span>
+      </div>
+      <p class="company"><a href="https://softbdltd.com/">Softbd LTD</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li><strong><a href="https://dlrms.land.gov.bd/">Digital Land Record System (DLRMS)</a>:</strong> Core front-end work — citizen khatian entry, khatian correction workflow, and admin processing UI</li>
+        <li>Improved page load performance by 40% through SSR, code splitting, and SWR caching</li>
+        <li><strong><a href="https://bangladesh.gov.bd/">National Portal Framework (NPF)</a>:</strong> Full-stack work on the theme engine builder powering 54,000+ government websites — Express + EJS rendering, Shadow DOM drag-and-drop, reusable widgets, and XML-driven layouts</li>
+        <li>Led a small team on NPF theme work; mentored junior developers on front-end patterns and delivery</li>
+        
+      </ul>
+      <p class="tech">Tech: React, Next.js, TypeScript, Express, EJS, TypeORM, MongoDB, MinIO</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Skills</h2>
+    <p class="skill-line"><strong>AI:</strong> Claude, ChatGPT, Cursor, JSON prompting, spec-driven development</p>
+    <p class="skill-line"><strong>Languages:</strong> JavaScript (ES6+), TypeScript</p>
+    <p class="skill-line"><strong>Frontend:</strong> React, Next.js, Tailwind CSS, Material UI, shadcn/ui, Zustand, SWR, Zod</p>
+    <p class="skill-line"><strong>Backend &amp; Automation:</strong> Node.js, Express, NestJS, Graphile Worker, Redis, GitHub Actions, Docker, PM2</p>
+    <p class="skill-line"><strong>Database:</strong> PostgreSQL, MySQL, MongoDB, Oracle, Prisma, TypeORM</p>
+    <p class="skill-line"><strong>Tools:</strong> Git, GitHub, Vercel, Postman, Notion, ClickUp, Jira</p>
+  </section>
+
+  <section class="block">
+    <h2>Education</h2>
+    <div class="row">
+      <span class="title">BSc. Computer Science and Telecommunication Engineering</span>
+      <span class="meta">2017 – 2022</span>
+    </div>
+    <p>Noakhali Science and Technology University · CGPA 3.39 / 4.00</p>
+  </section>
+
+</body>
+</html>

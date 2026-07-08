@@ -1,0 +1,75 @@
+
+Mazharul Islam Nahid
+Software Engineer
+
+01832409825  | nahid.dev19@gmail.com | Github | Gitlab | LinkedIn  | Portfolio | Leetcode
+
+Career Objective
+
+Full-stack developer with 4+ years of experience building scalable SaaS platforms, government-scale portals, and enterprise web applications using Next.js, React, Node.js, TypeScript, and PostgreSQL. Proven track record in architecting complex systems — from custom page builders to payment pipelines — while mentoring developers and driving technical decisions across the fullstack. Passionate about continuous learning and contributing to innovative, collaborative development teams.
+
+Experience
+
+Deputy Team Lead – Full Stack Developer (SaaS, Node.js, Next.js)                 Jan 2025 - Current
+RadiusTheme | Merul Badda, Dhaka 1212
+
+Lead a Node.js team building Radius Directory, a multi-tenant SaaS platform for classified listings and business directories using Next.js, Prisma, and PostgreSQL
+Mentor junior developers through code reviews, pair programming, and structured sprint planning to accelerate team productivity and code quality
+Drive architecture decisions across 59 database models, 51+ server actions, and 17 Zustand stores, ensuring scalable and maintainable codebase
+Own end-to-end feature delivery from technical design to deployment — including Page Builder, payment system, real-time chat, and background job infrastructure
+Tech Stack: Next.js 16, React 19, Node.js, TypeScript, Prisma, PostgreSQL, Zustand, Tailwind CSS, shadcn/ui
+
+Software Engineer                                                   	        			       May 2022 - Dec 2024
+Softbd LTD | 52/A, New Eskaton Road, Dhaka, Bangladesh
+Developed responsive, high-performance interfaces using React.js, Next.js, TypeScript, Tailwind CSS, and Material UI across multiple government and enterprise projects
+Contributed scalable backend APIs and microservices with NestJS, Express, TypeORM, MongoDB, and MySQL.
+Led front-end performance optimization, achieving 40% faster page loads through SSR, code splitting, and SWR caching
+Contributed to the National Portal Framework (NPF) serving 54,000+ websites, creating a theme customization engine with customized layouts, Express + EJS, and Shadow DOM for DnD rendering.
+Developed reusable admin tools including dynamic data tables, resource loaders, and content management widgets
+Tech Stack: React, NextJs, TypeScript, Material UI, Tailwindcss,  Nodejs, Express, Nestjs, TypeORM, Mysql, Mongoose, MinIO, Click Up
+
+Skills  
+
+Languages: JavaScript (ES6+), TypeScript
+Frontend: React, Next.js, Zustand, Redux Toolkit, Tailwind CSS, Material UI, shadcn/ui, SWR, Zod, Jest
+Backend: Node.js, Express, NestJS, Next.js Server Actions, Graphile Worker
+Database & ORM: PostgreSQL, MySQL, MongoDB, Prisma, TypeORM, Mongoose
+Tools:	Docker, Git, GitHub, GitHub Actions, PM2, Vercel, Figma, Postman, MinIO
+Others: Notion, Click Up, Jira
+
+Projects
+DIGITAL LAND RECORD AND MANAGEMENT SYSTEM (DLRMS) | Live Site                          April 2024 - Dec 2024
+Worked on a large-scale government project aimed at digitizing land records and improving administrative workflows.
+Developed features for khatian entry from the citizen panel and streamlined the processing workflow for DLRMS office administration.
+Created a khatian correction system, enabling citizens to correct their land records in an organized and efficient manner.
+Designed and maintained a scalable backend API using Nest.js, TypeORM, and Oracle to handle millions of user land records.
+Technologies: React, NextJs, TypeScript, MUI, NestJS, Oracle, TypeORM, Redis, Rabbitmq 
+
+
+RADIUS DIRECTORY - SasS Product | Internal Product  | Live Site                              	Jan 2025 - Current
+Full-stack engineer and core contributor to a multi-tenant classified listing and business directory SaaS platform serving dynamic directory and website creation.
+Architected and built a custom drag-and-drop Page Builder (295+ files) with container-based layout logic, modular widget architecture, real-time CSS generation, and responsive design controls — inspired by Elementor but optimized for React/Next.js
+Designed and implemented an interactive Menu Builder system with nested drag-and-drop tree structure, keyboard navigation, and page/category linking
+Built end-to-end payment and checkout flows integrating SSLCommerz, Stripe, and PayPal gateways, pay-per-ad billing, listing promotions, and PDF invoice generation with translation support
+Designed and implemented 16 background job tasks using Graphile Worker for automated membership expiration alerts, listing cleanup, daily stats aggregation, database backups, and health checks
+Developed a reporting and analytics module with revenue, user, listing, lead, and search dashboards with daily aggregation
+Integrated 6+ third-party services: Pusher (real-time), ImageKit (CDN), AWS S3/Cloudflare R2 (storage), Twilio (SMS/OTP), Firebase (auth), SSLCommerz (payments)
+Technologies: Next.js 16, React 19, Prisma 7, PostgreSQL, Zustand, Tailwind CSS, shadcn/ui, TypeScript, Graphile Worker, React Email
+NATIONAL PORTAL FRAMEWORK (NPF) – Government Portal | Government Project  | Live Site                                                              Dec 2023 – Dec 2024   
+
+Built a dynamic theme customization system powering 54,000+ Bangladeshi government websites under the National Portal Framework.
+Designed a flexible theme engine using Express + EJS with React-based composition to render dynamic pages from XML configurations.
+Created a dependency-free drag-and-drop system using Shadow DOM, supporting custom raw widgets and dynamic content rendering.
+Built reusable tools like Minioloader, Fileloader, and Mongoloader to manage resource loading across admin and theme layers.
+Developed a feature-rich data table component in EJS, enabling high-performance, theme-aware content management.
+Integrated backend with MongoDB and MinIO, enabling reliable data handling and asset delivery.
+Technologies: Express.js, EJS, React, Node.js, Shadow DOM, XML, MongoDB, MinIO, NestJS, Next.js, TypeScript
+
+
+Achievement
+LWS (think-in-a-redux-way) Certificate Link Site
+
+Education
+BSc. in Computer Science and Telecommunication Engineering                                              2017-2022
+Noakhali Science and Technology University                      
+CGPA: 3.39 (out of 4.00)

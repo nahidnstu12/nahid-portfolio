@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mazharul Islam Nahid — Senior Software Engineer (Web)</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt; line-height: 1.4; color: #000; background: #fff;
+      max-width: 210mm; margin: 0 auto; padding: 14mm 16mm;
+    }
+    @media print {
+      body { padding: 0; }
+      a { color: #000; text-decoration: none; }
+      .block { break-inside: avoid; }
+    }
+    h1 { font-size: 20pt; font-weight: 700; }
+    .headline { font-size: 11pt; margin-top: 2px; }
+    .contact { margin-top: 8px; font-size: 9.5pt; line-height: 1.6; }
+    .contact a { color: #1155cc; text-decoration: none; }
+    section { margin-top: 12px; }
+    h2 {
+      font-size: 11pt; font-weight: 700; text-transform: uppercase;
+      border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 6px;
+    }
+    p, li { color: #111; }
+    .job { margin-bottom: 10px; }
+    .row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .title { font-weight: 700; }
+    .meta { font-size: 9.5pt; white-space: nowrap; }
+    .company { font-weight: 600; margin: 2px 0 4px; }
+    .company a { color: #1155cc; text-decoration: none; }
+    ul { margin: 0 0 0 18px; }
+    li { margin-bottom: 2px; }
+    .tech { font-size: 9.5pt; margin-top: 3px; }
+    .skill-line { margin-bottom: 3px; font-size: 10pt; }
+    .skill-line strong { font-weight: 700; }
+    a { color: #1155cc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header class="block">
+    <h1>Mazharul Islam Nahid</h1>
+    <p class="headline">Senior Software Engineer · React &amp; Next.js</p>
+    <p class="contact">
+      01832409825 |
+      <a href="mailto:nahid.dev19@gmail.com">nahid.dev19@gmail.com</a> |
+      <a href="https://github.com/nahidnstu12">GitHub</a> |
+      <a href="https://gitlab.com/nahid-dev">GitLab</a> |
+      <a href="https://www.linkedin.com/in/nahid-dev/">LinkedIn</a> |
+      <a href="https://nahid-portfolio.vercel.app/">Portfolio</a>
+    </p>
+  </header>
+
+  <section class="block">
+    <h2>Summary</h2>
+    <p>
+      Full-stack web engineer with 4+ years building production-grade applications using React,
+      Next.js, TypeScript, and REST APIs. Strong front-end focus — responsive UI, component
+      architecture, and performance optimization (40% faster page loads on a prior project). Currently
+      deputy team lead on a multi-tenant SaaS with a custom Page Builder, payment integrations, and
+      real-time features. Experienced leading technical delivery, mentoring juniors, and working
+      through Git-based CI/CD workflows. Exploring Golang for full-stack expansion.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Deputy Team Lead – Full Stack Developer</span>
+        <span class="meta">Jan 2025 – Present</span>
+      </div>
+      <p class="company"><a href="https://radiustheme.com">RadiusTheme</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Lead front-end and full-stack development on <a href="https://bikribd.com/">Radius Directory</a> — multi-tenant classified listing and business directory SaaS</li>
+        <li>Built a custom drag-and-drop Page Builder and Directory Builder with responsive layout controls, modular widgets, and real-time CSS generation in React/Next.js</li>
+        <li>Integrated REST APIs and third-party services — Stripe, SSLCommerz, PayPal, Pusher (real-time), ImageKit, Twilio</li>
+        <li>Own end-to-end feature delivery: technical design, implementation, production deployment, and GitHub Actions CI/CD</li>
+        <li>Drive front-end architecture with Zustand state management, server actions, and Tailwind CSS + shadcn/ui component patterns</li>
+        <li>Mentor junior developers through code reviews, pair programming, and sprint planning</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, Zustand, Prisma, PostgreSQL, GitHub Actions</p>
+    </article>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Software Engineer</span>
+        <span class="meta">May 2022 – Dec 2024</span>
+      </div>
+      <p class="company"><a href="https://softbdltd.com/">Softbd LTD</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Developed responsive, high-performance interfaces with React, Next.js, TypeScript, Tailwind CSS, and Material UI across government and enterprise projects</li>
+        <li>Improved page load performance by 40% through SSR, code splitting, and SWR caching</li>
+        <li><strong><a href="https://bangladesh.gov.bd/">National Portal Framework (NPF)</a>:</strong> Built the theme engine for 54,000+ government websites — Shadow DOM drag-and-drop, Express + EJS rendering, reusable widgets, and XML-driven layouts</li>
+        <li>Led a small team on NPF theme work; mentored junior developers on front-end patterns and delivery</li>
+        <li><strong><a href="https://dlrms.land.gov.bd/">Digital Land Record System (DLRMS)</a>:</strong> Core front-end work — citizen khatian entry, khatian correction workflow, and admin processing UI; integrated with NestJS REST APIs</li>
+        <li>Built reusable admin components — dynamic data tables, resource loaders, and CMS widgets</li>
+      </ul>
+      <p class="tech">Tech: React, Next.js, TypeScript, Tailwind CSS, MUI, Express, NestJS, TypeORM, MongoDB, MinIO</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Skills</h2>
+    <p class="skill-line"><strong>Frontend:</strong> React, Next.js, HTML, CSS, TypeScript, Tailwind CSS, Material UI, shadcn/ui, Zustand, Redux Toolkit, SWR, responsive design</p>
+    <p class="skill-line"><strong>Backend &amp; APIs:</strong> Node.js, Express, NestJS, REST API integration, Next.js Server Actions</p>
+    <p class="skill-line"><strong>Performance:</strong> SSR, code splitting, SWR caching, Redis caching, lazy loading</p>
+    <p class="skill-line"><strong>Database:</strong> PostgreSQL, MySQL, MongoDB, Oracle, Prisma, TypeORM</p>
+    <p class="skill-line"><strong>DevOps &amp; Workflow:</strong> Git, GitHub Actions, Docker, PM2, Vercel, Jira, ClickUp</p>
+    <p class="skill-line"><strong>Learning:</strong> Go (Gin, GORM — basic)</p>
+  </section>
+
+  <section class="block">
+    <h2>Education</h2>
+    <div class="row">
+      <span class="title">BSc. Computer Science and Telecommunication Engineering</span>
+      <span class="meta">2017 – 2022</span>
+    </div>
+    <p>Noakhali Science and Technology University · CGPA 3.39 / 4.00</p>
+  </section>
+
+  <section class="block">
+    <h2>Certification</h2>
+    <p>
+      <a href="https://learnwithsumit.com/certificates/verify/LWSCTXN-FTIOH0BP">LWS (think-in-a-redux-way) Certificate</a>
+    </p>
+  </section>
+</body>
+</html>
