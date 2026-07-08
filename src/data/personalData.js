@@ -234,9 +234,12 @@ export const techStack = [
 ];
 
 // Projects
+// Optional: set `order` (number) on any project to control display order.
+// Lower value appears first in both home section and /projects page.
 export const projects = [
   {
     id: 1,
+    order: 2,
     title: "DIGITAL LAND RECORD AND MANAGEMENT SYSTEM (DLRMS)",
     type: "Softbd",
     status: "Live",
@@ -261,6 +264,7 @@ export const projects = [
   },
   {
     id: 2,
+    order: 1,
     title: "RADIUS DIRECTORY",
     type: "RadiusTheme",
     status: "Live",
@@ -305,6 +309,7 @@ export const projects = [
   },
   {
     id: 3,
+    order: 3,
     title: "NATIONAL PORTAL FRAMEWORK (NPF)",
     type: "Softbd",
     status: "Live",
@@ -332,6 +337,7 @@ export const projects = [
   },
   {
     id: 4,
+    order: 7,
     title: "FUTURE NATION",
     type: "Client Project",
     status: "Live",
@@ -357,6 +363,7 @@ export const projects = [
   },
   {
     id: 5,
+    order: 6,
     title: "School",
     type: "SaaS Product",
     status: "Live",
@@ -408,6 +415,7 @@ export const projects = [
   // },
   {
     id: 7,
+    order: 7,
     title: "Ecom-Microservice",
     type: "Personal Project",
     status: "Completed",
@@ -435,6 +443,7 @@ export const projects = [
   },
   {
     id: 8,
+    order: 8,
     title: "NISE",
     type: "SaaS Product",
     status: "Live",
@@ -460,6 +469,7 @@ export const projects = [
   },
   {
     id: 9,
+    order: 4,
     title: "Scholars (SEM)",
     type: "SaaS Product",
     status: "Live",
@@ -486,11 +496,12 @@ export const projects = [
   },
   {
     id: 10,
+    order: 5,
     title: "FREELOCITY",
     type: "Client Project",
     status: "Live",
     duration: "Dec 2025 - May 2026",
-    liveUrl: "http://freelocity.bynarilab.com/",
+    liveUrl: "https://freelocity.bynarilab.com/",
     description: [
       "End-to-end solo build for a USA-based client: architected and delivered the full web platform and REST API for a two-sided freelance marketplace connecting buyers with skilled freelancers.",
       "Designed system architecture spanning Laravel 12 API, Inertia.js + React 19 frontend, Sanctum auth, and role-based buyer/freelancer/admin flows with shared dashboard infrastructure.",
@@ -518,6 +529,7 @@ export const projects = [
   },
   {
     id: 11,
+    order: 4,
     title: "PHARMA POS (DatasolutionBD)",
     type: "SaaS Product",
     status: "Live",

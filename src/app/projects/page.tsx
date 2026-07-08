@@ -13,13 +13,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+const sortedProjectsData = [...projects].sort(
+	(a: any, b: any) => (a?.order ?? a?.id) - (b?.order ?? b?.id)
+);
+
 // Transform projects data
-const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
+const portfolioProjects: PortfolioProject[] = sortedProjectsData.map((project: any) => ({
 	company: project.type,
 	category: project.category,
+	order: project?.order ?? project?.id,
 	year: project.duration.split(' - ')[1]?.split(' ')[1] || "2024",
 	title: project.title,
-	results: project.features.map(feature => ({ title: feature })),
+	results: project.features.map((feature: any) => ({ title: feature })),
 	link: project.liveUrl || "#",
 	image: project.image || projectImages.organizationCover,
 	technologies: project.techStack,
@@ -40,28 +45,28 @@ const projectsByCategory = {
 
 const ProjectCard = ({ project, index, onOpenModal }: { project: PortfolioProject; index: number; onOpenModal: (project: any) => void }) => {
 	return (
-		<motion.div 
-			initial={{ opacity: 0, y: 30 }} 
-			whileInView={{ opacity: 1, y: 0 }} 
-			viewport={{ once: true, margin: "-50px" }} 
-			transition={{ duration: 0.5, delay: index * 0.05, type: "tween" }} 
+		<motion.div
+			initial={{ opacity: 0, y: 30 }}
+			whileInView={{ opacity: 1, y: 0 }}
+			viewport={{ once: true, margin: "-50px" }}
+			transition={{ duration: 0.5, delay: index * 0.05, type: "tween" }}
 			className="group"
 		>
-			<Card 
-				variant="glass" 
+			<Card
+				variant="glass"
 				className="overflow-hidden cursor-pointer transition-all duration-300 hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/5 h-full flex flex-col"
 				onClick={() => onOpenModal(project)}
 			>
 				{/* Image */}
 				<div className="relative h-56 overflow-hidden bg-gray-800/50">
-					<Image 
-						src={project.image} 
-						alt={project.title} 
-						fill 
-						className="object-cover transition-transform duration-700 ease-out group-hover:scale-110" 
+					<Image
+						src={project.image}
+						alt={project.title}
+						fill
+						className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
 					/>
 					<div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent" />
-					
+
 					{/* Status Badge */}
 					<div className="absolute top-4 right-4 z-10">
 						{project.hasLiveDemo && !project.isPrivate && (
@@ -108,8 +113,8 @@ const ProjectCard = ({ project, index, onOpenModal }: { project: PortfolioProjec
 						<div className="mb-5 flex-shrink-0">
 							<div className="flex flex-wrap gap-1.5">
 								{project.technologies.slice(0, 5).map((tech, idx) => (
-									<span 
-										key={idx} 
+									<span
+										key={idx}
 										className="px-2 py-0.5 text-xs font-medium text-gray-400 bg-gray-800/40 rounded border border-gray-700/30"
 									>
 										{tech}
@@ -126,15 +131,13 @@ const ProjectCard = ({ project, index, onOpenModal }: { project: PortfolioProjec
 
 					{/* Action Button */}
 					<div className="pt-4 border-t border-gray-700/30 mt-auto">
-						{!project.isPrivate && project.hasLiveDemo ? (
+						{!project.isPrivate && project.hasLiveDemo && project.link && project.link !== "#" ? (
 							<Button
 								size="sm"
 								variant="primary"
-								onClick={(e) => {
-									e.stopPropagation();
-									window.open(project.link, "_blank");
-								}}
 								className="w-full"
+								href={project.link}
+								onClick={(e) => e.stopPropagation()}
 							>
 								View Live
 								<ArrowUpRightIcon className="w-4 h-4" />
@@ -143,11 +146,11 @@ const ProjectCard = ({ project, index, onOpenModal }: { project: PortfolioProjec
 							<Button
 								size="sm"
 								variant="secondary"
+								className="w-full"
 								onClick={(e) => {
 									e.stopPropagation();
 									onOpenModal(project);
 								}}
-								className="w-full"
 							>
 								View Details
 								<ArrowUpRightIcon className="w-4 h-4" />
@@ -176,7 +179,7 @@ export default function ProjectsPage() {
 	const filteredProjects = projectsByCategory[activeCategory];
 
 	const handleOpenModal = (project: any) => {
-		const originalProject = projects.find(p => p.title === project.title);
+		const originalProject = sortedProjectsData.find(p => p.title === project.title);
 		if (originalProject) {
 			setSelectedProject({
 				...originalProject,
@@ -199,12 +202,12 @@ export default function ProjectsPage() {
 				<Section className="relative py-24 md:py-32">
 					{/* Clean Background */}
 					<div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900 to-gray-950" />
-					
+
 					<div className="relative z-10">
 						{/* Header */}
 						<FadeIn>
 							<div className="text-center mb-12">
-								<Link 
+								<Link
 									href="/#projects"
 									className="inline-block mb-4 text-sm text-emerald-400 hover:text-emerald-300 transition-colors"
 								>
@@ -226,11 +229,10 @@ export default function ProjectsPage() {
 									<button
 										key={category.key}
 										onClick={() => setActiveCategory(category.key)}
-										className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 ${
-											activeCategory === category.key
+										className={`px-6 py-2.5 rounded-lg font-medium transition-all duration-200 ${activeCategory === category.key
 												? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 shadow-lg shadow-emerald-500/10"
 												: "bg-gray-800/50 text-gray-400 border border-gray-700/50 hover:border-gray-600/50 hover:text-gray-300"
-										}`}
+											}`}
 									>
 										{category.label}
 										<span className="ml-2 text-xs opacity-70">({category.count})</span>
@@ -243,10 +245,10 @@ export default function ProjectsPage() {
 						<StaggerContainer>
 							<div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
 								{filteredProjects.map((project, index) => (
-									<ProjectCard 
-										key={project.title} 
-										project={project} 
-										index={index} 
+									<ProjectCard
+										key={project.title}
+										project={project}
+										index={index}
 										onOpenModal={handleOpenModal}
 									/>
 								))}
