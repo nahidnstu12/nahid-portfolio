@@ -13,6 +13,7 @@ import { useState } from "react";
 // Transform projects data to match PortfolioProject interface
 const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
 	company: project.type,
+	category: project.category,
 	year: project.duration || "2024",
 	// year: project.duration.split(' - ')[1]?.split(' ')[1] || "2024",
 	title: project.title,

@@ -16,6 +16,7 @@ import { useState } from "react";
 // Transform projects data
 const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
 	company: project.type,
+	category: project.category,
 	year: project.duration.split(' - ')[1]?.split(' ')[1] || "2024",
 	title: project.title,
 	results: project.features.map(feature => ({ title: feature })),
@@ -25,15 +26,16 @@ const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
 	description: project.description.join(" "),
 	hasLiveDemo: project.status === "Live",
 	isComingSoon: project.status === "Development",
-	isPrivate: project.type === "Government Project"
+	isPrivate: project.status !== "Live" && !project.liveUrl,
 }));
 
-// Group projects by category
+// Group projects by category (matches personalData.js `category` field)
 const projectsByCategory = {
 	all: portfolioProjects,
-	government: portfolioProjects.filter(p => p.company === "Government Project"),
-	saas: portfolioProjects.filter(p => p.company === "SaaS Product" || p.company === "Sass Project"),
-	personal: portfolioProjects.filter(p => p.company === "Personal Project")
+	government: portfolioProjects.filter((p) => p.category === "Government"),
+	saas: portfolioProjects.filter((p) => p.category === "SaaS"),
+	client: portfolioProjects.filter((p) => p.category === "Client"),
+	personal: portfolioProjects.filter((p) => p.category === "Personal"),
 };
 
 const ProjectCard = ({ project, index, onOpenModal }: { project: PortfolioProject; index: number; onOpenModal: (project: any) => void }) => {
@@ -167,6 +169,7 @@ export default function ProjectsPage() {
 		{ key: "all" as const, label: "All Projects", count: projectsByCategory.all.length },
 		{ key: "government" as const, label: "Government", count: projectsByCategory.government.length },
 		{ key: "saas" as const, label: "SaaS", count: projectsByCategory.saas.length },
+		{ key: "client" as const, label: "Client", count: projectsByCategory.client.length },
 		{ key: "personal" as const, label: "Personal", count: projectsByCategory.personal.length },
 	];
 
