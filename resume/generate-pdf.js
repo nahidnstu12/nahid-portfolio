@@ -34,8 +34,9 @@ async function generatePDF(htmlFilePath, outputPdfPath) {
 
 const htmlFile =
   process.argv[2] ??
-  '/Users/MAC/projects/rival-assessment/docs/resume/resume-w3.html';
+  './resume/resume-gigalogy.html';
 const outputPdf =
   process.argv[3] ?? path.join(__dirname, 'cv', 'mazharul-islam-nahid-resume.pdf');
 
 generatePDF(htmlFile, outputPdf).catch(console.error);
+// node resume/generate-pdf.js resume/resume-gigalogy.html resume/cv/mazharul-islam-nahid-gigalogy.pdf
