@@ -13,6 +13,8 @@ export interface Project {
 
 export interface PortfolioProject {
 	company: string;
+	category: string;
+	order?: number;
 	year: string;
 	title: string;
 	results: { title: string }[];

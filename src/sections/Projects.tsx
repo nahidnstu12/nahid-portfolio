@@ -10,13 +10,19 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
 
+const sortedProjectsData = [...projects].sort(
+	(a:any, b:any) => (a?.order ?? a?.id) - (b?.order ?? b?.id)
+);
+
 // Transform projects data to match PortfolioProject interface
-const portfolioProjects: PortfolioProject[] = projects.map((project) => ({
+const portfolioProjects: PortfolioProject[] = sortedProjectsData.map((project:any) => ({
 	company: project.type,
+	category: project.category,
+	order: project.order ?? project.id,
 	year: project.duration || "2024",
 	// year: project.duration.split(' - ')[1]?.split(' ')[1] || "2024",
 	title: project.title,
-	results: project.features.map(feature => ({ title: feature })),
+	results: project.features.map((feature:any) => ({ title: feature })),
 	link: project.liveUrl || "#",
 	image: project.image || projectImages.organizationCover,
 	technologies: project.techStack,
@@ -155,14 +161,12 @@ const FeaturedProjectCard = ({ project, index, onOpenModal }: { project: Portfol
 
 						{/* Action Buttons */}
 						<div className="flex gap-3 pt-6 mt-6 border-t border-gray-700/30">
-							{project.link ? (
+							{project.link && project.link !== "#" ? (
 								<Button
 									size="md"
 									variant="primary"
-									onClick={(e) => {
-										e.stopPropagation();
-										window.open(project.link, "_blank");
-									}}
+									href={project.link}
+									onClick={(e) => e.stopPropagation()}
 									className="flex-1 group/btn"
 								>
 									View Live Site
@@ -171,12 +175,12 @@ const FeaturedProjectCard = ({ project, index, onOpenModal }: { project: Portfol
 							) : null}
 							<Button
 								size="md"
-								variant={project.link ? "secondary" : "primary"}
+								variant={project.link && project.link !== "#" ? "secondary" : "primary"}
 								onClick={(e) => {
 									e.stopPropagation();
 									onOpenModal(project);
 								}}
-								className={project.link ? "flex-1" : "w-full"}
+								className={project.link && project.link !== "#" ? "flex-1" : "w-full"}
 							>
 								View Details
 								<ArrowUpRightIcon className="w-4 h-4" />
@@ -195,7 +199,7 @@ export const ProjectsSection = () => {
 
 	const handleOpenModal = (project: any) => {
 		// Find the original project data from personalData
-		const originalProject = projects.find(p => p.title === project.title);
+		const originalProject = sortedProjectsData.find(p => p.title === project.title);
 		if (originalProject) {
 			setSelectedProject({
 				...originalProject,

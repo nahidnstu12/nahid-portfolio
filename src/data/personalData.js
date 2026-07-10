@@ -234,9 +234,12 @@ export const techStack = [
 ];
 
 // Projects
+// Optional: set `order` (number) on any project to control display order.
+// Lower value appears first in both home section and /projects page.
 export const projects = [
   {
     id: 1,
+    order: 2,
     title: "DIGITAL LAND RECORD AND MANAGEMENT SYSTEM (DLRMS)",
     type: "Softbd",
     status: "Live",
@@ -261,11 +264,12 @@ export const projects = [
   },
   {
     id: 2,
+    order: 1,
     title: "RADIUS DIRECTORY",
     type: "RadiusTheme",
-    status: "Development",
+    status: "Live",
     duration: "Jan 2025 - Current",
-    liveUrl: "https://radiusdirectory.net/",
+    liveUrl: "https://bikribd.com/",
     description: [
       "Core contributor to RadiusTheme's top-selling SaaS platform for dynamic directory and website creation, serving as a leading marketplace solution.",
       "Architected and developed a fully custom drag-and-drop Page Builder system inspired by Elementor, featuring container-based layout logic, nested container support, flexbox controls, and real-time styling with live preview capabilities.",
@@ -305,11 +309,12 @@ export const projects = [
   },
   {
     id: 3,
+    order: 3,
     title: "NATIONAL PORTAL FRAMEWORK (NPF)",
     type: "Softbd",
-    status: "Development",
+    status: "Live",
     duration: "Dec 2023 – Dec 2024",
-    liveUrl: "#",
+    liveUrl: "https://bangladesh.gov.bd/",
     description: [
       "Built a dynamic theme customization system powering 54,000+ Bangladeshi government websites under the National Portal Framework.",
       "Designed a flexible theme engine using Express + EJS with React-based composition to render dynamic pages from XML configurations.",
@@ -332,6 +337,7 @@ export const projects = [
   },
   {
     id: 4,
+    order: 7,
     title: "FUTURE NATION",
     type: "Client Project",
     status: "Live",
@@ -357,6 +363,7 @@ export const projects = [
   },
   {
     id: 5,
+    order: 6,
     title: "School",
     type: "SaaS Product",
     status: "Live",
@@ -408,6 +415,7 @@ export const projects = [
   // },
   {
     id: 7,
+    order: 7,
     title: "Ecom-Microservice",
     type: "Personal Project",
     status: "Completed",
@@ -435,6 +443,7 @@ export const projects = [
   },
   {
     id: 8,
+    order: 8,
     title: "NISE",
     type: "SaaS Product",
     status: "Live",
@@ -460,11 +469,12 @@ export const projects = [
   },
   {
     id: 9,
+    order: 4,
     title: "Scholars (SEM)",
     type: "SaaS Product",
-    status: "Development",
+    status: "Live",
     duration: "May 2025 – Current",
-    liveUrl: "#",
+    liveUrl: "https://www.scholarsfoundationbd.org/",
     description: [
       "Developed comprehensive scholarship management system for government educational programs with application processing and evaluation workflows.",
       "Built student eligibility verification system with automated document validation, academic record checking, and merit-based scoring.",
@@ -486,11 +496,12 @@ export const projects = [
   },
   {
     id: 10,
+    order: 5,
     title: "FREELOCITY",
     type: "Client Project",
     status: "Live",
     duration: "Dec 2025 - May 2026",
-    liveUrl: "http://freelocity.bynarilab.com/",
+    liveUrl: "https://freelocity.bynarilab.com/",
     description: [
       "End-to-end solo build for a USA-based client: architected and delivered the full web platform and REST API for a two-sided freelance marketplace connecting buyers with skilled freelancers.",
       "Designed system architecture spanning Laravel 12 API, Inertia.js + React 19 frontend, Sanctum auth, and role-based buyer/freelancer/admin flows with shared dashboard infrastructure.",
@@ -518,11 +529,12 @@ export const projects = [
   },
   {
     id: 11,
-    title: "PHARMA POS (Bynarilab)",
-    type: "Bynarilab Product",
+    order: 4,
+    title: "PHARMA POS (DatasolutionBD)",
+    type: "SaaS Product",
     status: "Live",
     duration: "Apr 2026 - Current",
-    liveUrl: "https://pos.bynarilab.com/",
+    liveUrl: "https://pharmacy.datasolutionbd.com/",
     description: [
       "Lead architect and solo full-stack builder for Bynarilab's pharmacy-focused POS SaaS — mobile-first point of sale for Bangladeshi drug stores with Bengali UX and HQ-administered master catalog.",
       "Designed multi-tenant architecture: Laravel 12 REST API, React 19 SPA, Sanctum session auth, shop booking/onboarding wizard, and super-admin platform for tenants, plans, and master products.",

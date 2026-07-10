@@ -27,7 +27,7 @@ export default function ProjectCard({
 						) : project.isComingSoon ? (
 							<div className="backdrop-blur-sm bg-blue-500/20 border border-blue-500/30 text-blue-300 px-4 py-2 rounded-md text-sm">Live Demo Coming Soon</div>
 						) : (
-							<Button size="sm" onClick={() => window.open(project.link, "_blank")} className="backdrop-blur-sm bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-white">
+							<Button size="sm" href={project.link} className="backdrop-blur-sm bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/30 text-white">
 								<ArrowUpRightIcon className="w-4 h-4 mr-2" />
 								{project.link.includes("github") ? "View Code" : "View Project"}
 							</Button>

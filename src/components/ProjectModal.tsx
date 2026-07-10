@@ -271,9 +271,9 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
 
                   {/* Action Buttons */}
                   <div className="flex flex-col sm:flex-row gap-3 pt-4">
-                    {project.liveUrl && (
+                    {project.liveUrl && project.liveUrl !== "#" && (
                       <Button
-                        onClick={() => window.open(project.liveUrl, "_blank")}
+                        href={project.liveUrl}
                         className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white"
                       >
                         <ArrowUpRightIcon className="w-4 h-4 mr-2" />
@@ -283,7 +283,7 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
                     {project.githubUrl && (
                       <Button
                         variant="secondary"
-                        onClick={() => window.open(project.githubUrl, "_blank")}
+                        href={project.githubUrl}
                         className="flex-1 border-emerald-500/30 hover:border-emerald-500/50 hover:bg-emerald-500/10"
                       >
                         <GitHubIcon className="w-4 h-4 mr-2" />
