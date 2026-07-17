@@ -16,16 +16,13 @@ async function generatePDF(htmlFilePath, outputPdfPath) {
 
   await page.goto(`file://${resolvedHtml}`, { waitUntil: 'networkidle0' });
 
+  // Margins come from @page in the HTML — don't double-apply here
   await page.pdf({
     path: resolvedPdf,
     format: 'A4',
     printBackground: true,
-    margin: {
-      top: '10mm',
-      right: '10mm',
-      bottom: '10mm',
-      left: '10mm',
-    },
+    preferCSSPageSize: true,
+    margin: { top: '0', right: '0', bottom: '0', left: '0' },
   });
 
   await browser.close();
@@ -34,9 +31,10 @@ async function generatePDF(htmlFilePath, outputPdfPath) {
 
 const htmlFile =
   process.argv[2] ??
-  './resume/resume-gigalogy.html';
+  path.join(__dirname, 'resume', 'resume-gigalogy.html');
 const outputPdf =
-  process.argv[3] ?? path.join(__dirname, 'cv', 'mazharul-islam-nahid-resume.pdf');
+  process.argv[3] ?? path.join(__dirname, 'cv', 'mazharul-islam-nahid-frontend.pdf');
 
 generatePDF(htmlFile, outputPdf).catch(console.error);
-// node resume/generate-pdf.js resume/resume-gigalogy.html resume/cv/mazharul-islam-nahid-gigalogy.pdf
+// node resume/generate-pdf.js resume/resume/resume-gigalogy.html resume/cv/mazharul-islam-nahid-gigalogy.pdf
+// node resume/generate-pdf.js resume/resume/resume-fullstack-remote.html resume/cv/mazharul-islam-nahid-fullstack-software.pdf
