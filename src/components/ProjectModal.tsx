@@ -9,7 +9,7 @@ import { ChevronLeftIcon } from "@/components/icons/ChevronLeft";
 import { ChevronRightIcon } from "@/components/icons/ChevronRight";
 
 interface ProjectImage {
-  src: string;
+  src: string | import("next/image").StaticImageData;
   alt: string;
   caption?: string;
 }
@@ -28,6 +28,7 @@ interface ProjectModalProps {
     githubUrl?: string;
     status: string;
     duration: string;
+    image?: ProjectImage["src"];
     images?: ProjectImage[];
   };
 }
@@ -38,15 +39,24 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
   const imageRef = useRef<HTMLDivElement>(null);
   const scrollAnimationRef = useRef<number | null>(null);
   
-  // Default images if none provided
-  const images: ProjectImage[] = project.images || [];
+  const galleryImages: ProjectImage[] =
+    project.images && project.images.length > 0
+      ? project.images
+      : project.image
+        ? [{ src: project.image as ProjectImage["src"], alt: project.title }]
+        : [];
+
+  const currentImage = galleryImages[currentImageIndex];
+  const hasImages = galleryImages.length > 0;
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    if (!hasImages) return;
+    setCurrentImageIndex((prev) => (prev + 1) % galleryImages.length);
   };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+    if (!hasImages) return;
+    setCurrentImageIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length);
   };
 
   const goToImage = (index: number) => {
@@ -162,6 +172,8 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
               {/* Image Slider */}
               <div className="lg:w-1/2 p-6">
                 <div className="relative h-full bg-gray-800 rounded-lg overflow-hidden">
+                  {hasImages && currentImage ? (
+                  <>
                   {/* Main Image - Scrollable Container with Auto-scroll */}
                   <div 
                     ref={scrollContainerRef}
@@ -174,23 +186,23 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
                       className="relative min-h-full flex items-start justify-center p-2"
                     >
                       <Image
-                        src={images[currentImageIndex].src}
-                        alt={images[currentImageIndex].alt}
+                        src={currentImage.src}
+                        alt={currentImage.alt}
                         width={800}
                         height={1200}
                         className="object-contain w-full h-auto"
                         style={{ maxWidth: '100%' }}
                       />
                     </div>
-                    {images[currentImageIndex].caption && (
+                    {currentImage.caption && (
                       <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent p-4 mt-2 pointer-events-none z-10">
-                        <p className="text-white text-sm">{images[currentImageIndex].caption}</p>
+                        <p className="text-white text-sm">{currentImage.caption}</p>
                       </div>
                     )}
                   </div>
 
                   {/* Navigation Arrows */}
-                  {images.length > 1 && (
+                  {galleryImages.length > 1 && (
                     <>
                       <button
                         onClick={prevImage}
@@ -208,9 +220,9 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
                   )}
 
                   {/* Image Indicators */}
-                  {images.length > 1 && (
+                  {galleryImages.length > 1 && (
                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                      {images.map((_, index) => (
+                      {galleryImages.map((_, index) => (
                         <button
                           key={index}
                           onClick={() => goToImage(index)}
@@ -221,6 +233,16 @@ export const ProjectModal = ({ isOpen, onClose, project }: ProjectModalProps) =>
                           }`}
                         />
                       ))}
+                    </div>
+                  )}
+                  </>
+                  ) : (
+                    <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
+                      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+                        <span className="text-2xl">📁</span>
+                      </div>
+                      <p className="text-sm font-medium text-gray-300">Screenshots coming soon</p>
+                      <p className="text-xs text-gray-500">In-house product — visuals will be added as modules ship.</p>
                     </div>
                   )}
                 </div>

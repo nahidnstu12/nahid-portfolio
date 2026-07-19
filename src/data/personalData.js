@@ -238,6 +238,50 @@ export const techStack = [
 // Lower value appears first in both home section and /projects page.
 export const projects = [
   {
+    id: 12,
+    order: 6,
+    title: "RADIUS TASK",
+    type: "RadiusTheme",
+    status: "Development",
+    duration: "Jan 2025 - Current",
+    description: [
+      "Core developer on RadiusTask — RadiusTheme's in-house multi-workspace HR & project-management SaaS for employee operations, delivery tracking, and client billing.",
+      "Building employee management module: profiles, org chart, bulk CSV import, shifts, holidays, and self-service profile workflows with role-based field restrictions.",
+      "Developing projects & tasks module with lifecycle controls, List/Board/Calendar/Gantt views, task slide-over panels, estimate approval flows, and recurring task automation.",
+      "Implementing Live Monitor — real-time workforce visibility via Server-Sent Events and Redis pub/sub with idle/away detection, nudge notifications, and manager-filtered views.",
+      "Building payroll module: salary structures, tax slabs, payroll runs, and employee payslip generation with assignment history.",
+      "Developing clients & invoicing: client master CRUD, Fixed/T&M/Milestone/Retainer invoices, PDF export, payment recording, and aging receivables.",
+      "Shipping notifications & UX layer: in-app and email notification center, per-user channel preferences, Cmd+K command palette, 3-pane app shell, and slide-over detail panels."
+    ],
+    features: [
+      "Multi-workspace HR SaaS (in-house product)",
+      "Employee management & org chart",
+      "Projects, tasks & estimate approval",
+      "Live Monitor with real-time SSE",
+      "Payroll runs & payslip generation",
+      "Clients, invoicing & aging reports",
+      "Notifications, Cmd+K & app shell UX"
+    ],
+    techStack: [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "Redis",
+      "BullMQ",
+      "Better Auth",
+      "Tailwind CSS",
+      "shadcn/ui",
+      "Zustand",
+      "AWS S3",
+      "SSE",
+      "RESTful APIs",
+      "RBAC"
+    ],
+    category: "SaaS"
+  },
+  {
     id: 1,
     order: 2,
     title: "DIGITAL LAND RECORD AND MANAGEMENT SYSTEM (DLRMS)",
