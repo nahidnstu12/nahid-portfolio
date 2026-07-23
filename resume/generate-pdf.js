@@ -2,8 +2,42 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import os from 'os';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+function resolveChromePath() {
+  if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+    return process.env.PUPPETEER_EXECUTABLE_PATH;
+  }
+
+  const candidates = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    path.join(
+      os.homedir(),
+      '.cache/puppeteer/chrome/mac_arm-145.0.7632.77/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing'
+    ),
+    '/usr/bin/google-chrome',
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+  ];
+
+  return candidates.find((p) => fs.existsSync(p));
+}
+
+async function launchBrowser() {
+  const executablePath = resolveChromePath();
+
+  try {
+    return await puppeteer.launch({
+      headless: true,
+      ...(executablePath ? { executablePath } : {}),
+    });
+  } catch {
+    // Bundled Chrome missing — use installed Google Chrome channel
+    return puppeteer.launch({ headless: true, channel: 'chrome' });
+  }
+}
 
 async function generatePDF(htmlFilePath, outputPdfPath) {
   const resolvedHtml = path.resolve(htmlFilePath);
@@ -11,7 +45,7 @@ async function generatePDF(htmlFilePath, outputPdfPath) {
 
   fs.mkdirSync(path.dirname(resolvedPdf), { recursive: true });
 
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await launchBrowser();
   const page = await browser.newPage();
 
   await page.goto(`file://${resolvedHtml}`, { waitUntil: 'networkidle0' });
@@ -37,4 +71,4 @@ const outputPdf =
 
 generatePDF(htmlFile, outputPdf).catch(console.error);
 // node resume/generate-pdf.js resume/resume/resume-gigalogy.html resume/cv/mazharul-islam-nahid-gigalogy.pdf
-// node resume/generate-pdf.js resume/resume/resume-fullstack-remote.html resume/cv/mazharul-islam-nahid-fullstack-software.pdf
+// node resume/generate-pdf.js resume/resume/resume-fullstack-remote.html resume/cv/mazharul-islam-nahid-software-engineer-web.pdf

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mazharul Islam Nahid — Front-End Developer (React &amp; Next.js)</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt; line-height: 1.4; color: #000; background: #fff;
+      max-width: 210mm; margin: 0 auto; padding: 14mm 16mm;
+    }
+    @media print {
+      body { padding: 0; }
+      .block, .job, .project {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      h2 {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+    }
+    h1 { font-size: 20pt; font-weight: 700; }
+    .headline { font-size: 11pt; margin-top: 2px; }
+    .contact { margin-top: 8px; font-size: 9.5pt; line-height: 1.6; }
+    .contact a { color: #1155cc; text-decoration: none; }
+    section { margin-top: 12px; }
+    h2 {
+      font-size: 11pt; font-weight: 700; text-transform: uppercase;
+      border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 6px;
+    }
+    p, li { color: #111; }
+    .job, .project { margin-bottom: 10px; }
+    .row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .title { font-weight: 700; }
+    .meta { font-size: 9.5pt; white-space: nowrap; }
+    .company { font-weight: 600; margin: 2px 0 4px; }
+    .company a { color: #1155cc; text-decoration: none; }
+    ul { margin: 0 0 0 18px; }
+    li { margin-bottom: 2px; }
+    .tech { font-size: 9.5pt; margin-top: 3px; }
+    .skill-line { margin-bottom: 3px; font-size: 10pt; }
+    .skill-line strong { font-weight: 700; }
+    .project-head { font-weight: 700; }
+    .project-links { font-size: 9.5pt; margin: 2px 0 4px; }
+    .project-links a { color: #1155cc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header class="block">
+    <h1>Mazharul Islam Nahid</h1>
+    <p class="headline">Front-End Developer · React &amp; Next.js</p>
+    <p class="contact">
+      01832409825 |
+      <a href="mailto:nahid.dev19@gmail.com">nahid.dev19@gmail.com</a> |
+      <a href="https://github.com/nahidnstu12">GitHub</a> |
+      <a href="https://gitlab.com/nahid-dev">GitLab</a> |
+      <a href="https://www.linkedin.com/in/nahid-dev/">LinkedIn</a> |
+      <a href="https://nahid-portfolio.vercel.app/">Portfolio</a>
+    </p>
+  </header>
+
+  <section class="block">
+    <h2>Summary</h2>
+    <p>
+      Front-end developer with 4+ years building responsive, production React and Next.js apps.
+      Strong at turning UI/UX into clean, reusable components, integrating REST APIs, and optimizing
+      for performance and SEO (SSR, code splitting, caching). Comfortable owning features end-to-end
+      and collaborating remotely with designers, developers, and product managers.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Deputy Team Lead – Full Stack Developer</span>
+        <span class="meta">Jan 2025 – Present</span>
+      </div>
+      <p class="company"><a href="https://radiustheme.com">RadiusTheme</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Lead front-end work on Radius Directory — multi-tenant classified SaaS built with Next.js, React, and TypeScript</li>
+        <li>Built a drag-and-drop Page Builder and Form Builder with nested layouts, live preview, and 50+ reusable UI widgets</li>
+        <li>Improved Page Builder drag-and-drop performance by 40%; cut page data fetches via SSR, prefetching, and caching</li>
+        <li>Ship responsive UI across marketplace, account, and admin surfaces; mentor juniors via reviews and pair programming</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, TypeScript, HTML5, CSS3, Tailwind CSS, shadcn/ui, Zustand, NextAuth, Git</p>
+    </article>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Software Engineer</span>
+        <span class="meta">May 2022 – Dec 2024</span>
+      </div>
+      <p class="company"><a href="https://softbdltd.com/">Softbd LTD</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Converted UI/UX designs into responsive React and Next.js interfaces for government and enterprise clients</li>
+        <li>Built reusable admin components — dynamic data tables, forms, loaders, and CMS widgets — with cross-browser support</li>
+        <li>Integrated REST APIs into citizen and admin front ends (e.g. DLRMS land-record workflows)</li>
+        <li>Improved page load performance by 40% through SSR, code splitting, and SWR caching</li>
+      </ul>
+      <p class="tech">Tech: React, Next.js, TypeScript, HTML5, CSS3, Tailwind CSS, Material UI, SWR, Git</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Skills</h2>
+    <p class="skill-line"><strong>Core:</strong> JavaScript (ES6+), TypeScript, HTML5, CSS3</p>
+    <p class="skill-line"><strong>Frontend:</strong> React.js, Next.js, Tailwind CSS, Material UI, shadcn/ui, responsive design, cross-browser compatibility, UX fundamentals</p>
+    <p class="skill-line"><strong>State &amp; data:</strong> Zustand, Redux Toolkit, REST API integration</p>
+    <p class="skill-line"><strong>Performance:</strong> SSR, code splitting, SEO-friendly rendering, caching strategies</p>
+    <p class="skill-line"><strong>Tools:</strong> Git, GitHub, Vercel, Figma, Jest, Vitest</p>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <article class="project block">
+      <p class="project-head">Radius Directory — SaaS Marketplace</p>
+      <p class="project-links"><a href="https://bikribd.com/">bikribd.com</a> · Jan 2025 – Present</p>
+      <ul>
+        <li>Multi-tenant classified marketplace and business directory — public and authenticated UI</li>
+        <li>Custom drag-and-drop Page Builder with nested containers, live styling, and real-time preview</li>
+        <li>Modular widget system with 50+ reusable front-end components for code-free page construction</li>
+        <li>Performance-focused front end — parallel prefetching, SSR, and App Router + Zustand state sync</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, TypeScript, Tailwind CSS, Zustand, @dnd-kit, shadcn/ui</p>
+    </article>
+
+    <article class="project block">
+      <p class="project-head">RadiusTask — HR &amp; Project Management SaaS</p>
+      <p class="project-links"><a href="https://app.radiustask.com/login">app.radiustask.com</a> · In-house (auth-gated) · Jan 2026 – Present</p>
+      <ul>
+        <li>Front-end for multi-workspace HR and project management — employee profiles, org chart, shifts, holidays</li>
+        <li>Projects &amp; tasks UI with List, Board, Calendar, and Gantt views plus slide-over detail panels</li>
+        <li>App shell UX — 3-pane layout, Cmd+K command palette, notification center, and role-aware screens</li>
+        <li>Reusable tables, forms, and filters integrated with REST APIs across HR, delivery, and billing flows</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, TypeScript, Tailwind CSS, shadcn/ui, Zustand</p>
+    </article>
+
+    <article class="project block">
+      <p class="project-head">Digital Land Record and Management System (DLRMS)</p>
+      <p class="project-links"><a href="https://dlrms.land.gov.bd/">dlrms.land.gov.bd</a> · Apr 2024 – Dec 2024</p>
+      <ul>
+        <li>Citizen land-record (khatian) entry UI — form flows for submitting new records into the digitization pipeline</li>
+        <li>Land-record correction full flow — citizen request through an 11-step administrative review/processing UI, where each officer forwards to the next based on hierarchy and correction type</li>
+        <li>Responsive, data-heavy screens integrated with NestJS REST APIs serving records at national scale</li>
+      </ul>
+      <p class="tech">Tech: React, Next.js, TypeScript, Material UI, REST APIs</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Education</h2>
+    <div class="row">
+      <span class="title">BSc. Computer Science and Telecommunication Engineering</span>
+      <span class="meta">2017 – 2022</span>
+    </div>
+    <p>Noakhali Science and Technology University · CGPA 3.39 / 4.00</p>
+  </section>
+
+  <section class="block">
+    <h2>Certification</h2>
+    <p>
+      <a href="https://learnwithsumit.com/certificates/verify/LWSCTXN-FTIOH0BP">LWS (think-in-a-redux-way) Certificate</a>
+    </p>
+  </section>
+</body>
+</html>
