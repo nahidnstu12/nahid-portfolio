@@ -70,5 +70,6 @@ const outputPdf =
   process.argv[3] ?? path.join(__dirname, 'cv', 'mazharul-islam-nahid-fullstack-developer.pdf');
 
 generatePDF(htmlFile, outputPdf).catch(console.error);
-// node resume/generate-pdf.js resume/resume/resume-gigalogy.html resume/cv/mazharul-islam-nahid-gigalogy.pdf
-// node resume/generate-pdf.js resume/resume/resume-fullstack-remote.html resume/cv/mazharul-islam-nahid-software-engineer-web.pdf
+// From resume/: see README.md for active HTML → PDF mappings
+// node generate-pdf.js resume/resume-fullstack-remote.html cv/mazharul-islam-nahid-fullstack-developer.pdf
+// node generate-pdf.js resume/resume-minhajul-islam.html cv/minhajul-islam-fullstack-developer.pdf

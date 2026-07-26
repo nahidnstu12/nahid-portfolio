@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Challenging Problem — Mazharul Islam Nahid</title>
+  <style>
+    @page { size: A4; margin: 16mm 18mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      color: #111;
+      background: #fff;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 16mm 18mm;
+    }
+    @media print {
+      body { padding: 0; }
+      h2 { break-after: avoid; page-break-after: avoid; }
+      .block { break-inside: avoid; page-break-inside: avoid; }
+    }
+    h1 {
+      font-size: 13pt;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+    .meta {
+      font-size: 10pt;
+      color: #333;
+      margin-bottom: 14px;
+    }
+    h2 {
+      font-size: 11pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid #000;
+      padding-bottom: 2px;
+      margin: 14px 0 6px;
+    }
+    p { margin-bottom: 8px; }
+    ol { margin: 0 0 8px 18px; }
+    li { margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+  <header class="block">
+    <h1>Tell us about a challenging problem you worked through.<br />How did you approach it, and what did you do when you got stuck?</h1>
+    <p class="meta">
+      Mazharul Islam Nahid<br />
+      Application — Software Engineer (Web), Greentech Apps Foundation
+    </p>
+  </header>
+
+  <section class="block">
+    <h2>Problem</h2>
+    <p>
+      We run a multi-tenant SaaS (Radius Directory) with a shared Redis/BullMQ central worker.
+      It loads each live tenant from an APP_PATHS registry and runs that tenant’s queues, crons,
+      and workers in one process.
+    </p>
+    <p>
+      With one live tenant, send-email worked. After a second tenant went live for testing
+      (bikribd and rd-dev), production email failed for about two days for one tenant only.
+      Crons for both still looked healthy, so it did not look like Redis or the worker process
+      was simply dead.
+    </p>
+  </section>
+
+  <section class="block">
+    <h2>Approach</h2>
+    <p>I narrowed the problem before changing production code.</p>
+    <ol>
+      <li>
+        <strong>App-level check:</strong> triggered email without the central worker → send path
+        worked. Mailer/app code was not the first suspect.
+      </li>
+      <li>
+        <strong>Local repro:</strong> ran two app instances under the central worker with Bull Board.
+        Both tenants could send locally, so I stopped treating it as a unique code bug.
+      </li>
+      <li>
+        <strong>Server focus:</strong> checked what APP_PATHS the live worker actually saw. The
+        running process still reflected a stale registry/env after tenant keys/paths had changed
+        during testing.
+      </li>
+    </ol>
+    <p>
+      Fixing that live registry/env mismatch and bringing the worker up on the intended mapping
+      restored email. I won’t overclaim the exact OS/PM2 detail — I’m confident in the isolation
+      path and the outcome.
+    </p>
+  </section>
+
+  <section class="block">
+    <h2>When I got stuck</h2>
+    <p>
+      I list possible causes, then check them one by one. Console, debugger, and AI tools help me
+      drop wrong guesses faster and shrink a big surface to a small fix — so I fix the real issue,
+      not a random symptom.
+    </p>
+  </section>
+
+  <section class="block">
+    <h2>Result</h2>
+    <p>
+      Both live tenants could send email again. Lesson: shared multi-tenant workers can fail
+      per-tenant in subtle ways, and a clean local repro does not always catch a stale process
+      environment on the server.
+    </p>
+  </section>
+</body>
+</html>

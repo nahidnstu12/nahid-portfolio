@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minhajul Islam — Full Stack Web Developer</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt; line-height: 1.4; color: #000; background: #fff;
+      max-width: 210mm; margin: 0 auto; padding: 14mm 16mm;
+    }
+    @media print {
+      body { padding: 0; }
+      .block, .job, .project {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      h2 {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+    }
+    h1 { font-size: 20pt; font-weight: 700; }
+    .headline { font-size: 11pt; margin-top: 2px; }
+    .contact { margin-top: 8px; font-size: 9.5pt; line-height: 1.6; }
+    .contact a { color: #1155cc; text-decoration: none; }
+    section { margin-top: 12px; }
+    h2 {
+      font-size: 11pt; font-weight: 700; text-transform: uppercase;
+      border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 6px;
+    }
+    p, li { color: #111; }
+    .job, .project { margin-bottom: 10px; }
+    .row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .title { font-weight: 700; }
+    .meta { font-size: 9.5pt; white-space: nowrap; }
+    .company { font-weight: 600; margin: 2px 0 4px; }
+    .company a { color: #1155cc; text-decoration: none; }
+    ul { margin: 0 0 0 18px; }
+    li { margin-bottom: 2px; }
+    .tech { font-size: 9.5pt; margin-top: 3px; }
+    .skill-line { margin-bottom: 3px; font-size: 10pt; }
+    .skill-line strong { font-weight: 700; }
+    .project-head { font-weight: 700; }
+    .project-links { font-size: 9.5pt; white-space: nowrap; margin-bottom: 4px; }
+    .project-links a { color: #1155cc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header class="block">
+    <h1>Minhajul Islam</h1>
+    <p class="headline">Full Stack Web Developer · Laravel, Next.js &amp; TanStack Start</p>
+    <p class="contact">
+      016411-02404 |
+      <a href="mailto:nishatislam3108@gmail.com">nishatislam3108@gmail.com</a> |
+      <a href="https://maps.app.goo.gl/eCvVBcRV2HD5nWxE9">Rampura, Dhaka</a> |
+      <a href="https://www.linkedin.com/in/nishat-mazumder">LinkedIn</a> |
+      <a href="https://github.com/nishatislam04">GitHub</a> |
+      <a href="https://new-portfolio-psi-bice.vercel.app/">Portfolio</a>
+    </p>
+  </header>
+
+  <section class="block">
+    <h2>Summary</h2>
+    <p>
+      Full-stack web developer with 1+ year of experience building production-ready applications
+      using React, Next.js, Laravel, and TanStack Start. Skilled in designing scalable architectures,
+      integrating REST APIs, and collaborating in teams. Passionate about clean code and performance
+      optimisation.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Junior Software Engineer</span>
+        <span class="meta">Oct 2024 – Nov 2025</span>
+      </div>
+      <p class="company"><a href="https://softbdltd.com/">SoftBd LTD</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Developed and maintained RESTful APIs using Laravel and MySQL</li>
+        <li>Built responsive frontend components with React and Tailwind CSS, improving page load speed</li>
+        <li>Collaborated in a 5-person agile team</li>
+        <li>Integrated third-party services (OAuth Google Login, email notifications, S3 file upload) into existing Laravel applications</li>
+      </ul>
+      <p class="tech">Tech: React, Next.js, Laravel, PHP, MySQL, Tailwind CSS, Docker</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Skills</h2>
+    <p class="skill-line"><strong>Languages:</strong> JavaScript, PHP, SQL</p>
+    <p class="skill-line"><strong>Frontend:</strong> React, Next.js (App Router), SolidJS, TanStack Router, Tailwind CSS, Zustand</p>
+    <p class="skill-line"><strong>Backend &amp; APIs:</strong> Laravel, ElysiaJS, TanStack Start, REST API design</p>
+    <p class="skill-line"><strong>Database:</strong> PostgreSQL, MySQL, Prisma (ORM)</p>
+    <p class="skill-line"><strong>DevOps &amp; tools:</strong> Git, Docker, Redis, Vite, Bun, Biome, Podman</p>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <article class="project block">
+      <div class="row">
+        <span class="project-head">Credets — Encrypted Credential Vault</span>
+        <span class="project-links"><a href="https://credets.onrender.com/">Live</a></span>
+      </div>
+      <ul>
+        <li>Credential vault with AES encryption, CSRF protection, and session-based authentication and authorization</li>
+        <li>Flexible credential inputs: single labels, key-value pairs, and rich text sections via a Tiptap editor</li>
+        <li>Hierarchical types, multiple images, and thumbnails with S3 upload and infinite pagination</li>
+        <li>Update, delete, draft, favorite, soft-delete, and tags per credential</li>
+      </ul>
+      <p class="tech"><strong>Tech:</strong> Bun, PostgreSQL, TanStack Router, TypeScript, React, TanStack Form, TanStack Query, shadcn/ui, Zod, Supabase Storage, Podman</p>
+    </article>
+
+    <article class="project block">
+      <div class="row">
+        <span class="project-head">Freelocity — USA Client Project</span>
+        <span class="project-links"><a href="https://freelocity.bynarilab.com/">Live</a></span>
+      </div>
+      <ul>
+        <li>Two-sided marketplace where buyers hire freelancers for services, built solo for a USA-based client</li>
+        <li>Gig listings with categories, tiered pricing packages, portfolio galleries, and search with slug-based routing</li>
+        <li>Buyer journey: browse freelancers, real-time chat, secure checkout, order tracking, and delivery workflows</li>
+        <li>Freelancer journey: service creation wizard, project applications, order delivery, reviews, and payout management</li>
+      </ul>
+      <p class="tech"><strong>Tech:</strong> Laravel 12, React 19, Inertia.js, TypeScript, Tailwind CSS 4, MySQL, Sanctum, Zustand, Zod</p>
+    </article>
+
+    <article class="project block">
+      <div class="row">
+        <span class="project-head">Team-Docs — Collaborative Documentation Platform</span>
+        <span class="project-links"><a href="https://team-docx.vercel.app/">Live</a></span>
+      </div>
+      <ul>
+        <li>Documentation platform where teams write and share content with a Notion-style editor</li>
+        <li>Role-based access (Admin and Super-Admin) for permission control</li>
+        <li>Rich text editing with TipTap; authentication with NextAuth.js</li>
+      </ul>
+      <p class="tech"><strong>Tech:</strong> Next.js 16 App Router, Prisma, PostgreSQL, NextAuth.js, TipTap, Tailwind CSS v4, Zustand, Docker</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Education</h2>
+    <div class="row">
+      <span class="title">Diploma in Computer Science</span>
+      <span class="meta">2021 – 2024</span>
+    </div>
+    <p>Feni Computer Institute, Feni · GPA 3.72 / 4.00</p>
+  </section>
+</body>
+</html>
