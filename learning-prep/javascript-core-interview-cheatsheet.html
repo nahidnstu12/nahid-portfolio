@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JavaScript Core — Interview Cheatsheet</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c2330;
+    --border: #2d333b;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --code-bg: #0b0f14;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(13,17,23,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+  }
+  header h1 { margin: 0 0 4px; font-size: 18px; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center;
+  }
+  #search {
+    flex: 1 1 220px; min-width: 180px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 12px; border-radius: 8px; font-size: 14px;
+  }
+  #search:focus { outline: none; border-color: var(--accent); }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+    padding: 6px 11px; border-radius: 20px; font-size: 12px; cursor: pointer; user-select: none;
+    transition: all .15s;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--text); }
+  .chip.active { background: var(--accent); color: #06121f; border-color: var(--accent); font-weight: 600; }
+  .chip.func.active { background: var(--purple); border-color: var(--purple); }
+  .chip.async.active { background: var(--green); border-color: var(--green); }
+  main { max-width: 980px; margin: 0 auto; padding: 20px; }
+  .section-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+    margin: 28px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    margin-bottom: 12px; overflow: hidden;
+  }
+  .card-head {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer;
+  }
+  .card-head:hover { background: var(--panel-2); }
+  .num { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; min-width: 20px; }
+  .title { font-weight: 600; font-size: 15px; flex: 1; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .b-easy { background: rgba(63,185,80,.15); color: var(--green); }
+  .b-med { background: rgba(210,153,34,.15); color: var(--yellow); }
+  .b-hard { background: rgba(248,81,73,.15); color: var(--red); }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+  .t-core { background: rgba(88,166,255,.13); color: var(--accent); }
+  .t-func { background: rgba(188,140,255,.13); color: var(--purple); }
+  .t-async { background: rgba(63,185,80,.13); color: var(--green); }
+  .arrow { color: var(--muted); transition: transform .2s; font-size: 12px; }
+  .card.open .arrow { transform: rotate(90deg); }
+  .card-body { display: none; padding: 4px 14px 16px; border-top: 1px solid var(--border); }
+  .card.open .card-body { display: block; }
+  .row { margin: 12px 0; }
+  .k {
+    display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--muted); margin-bottom: 3px;
+  }
+  .k.what { color: var(--accent); }
+  .k.when { color: var(--yellow); }
+  .k.example { color: var(--green); }
+  .k.say { color: var(--purple); }
+  .k.bangla { color: #ff9db0; }
+  .say-box {
+    background: var(--panel-2); border-left: 3px solid var(--purple);
+    padding: 8px 12px; border-radius: 6px; font-style: italic;
+  }
+  .bangla-box {
+    background: rgba(255,157,176,.06); border-left: 3px solid #ff9db0;
+    padding: 8px 12px; border-radius: 6px;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px; overflow-x: auto; margin: 6px 0; font-size: 13px;
+  }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; }
+  pre code { color: #c9d1d9; }
+  .inline-code {
+    background: var(--code-bg); border: 1px solid var(--border); padding: 1px 5px;
+    border-radius: 4px; font-size: 12px; font-family: "SF Mono", Menlo, monospace; color: #79c0ff;
+  }
+  .gotcha { color: var(--red); font-size: 13px; margin-top: 8px; }
+  .gotcha strong { color: var(--red); }
+  .wrong { color: var(--red); }
+  .right { color: var(--green); }
+  /* Quiz */
+  #quiz-section { margin-top: 40px; }
+  .quiz-intro { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .quiz-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 10px;
+  }
+  .quiz-q { font-weight: 600; display: flex; gap: 8px; }
+  .quiz-q .qn { color: var(--accent); }
+  .quiz-a {
+    display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+    color: var(--text);
+  }
+  .quiz-card.revealed .quiz-a { display: block; }
+  .reveal-btn {
+    margin-top: 8px; background: transparent; border: 1px solid var(--border); color: var(--muted);
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  .reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary {
+    background: var(--accent); color: #06121f; border: none; padding: 8px 16px;
+    border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; margin-right: 8px;
+  }
+  .btn-ghost {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  .no-results { text-align: center; color: var(--muted); padding: 40px; display: none; }
+  .toc-toggle { color: var(--accent); cursor: pointer; font-size: 12px; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 30px 20px; }
+  a { color: var(--accent); }
+  .pill-legend { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🟨 JavaScript Core — Interview Cheatsheet</h1>
+  <p>Frontend foundation, mid-level · <strong>What → When → Example → Say-this → Bangla hook</strong>. Your weak spot = precision &amp; vocabulary, so drill the "Say this" lines out loud.</p>
+  <div class="controls">
+    <input id="search" type="text" placeholder="🔍 Search: 'closure', 'this', 'event loop', 'coercion'..." />
+    <div class="filters">
+      <span class="chip active" data-filter="all">All</span>
+      <span class="chip" data-filter="core">Core</span>
+      <span class="chip func" data-filter="func">Functions</span>
+      <span class="chip async" data-filter="async">Async</span>
+      <span class="chip" data-filter="easy">🟢 Easy</span>
+      <span class="chip" data-filter="med">🟡 Med</span>
+      <span class="chip" data-filter="hard">🔴 Hard</span>
+    </div>
+  </div>
+  <div class="pill-legend">
+    <span>💡 Click any card to expand</span>
+    <span>·</span>
+    <span><span class="toc-toggle" id="expand-all">Expand all</span> / <span class="toc-toggle" id="collapse-all">Collapse all</span></span>
+    <span>·</span>
+    <span><a href="#quiz-section">⚡ Jump to Rapid-Fire Quiz</a></span>
+  </div>
+</header>
+
+<main>
+  <div id="cards"></div>
+  <div class="no-results" id="no-results">No matches. Try another keyword.</div>
+
+  <div id="quiz-section">
+    <h2 class="section-title" style="font-size:15px;color:var(--text)">⚡ Rapid-Fire Quiz — 30 Precision Drills</h2>
+    <div class="quiz-intro">
+      <strong>How to use:</strong> Read the question, say the answer <em>out loud in 1–2 sentences</em>, THEN reveal. Grade yourself on: (1) crisp definition first, (2) correct vocabulary (say "implicit binding", not "closure"), (3) a one-line example. If you knew it but spoke fuzzy — that fuzziness is exactly what fails interviews.
+      <div style="margin-top:12px">
+        <button class="btn-primary" id="reveal-all">Reveal all</button>
+        <button class="btn-ghost" id="hide-all">Hide all</button>
+        <button class="btn-ghost" id="shuffle">🔀 Shuffle</button>
+      </div>
+    </div>
+    <div id="quiz"></div>
+  </div>
+</main>
+
+<footer>
+  Built for frontend interview prep · JavaScript core foundation · Delivery beats knowledge — keep the "Say this" lines tight.
+</footer>
+
+<script>
+// ---------- DATA ----------
+// difficulty: easy | med | hard ; cat: core | func | async
+const CONCEPTS = [
+  // ===== GROUP A: FUNDAMENTALS & TYPES =====
+  {
+    group: "A · Fundamentals & Types",
+    num: 1, cat: "core", diff: "easy", title: "var vs let vs const + TDZ",
+    what: "<code>var</code> = function-scoped, hoisted &amp; initialized to <code>undefined</code>. <code>let</code>/<code>const</code> = block-scoped, hoisted but sit in the <strong>Temporal Dead Zone</strong> until declared (accessing early throws). <code>const</code> = can't <em>reassign</em> (contents still mutable).",
+    when: "Default to <code>const</code>. Use <code>let</code> only when you reassign. Never <code>var</code> in modern code.",
+    example: "<code>const user = {}; user.name = 'A'</code> is fine — you mutated, didn't reassign. <code>user = {}</code> throws <code>TypeError</code>.",
+    say: "const and let are block-scoped and live in the temporal dead zone until their line runs. const blocks reassignment, not mutation.",
+    bangla: "const = notun kore assign kora jabe na, kintu bhitorer jinis change kora jabe. let = block scope, reassign kora jabe.",
+    code: "console.log(a); // undefined  (var hoisted)\nconsole.log(b); // ReferenceError (TDZ)\nvar a = 1;\nlet b = 2;",
+    gotcha: "Reassigning a <code>const</code> throws <code>TypeError</code> at <strong>runtime</strong>. Redeclaring <code>let</code> twice in one scope is a <code>SyntaxError</code> at parse time. Name the exact error."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 2, cat: "core", diff: "med", title: "Hoisting (declarations vs expressions)",
+    what: "The engine moves <strong>declarations</strong> to the top of their scope before running. Function <em>declarations</em> are fully hoisted (callable before their line). Function <em>expressions</em> and arrows are not — only the variable is hoisted.",
+    when: "Explaining why some functions work before they're written and others throw.",
+    example: "A <code>function foo(){}</code> can be called above its definition; a <code>const foo = () =&gt; {}</code> cannot.",
+    say: "Declarations are hoisted with their body; expressions only hoist the variable binding, which is undefined or in the TDZ until assigned.",
+    bangla: "function declaration puro upore chole jay — age call kora jay. Expression/arrow shudhu variable hoist hoy, body na.",
+    code: "greet();            // ✅ works\nfunction greet(){ return 'hi'; }\n\nsayHi();            // ❌ TypeError: not a function\nvar sayHi = () => 'hi';",
+    gotcha: "<code>var sayHi</code> hoists as <code>undefined</code> → calling it is <code>TypeError</code>. Same with <code>let</code>/<code>const</code> but it's a <code>ReferenceError</code> (TDZ)."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 3, cat: "core", diff: "easy", title: "Primitives vs Reference types",
+    what: "7 primitives (<code>string, number, boolean, null, undefined, symbol, bigint</code>) are <strong>immutable</strong> and copied <strong>by value</strong>. Objects/arrays/functions are copied <strong>by reference</strong> (a pointer to the same memory).",
+    when: "Any bug where 'I changed a copy but the original changed too'.",
+    example: "Passing a number into a function can't change the caller's variable; passing an object lets the function mutate it.",
+    say: "Primitives copy the value; objects copy the reference. Two object variables can point to the same thing in memory.",
+    bangla: "Primitive = value copy hoy (alada). Object = reference copy hoy (eki jinis point kore).",
+    code: "let a = 1, b = a; b = 2;\nconsole.log(a);      // 1  (independent)\n\nlet x = {n:1}, y = x; y.n = 2;\nconsole.log(x.n);    // 2  (same object)",
+    gotcha: "<code>const arr = [1]; const copy = arr; copy.push(2)</code> → <code>arr</code> is now <code>[1,2]</code>. You copied the reference, not the array."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 4, cat: "core", diff: "med", title: "== vs === (and coercion)",
+    what: "<code>===</code> (strict) compares value AND type, no coercion. <code>==</code> (loose) coerces types first, causing surprises. <strong>Always use <code>===</code></strong>.",
+    when: "Always <code>===</code>. The one <code>==</code> use: <code>x == null</code> to catch both null and undefined.",
+    example: "<code>0 == ''</code> → true (both coerce to falsy numbers); <code>0 === ''</code> → false.",
+    say: "Triple equals compares type and value with no coercion. I always use it, except x == null as a shorthand for null-or-undefined.",
+    bangla: "=== type o value duitai check kore, coercion nai. == coerce kore — bhul answer dey. Shob shomoy === use koro.",
+    code: "0 == '';          // true  😱\n0 == false;       // true\nnull == undefined;// true (special rule)\nnull == 0;        // false\nNaN === NaN;      // false (!)",
+    gotcha: "<code>null == undefined</code> is <code>true</code> by a special spec rule, but <code>null</code> equals nothing else. <code>NaN</code> is never equal to anything — use <code>Number.isNaN()</code>."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 5, cat: "core", diff: "easy", title: "Truthy / Falsy values",
+    what: "8 <strong>falsy</strong> values: <code>false, 0, -0, 0n, \"\" , null, undefined, NaN</code>. Everything else is truthy — including <code>[]</code>, <code>{}</code>, and <code>\"0\"</code>.",
+    when: "Every <code>if</code>, <code>&amp;&amp;</code>, <code>||</code>, and ternary relies on this.",
+    example: "<code>if ([]) {}</code> runs — an empty array is truthy. A common bug when checking 'is this array empty'.",
+    say: "There are exactly 8 falsy values; empty array and empty object are both truthy. To check an empty array I check its length.",
+    bangla: "8 ta falsy value. [] ar {} truthy! Array khali kina check korte .length use koro, shudhu if(arr) na.",
+    code: "Boolean([]);   // true\nBoolean({});   // true\nBoolean('0');  // true\nBoolean(0);    // false\nBoolean('');   // false",
+    gotcha: "Checking <code>if (arr)</code> to mean 'has items' is wrong — <code>[]</code> is truthy. Use <code>if (arr.length)</code>."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 6, cat: "core", diff: "med", title: "?? (nullish) vs || (OR)",
+    what: "<code>||</code> falls back on ANY falsy value. <code>??</code> falls back ONLY on <code>null</code>/<code>undefined</code> — so valid <code>0</code>, <code>\"\"</code>, <code>false</code> pass through.",
+    when: "Use <code>??</code> when 0 / empty-string / false are legitimate values you must keep.",
+    example: "<code>count || 10</code> turns a real <code>0</code> into <code>10</code> (bug). <code>count ?? 10</code> keeps the <code>0</code>.",
+    say: "Double-pipe falls back on any falsy value; nullish only on null or undefined. I use nullish when zero or empty string are valid.",
+    bangla: "|| shob falsy te fallback dey. ?? shudhu null/undefined te. 0 ba '' valid hole ?? use koro.",
+    code: "const qty = 0;\nqty || 10;   // 10  ❌ lost the real 0\nqty ?? 10;   // 0   ✅",
+    gotcha: "You can't mix <code>??</code> with <code>&amp;&amp;</code>/<code>||</code> without parentheses — it's a <code>SyntaxError</code>."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 7, cat: "core", diff: "easy", title: "typeof & the null bug",
+    what: "<code>typeof</code> returns a type string. Quirk: <code>typeof null === 'object'</code> (a historic bug kept for compatibility). <code>typeof function(){}</code> is <code>'function'</code>.",
+    when: "Type-guards, and any 'what does typeof X return' trap.",
+    example: "To reliably detect an array use <code>Array.isArray(x)</code>, not <code>typeof</code> (arrays report <code>'object'</code>).",
+    say: "typeof null is 'object' — a legacy bug. For arrays I use Array.isArray, since typeof can't tell arrays from objects.",
+    bangla: "typeof null = 'object' — purono bug. Array check korte Array.isArray() use koro, typeof na.",
+    code: "typeof null;        // 'object'  (bug)\ntypeof undefined;   // 'undefined'\ntypeof [];          // 'object'\ntypeof function(){}; // 'function'\nArray.isArray([]);  // true",
+    gotcha: "The bug's origin: values were tagged by low bits; <code>000</code> meant object, and <code>null</code> is all-zeros → read as object."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 8, cat: "core", diff: "med", title: "Type coercion in + operator",
+    what: "<code>+</code> is overloaded: if <em>either</em> side is a string, it <strong>concatenates</strong> (left to right); otherwise it adds. <code>-</code>, <code>*</code>, <code>/</code> have NO string mode — they always coerce to number.",
+    when: "The #1 'guess the output' trap category.",
+    example: "<code>1 + '2' + 3</code> → <code>'123'</code> (string from the first +). <code>1 - '2'</code> → <code>-1</code> (math).",
+    say: "Plus with any string means concatenation, evaluated left to right. Minus, star, slash always mean numbers. That asymmetry is the whole trick.",
+    bangla: "+ e ekta string thakle joint (concatenate) hoy, baa theke daane. -, *, / shob shomoy number banay.",
+    code: "1 + '2' + 3;   // '123'\n1 + 2 + '3';   // '33' (math first)\n'5' * '2';     // 10\n[1,2] + [3,4]; // '1,23,4'",
+    gotcha: "Arrays/objects stringify via <code>toString()</code> before <code>+</code>: <code>[1,2]+[3,4]</code> → <code>'1,2'+'3,4'</code> → <code>'1,23,4'</code>."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 9, cat: "core", diff: "easy", title: "Optional chaining ?.",
+    what: "<code>?.</code> short-circuits to <code>undefined</code> the moment a link is <code>null</code>/<code>undefined</code>, instead of throwing 'cannot read property of undefined'. Works on props, calls <code>fn?.()</code>, and index <code>arr?.[i]</code>.",
+    when: "Reading deep into data that might be partially missing (API responses, optional configs).",
+    example: "<code>user?.address?.city ?? 'N/A'</code> safely reads a maybe-missing city.",
+    say: "Optional chaining stops and returns undefined as soon as something is null or undefined, so I don't crash reading deep objects. I pair it with nullish for a default.",
+    bangla: "?. — jodi majhkhane null/undefined pay, crash na kore undefined return kore. ?? diye default dao.",
+    code: "user?.address?.city;   // undefined, no crash\nuser.getName?.();      // only calls if it exists\narr?.[0];              // safe index",
+    gotcha: "Don't overuse it — <code>a?.b?.c?.d</code> everywhere hides real bugs. Use it where data is genuinely optional."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 10, cat: "core", diff: "med", title: "Destructuring + spread/rest",
+    what: "<strong>Destructuring</strong> pulls values out with defaults &amp; renaming. <strong>Spread</strong> <code>...</code> expands (copy/merge). <strong>Rest</strong> <code>...</code> gathers the remainder into an array/object.",
+    when: "Function params, cloning/merging, swapping, pulling fields off props/objects.",
+    example: "<code>const {a = 1, b: bee, ...rest} = obj</code> — default, rename, and collect the rest.",
+    say: "Same three dots, two roles: spread expands a collection, rest collects the remainder. Destructuring supports defaults and renaming.",
+    bangla: "Ekoi ... — spread choray (copy/merge), rest joma kore (baki gulo). Destructuring e default o rename kora jay.",
+    code: "const [a, ...tail] = [1,2,3];   // a=1, tail=[2,3]\nconst {x, ...others} = obj;\nconst merged = {...d1, ...d2};  // later wins\n[a, b] = [b, a];               // swap",
+    gotcha: "Spread is a <strong>shallow</strong> copy — nested objects are still shared by reference. On merge, the <em>later</em> key wins."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 11, cat: "core", diff: "med", title: "Shallow vs deep copy",
+    what: "<code>{...obj}</code> / <code>Object.assign</code> / <code>slice</code> copy only the <strong>top level</strong>; nested objects stay shared. A <strong>deep copy</strong> duplicates every level.",
+    when: "Any time you edit a copy and don't want the original touched — especially nested state.",
+    example: "<code>const c = {...o}; c.nested.x = 9</code> also changes <code>o.nested.x</code>.",
+    say: "Spread is shallow — nested references are shared. For a true deep copy I use structuredClone.",
+    bangla: "Spread shudhu upor-tola copy kore, bhitorer object share thake. Puro deep copy chaile structuredClone use koro.",
+    code: "const deep = structuredClone(obj); // ✅ modern\n// old trick (drops fns, Dates, throws on cycles):\nconst d = JSON.parse(JSON.stringify(obj));",
+    gotcha: "<code>JSON.parse(JSON.stringify())</code> silently drops functions/<code>undefined</code>, turns <code>Date</code> into a string, and throws on circular refs."
+  },
+  {
+    group: "A · Fundamentals & Types",
+    num: 12, cat: "core", diff: "hard", title: "NaN & floating-point precision",
+    what: "JS numbers are IEEE-754 64-bit floats — most decimals can't be stored exactly. <code>NaN</code> is the only value not equal to itself.",
+    when: "Money math, comparing computed decimals, validating numeric input.",
+    example: "<code>0.1 + 0.2 === 0.3</code> → <code>false</code> (it's <code>0.30000000000000004</code>).",
+    say: "Floats can't represent most decimals exactly, so I compare with an epsilon tolerance, and for money I work in integer cents.",
+    bangla: "0.1 + 0.2 === 0.3 → false. Float exact na. Compare korte epsilon, taka'r jonno cents (integer) use koro.",
+    code: "0.1 + 0.2;                       // 0.30000000000000004\nMath.abs(0.1+0.2-0.3) < Number.EPSILON; // true\nNumber.isNaN(NaN);               // true",
+    gotcha: "Never do currency in raw floats — store cents (integers). Detect NaN with <code>Number.isNaN()</code>, never <code>x === NaN</code>."
+  },
+
+  // ===== GROUP B: FUNCTIONS, SCOPE & this =====
+  {
+    group: "B · Functions, Scope & this",
+    num: 13, cat: "func", diff: "med", title: "Closures ⭐",
+    what: "A function that <strong>remembers the variables from where it was created</strong>, even after that outer scope returned. It captures the <em>variable</em>, not a snapshot value.",
+    when: "Private state, memoization, currying, event handlers, the <code>let</code> loop fix, module pattern.",
+    example: "A <code>makeCounter()</code> returns a function that keeps incrementing a private <code>count</code> that outlives the factory call.",
+    say: "A closure is a function bundled with the variables it was born with. Each call to the outer function mints a fresh set of those variables.",
+    bangla: "Closure = function + jei variable-er moddhe toiri hoyeche seta mne rakhe. Protyek call e notun copy toiri hoy.",
+    code: "function makeCounter(){\n  let count = 0;            // private\n  return () => ++count;     // closes over count\n}\nconst c = makeCounter();\nc(); // 1\nc(); // 2",
+    gotcha: "Classic bug: <code>for (var i...) setTimeout(()=&gt;log(i))</code> prints the final value N times — all closures share ONE <code>i</code>. <code>let</code> gives a fresh binding per iteration."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 14, cat: "func", diff: "hard", title: "this — the 4 binding rules",
+    what: "<code>this</code> is decided at <strong>call time</strong>, in priority: (1) <code>new</code> → the new object; (2) explicit <code>call/apply/bind</code>; (3) implicit <code>obj.method()</code> → left of the dot; (4) default → <code>undefined</code> (strict) / global. Arrows ignore all 4 → lexical.",
+    when: "Any 'what is this here' question, and callback bugs where <code>this</code> is lost.",
+    example: "<code>const fn = obj.method; fn()</code> loses <code>this</code> — no object left of the dot at call time.",
+    say: "this is set by the call site, not where the function is defined. Priority: new, then explicit bind, then the object before the dot, then default.",
+    bangla: "this call korar shomoy thik hoy, likhar shomoy na. Dot-er baa pashe je object, sei this. Arrow — lexical, uporer this.",
+    code: "const obj = { name:'A',\n  reg(){ return this.name; } };\nobj.reg();          // 'A'  (left of dot)\nconst f = obj.reg;\nf();                // undefined (lost this)",
+    gotcha: "Object literals do NOT create a <code>this</code> scope. An arrow method on an object inherits the <em>outer</em> <code>this</code> (usually <code>undefined</code>/window), not the object."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 15, cat: "func", diff: "med", title: "Arrow vs regular functions",
+    what: "Arrows have <strong>no own</strong> <code>this</code>, <code>arguments</code>, <code>prototype</code>, and can't be <code>new</code>-ed. Their <code>this</code> is <strong>lexical</strong> (inherited from the enclosing scope at definition).",
+    when: "Callbacks that need the surrounding <code>this</code> (e.g. class methods, array callbacks). NOT for object methods or constructors.",
+    example: "In a class, <code>onClick = () =&gt; this.handle()</code> keeps <code>this</code> bound to the instance without <code>.bind</code>.",
+    say: "Arrows take this lexically from where they're written, so they're perfect for callbacks but wrong as object methods or constructors.",
+    bangla: "Arrow-er nijer this nai — uporer scope theke ney. Callback-er jonno bhalo, object method/constructor-e kharap.",
+    code: "// ✅ keeps outer this\nsetTimeout(() => this.tick(), 100);\n// ❌ as method: this is not the object\nconst o = { n:1, get: () => this.n };",
+    gotcha: "Arrows have no <code>arguments</code> object and can't be used with <code>new</code> (throws). Don't use them as prototype methods."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 16, cat: "func", diff: "hard", title: "call / apply / bind",
+    what: "All three set <code>this</code> explicitly. <code>call(thisArg, a, b)</code> invokes now with args listed; <code>apply(thisArg, [a,b])</code> invokes now with an array; <code>bind(thisArg)</code> returns a NEW function to call later.",
+    when: "Borrowing methods, fixing <code>this</code> in callbacks, partial application.",
+    example: "<code>Array.prototype.slice.call(arguments)</code> turns an array-like into a real array (pre-spread trick).",
+    say: "call and apply invoke immediately — call takes comma args, apply takes an array. bind returns a new permanently-bound function.",
+    bangla: "call/apply ekhoni chalay (call comma, apply array). bind notun function ফেরত dey — pore chalabe.",
+    code: "function greet(g){ return g + ' ' + this.name; }\ngreet.call({name:'A'}, 'Hi');   // 'Hi A'\ngreet.apply({name:'A'}, ['Yo']);// 'Yo A'\nconst f = greet.bind({name:'B'});\nf('Hey');                       // 'Hey B'",
+    gotcha: "Remember which takes an array: <strong>A</strong>pply = <strong>A</strong>rray. A bound function's <code>this</code> can't be re-bound again."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 17, cat: "func", diff: "hard", title: "Prototypes & the prototype chain",
+    what: "Every object has a hidden <code>[[Prototype]]</code> link. Property lookup walks the <strong>chain</strong> until found or <code>null</code>. <code>class</code> is syntactic sugar over prototypes. Methods live on the prototype (shared), instance data lives on the object.",
+    when: "Explaining inheritance, <code>hasOwnProperty</code>, why methods are shared, memory efficiency.",
+    example: "<code>new Dog().speak()</code> finds <code>speak</code> on <code>Dog.prototype</code> by walking the chain.",
+    say: "Objects delegate to their prototype; lookup walks the chain until found or null. Methods sit on the prototype so all instances share one copy.",
+    bangla: "Property khujte chain dhore upore jay jotokkhon na pay. Method prototype-e thake (share), instance data object-e.",
+    code: "class Animal { speak(){ return '...'; } }\nclass Dog extends Animal { speak(){ return 'Woof'; } }\nconst d = new Dog();\nd.speak();                     // 'Woof'\nd.hasOwnProperty('speak');     // false (on prototype)",
+    gotcha: "<code>hasOwnProperty</code> does NOT walk the chain; <code>in</code> does. So <code>'speak' in d</code> is <code>true</code> but <code>d.hasOwnProperty('speak')</code> is <code>false</code>."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 18, cat: "func", diff: "med", title: "Higher-order functions (map / filter / reduce)",
+    what: "A HOF takes or returns a function. <code>map</code> transforms (same length), <code>filter</code> keeps matches, <code>reduce</code> folds an array into one value. All are <strong>immutable</strong> (return new arrays).",
+    when: "Any data transformation instead of manual <code>for</code> loops.",
+    example: "<code>arr.filter(even).map(x=&gt;x*10).reduce((a,b)=&gt;a+b, 0)</code> — pipeline of transforms.",
+    say: "map transforms one-to-one, filter selects, reduce folds to a single value. reduce's second argument is the initial accumulator.",
+    bangla: "map = transform (same length), filter = baccho, reduce = ek value te joma. reduce-er 2nd arg = initial acc.",
+    code: "[1,2,3,4].filter(n => n%2===0) // [2,4]\n         .map(n => n*10)       // [20,40]\n         .reduce((a,n)=>a+n, 0);// 60",
+    gotcha: "<code>reduce</code> with NO initial value throws on an empty array and uses element[0] as the seed. Always pass an initial value when the array may be empty."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 19, cat: "func", diff: "hard", title: "Currying & partial application",
+    what: "<strong>Currying</strong> turns <code>f(a,b,c)</code> into <code>f(a)(b)(c)</code> — one arg at a time. <strong>Partial application</strong> pre-fills some args, returning a function waiting for the rest. Both rely on closures.",
+    when: "Reusable configured functions, function composition, cleaner callbacks.",
+    example: "<code>const add = a =&gt; b =&gt; a + b; const add5 = add(5); add5(3) // 8</code>.",
+    say: "Currying takes arguments one at a time via closures; partial application pre-fills some now and returns a function for the rest.",
+    bangla: "Currying = ek ek kore argument ney. Partial = kichu ekhon fill kore, baki'r jonno function ফেরত dey. Duitai closure diye.",
+    code: "const add = a => b => c => a + b + c;\nadd(1)(2)(3);        // 6\nconst add10 = add(10);\nadd10(5)(1);         // 16",
+    gotcha: "Currying strictly means one arg per call; partial application can fix several at once. Interviewers sometimes conflate them — know the distinction."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 20, cat: "func", diff: "hard", title: "Debounce vs Throttle",
+    what: "Both limit how often a function runs (closure over a timer). <strong>Debounce</strong> waits until activity <em>stops</em> for N ms, then fires once. <strong>Throttle</strong> fires at most once per N ms during activity.",
+    when: "Debounce → search-as-you-type, resize end, autosave. Throttle → scroll handlers, drag, rate-limited APIs.",
+    example: "Debounce a search box so the API fires 300ms after the user stops typing, not on every keystroke.",
+    say: "Debounce waits for a pause then runs once; throttle runs on a fixed cadence during activity. Search input is debounce; scroll is throttle.",
+    bangla: "Debounce = thamle por ekbar chole (search box). Throttle = niyomito interval e chole (scroll). Duitai timer closure.",
+    code: "function debounce(fn, ms){\n  let t;\n  return (...args) => {\n    clearTimeout(t);\n    t = setTimeout(() => fn(...args), ms);\n  };\n}",
+    gotcha: "Mixing them up is a classic red flag. One-liner: debounce = 'wait for quiet', throttle = 'steady drip'."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 21, cat: "func", diff: "med", title: "Pure functions & immutability",
+    what: "A <strong>pure function</strong>: same input → same output, and no side effects (no mutation, no I/O, no globals). <strong>Immutability</strong> = never mutate; produce new values instead.",
+    when: "Predictable code, React state updates, testability, avoiding shared-reference bugs.",
+    example: "React state: <code>setItems([...items, newItem])</code> (new array) instead of <code>items.push()</code> (mutation).",
+    say: "A pure function returns the same output for the same input with no side effects. In UI state I always return a new object or array instead of mutating.",
+    bangla: "Pure function = eki input e eki output, kono side effect nai. Immutability = mutate na kore notun value banao.",
+    code: "// pure\nconst double = x => x * 2;\n// immutable update\nconst next = [...arr, item];\nconst obj2 = { ...obj, done: true };",
+    gotcha: "<code>push</code>, <code>splice</code>, <code>sort</code>, <code>reverse</code> mutate in place. <code>map</code>, <code>filter</code>, <code>concat</code>, spread return new arrays."
+  },
+  {
+    group: "B · Functions, Scope & this",
+    num: 22, cat: "func", diff: "easy", title: "IIFE (Immediately Invoked Function Expression)",
+    what: "A function defined and called at once: <code>(function(){ ... })()</code>. Creates a private scope so variables don't leak to global.",
+    when: "Historically for module isolation (pre-ES modules); today for one-off scoped setup or top-level <code>await</code> workarounds.",
+    example: "Wrapping init code so its temp variables never touch the global namespace.",
+    say: "An IIFE runs immediately and gives its own private scope, so variables don't leak globally. It was the pre-modules isolation pattern.",
+    bangla: "IIFE = shonge shongei chole, nijer private scope dey. Modules asar age isolation-er jonno use hoto.",
+    code: "(function(){\n  const secret = 42;   // not global\n})();\n\n(async () => { await init(); })(); // async IIFE",
+    gotcha: "Mostly replaced by ES modules (each module is already scoped) and block scoping. Still handy for async top-level code in scripts."
+  },
+
+  // ===== GROUP C: ASYNC & EVENT LOOP =====
+  {
+    group: "C · Async & the Event Loop",
+    num: 23, cat: "async", diff: "hard", title: "The Event Loop ⭐ (micro vs macro)",
+    what: "JS is <strong>single-threaded</strong>. The loop: run all sync code → <strong>drain the ENTIRE microtask queue</strong> (Promises, <code>await</code> continuations, <code>queueMicrotask</code>) → run ONE macrotask (<code>setTimeout</code>, events) → repeat.",
+    when: "Every 'what's the output order' async question.",
+    example: "A <code>Promise.then</code> always runs before a <code>setTimeout(...,0)</code> scheduled at the same time.",
+    say: "Sync first, then all microtasks drain completely, then one macrotask, then repeat. Microtasks always beat setTimeout.",
+    bangla: "Age sync, tarpor shob microtask (Promise) shesh, tarpor ekta macrotask (setTimeout). Microtask shob shomoy age.",
+    code: "console.log(1);\nsetTimeout(()=>console.log(2));      // macro\nPromise.resolve().then(()=>console.log(3)); // micro\nconsole.log(4);\n// → 1, 4, 3, 2",
+    gotcha: "A microtask can schedule more microtasks that ALSO run before the next macrotask — an infinite microtask loop can starve <code>setTimeout</code> forever."
+  },
+  {
+    group: "C · Async & the Event Loop",
+    num: 24, cat: "async", diff: "med", title: "Promises (states + chaining)",
+    what: "A Promise = a future value with 3 states: <strong>pending → fulfilled / rejected</strong>. It settles <strong>once</strong> (later resolve/reject calls are ignored). <code>.then/.catch/.finally</code> chain and pass values along.",
+    when: "Any async operation — fetch, timers, file/DB access.",
+    example: "<code>fetch(url).then(r =&gt; r.json()).catch(handleErr)</code> — each <code>.then</code> returns a new promise.",
+    say: "A promise is a future value that settles once from pending to fulfilled or rejected. then/catch chain, each returning a new promise.",
+    bangla: "Promise = future value, 3 ta state. Ekbar settle hoy — porer resolve/reject ignore hoy. then/catch chain kore.",
+    code: "new Promise((res, rej) => {\n  res('first');\n  res('second'); // ignored — already settled\n}).then(v => console.log(v)); // 'first'",
+    gotcha: "The <strong>executor</strong> (the function passed to <code>new Promise</code>) runs <strong>synchronously</strong>, immediately. Only <code>.then</code> callbacks are async (microtasks). A promise is immutable once settled."
+  },
+  {
+    group: "C · Async & the Event Loop",
+    num: 25, cat: "async", diff: "med", title: "async / await",
+    what: "Sugar over promises. <code>async</code> functions always return a promise. <code>await</code> pauses the function until a promise settles — everything <strong>before</strong> the first <code>await</code> runs sync; everything <strong>after</strong> becomes a microtask.",
+    when: "Readable sequential async code; wrap in <code>try/catch</code> for errors.",
+    example: "<code>const data = await (await fetch(url)).json()</code> reads like sync code but is non-blocking.",
+    say: "await splits the function: the part before runs synchronously, the part after becomes a microtask. Even awaiting a resolved value defers the rest.",
+    bangla: "await function-ke bhag kore — age-r ongsho sync, pore-r ongsho microtask. Resolved value-tei porer ta defer hoy.",
+    code: "async function test(){\n  console.log(1);\n  await Promise.resolve();\n  console.log(2);   // microtask\n}\nconsole.log(0); test(); console.log(3);\n// → 0, 1, 3, 2",
+    gotcha: "<code>await</code> in a loop runs serially (slow). To parallelize, start all promises first then <code>await Promise.all([...])</code>."
+  },
+  {
+    group: "C · Async & the Event Loop",
+    num: 26, cat: "async", diff: "med", title: "Promise combinators (all / race / allSettled / any)",
+    what: "<code>all</code> → all fulfil (fail-fast on any reject). <code>allSettled</code> → waits for all, never rejects (returns status objects). <code>race</code> → first to settle (fulfil OR reject). <code>any</code> → first to <em>fulfil</em> (rejects only if all reject).",
+    when: "Running independent async tasks together instead of one-by-one.",
+    example: "<code>Promise.all([fetchA(), fetchB()])</code> runs both in parallel and waits for both.",
+    say: "all is fail-fast on all results; allSettled never rejects; race is first-to-settle; any is first-to-succeed.",
+    bangla: "all = shob lagbe (ekta fail hole fail). allSettled = shob-e wait, reject hoy na. race = prothom settle. any = prothom success.",
+    code: "await Promise.all([a, b]);        // both or throw\nawait Promise.allSettled([a, b]); // [{status,value}...]\nawait Promise.race([a, b]);       // first settled\nawait Promise.any([a, b]);        // first fulfilled",
+    gotcha: "Use <code>allSettled</code> when partial failure is OK (you want every result). <code>all</code> throws the moment ANY promise rejects, discarding the rest."
+  },
+  {
+    group: "C · Async & the Event Loop",
+    num: 27, cat: "async", diff: "med", title: "Async error handling",
+    what: "With <code>async/await</code> use <code>try/catch</code>. With raw promises use <code>.catch()</code>. An unhandled rejection can crash Node / warn in the browser.",
+    when: "Every network / async call that can fail.",
+    example: "Wrap <code>await fetch()</code> in <code>try/catch</code> and handle the network error branch.",
+    say: "await errors are caught with try/catch; promise chains use .catch. A rejection with no handler becomes an unhandled rejection.",
+    bangla: "await-er error try/catch e dhoro; chain-e .catch. Handle na korle unhandled rejection — crash/warn.",
+    code: "try {\n  const r = await fetch(url);\n  if (!r.ok) throw new Error(r.status);\n  return await r.json();\n} catch (e) {\n  console.error(e);\n}",
+    gotcha: "<code>fetch</code> does NOT reject on 404/500 — only on network failure. You must check <code>res.ok</code> yourself and throw."
+  },
+  {
+    group: "C · Async & the Event Loop",
+    num: 28, cat: "async", diff: "easy", title: "Callbacks & callback hell",
+    what: "A <strong>callback</strong> = a function passed to run later. Nesting many async callbacks creates 'callback hell' (deep pyramid, hard to read/handle errors). Promises &amp; async/await were the fix.",
+    when: "Understanding legacy code, event listeners, and why promises exist.",
+    example: "Old Node style <code>fs.readFile(path, (err, data) =&gt; {...})</code> — error-first callbacks.",
+    say: "A callback runs later; deeply nested callbacks became callback hell, which promises and async/await flattened.",
+    bangla: "Callback = pore chalanor jonno function. Onek nesting = callback hell. Promise/async-await eta thik korlo.",
+    code: "// hell\ngetUser(id, u => getPosts(u, p => getComments(p, c => {...})));\n// flat with async/await\nconst u = await getUser(id);\nconst p = await getPosts(u);",
+    gotcha: "Node's convention is <strong>error-first</strong> callbacks: <code>(err, data)</code>. Not all callbacks are async — <code>arr.map(cb)</code> runs synchronously."
+  },
+
+  // ===== GROUP D: MODERN JS & COLLECTIONS =====
+  {
+    group: "D · Modern JS & Collections",
+    num: 29, cat: "core", diff: "easy", title: "ES Modules (import / export)",
+    what: "<strong>Named</strong> exports (many per file, import by exact name in braces) vs <strong>default</strong> (one per file, import with any name). Modules are file-scoped, run once, and are strict-mode by default.",
+    when: "Structuring any modern codebase; tree-shaking relies on named exports.",
+    example: "<code>export const x = 1</code> → <code>import { x } from './m'</code>; <code>export default fn</code> → <code>import anything from './m'</code>.",
+    say: "Named exports import by exact name in braces; a default export imports under any name. Modules are singletons — evaluated once and cached.",
+    bangla: "Named = brace diye exact name. Default = jekono name. Module ekbar-i chole, cache hoy (singleton).",
+    code: "// named\nexport const add = (a,b) => a+b;\nimport { add } from './math';\n// default\nexport default function App(){}\nimport App from './App';",
+    gotcha: "A module runs <strong>once</strong> and the result is cached — importing it in 10 files shares one instance. Import order doesn't re-run it."
+  },
+  {
+    group: "D · Modern JS & Collections",
+    num: 30, cat: "core", diff: "med", title: "Map / Set vs Object / Array",
+    what: "<code>Map</code> = key→value with <strong>any</strong> key type, insertion order, real <code>.size</code>, no prototype keys. <code>Set</code> = unique values. Objects only allow string/symbol keys; arrays allow duplicates.",
+    when: "Map → dynamic/non-string keys, frequent add/delete. Set → dedupe, membership checks.",
+    example: "Dedupe an array: <code>[...new Set(arr)]</code>. Count with a <code>Map</code> keyed by object.",
+    say: "Map takes any key type and keeps insertion order with a real size; Set stores unique values. I use Set to dedupe and for fast membership tests.",
+    bangla: "Map = jekono type-er key, order thake, .size ache. Set = unique value. Array dedupe: [...new Set(arr)].",
+    code: "const s = new Set([1,1,2]); // {1,2}\n[...new Set(arr)];          // dedupe\nconst m = new Map();\nm.set(objKey, 'v').get(objKey);",
+    gotcha: "<code>Set</code>/<code>Map</code> use <strong>reference</strong> equality for objects — two equal-looking objects are different keys. Primitives compare by value."
+  },
+  {
+    group: "D · Modern JS & Collections",
+    num: 31, cat: "core", diff: "easy", title: "Essential array methods (find / some / every / includes / flat)",
+    what: "<code>find</code> → first match (or undefined). <code>some</code> → any match (bool). <code>every</code> → all match (bool). <code>includes</code> → contains value. <code>flat</code> → flatten nested arrays.",
+    when: "Searching, validating, and reshaping arrays without manual loops.",
+    example: "<code>users.find(u =&gt; u.id === id)</code>, <code>arr.some(isInvalid)</code>, <code>arr.every(isValid)</code>.",
+    say: "find returns the first match, some and every return booleans, includes checks membership, flat flattens. Pick by intent for readable code.",
+    bangla: "find = prothom match, some = ekta hole true, every = shob hole true, includes = ache kina, flat = nested khule dey.",
+    code: "arr.find(x => x > 2);   // first match\narr.some(x => x > 2);   // true if any\narr.every(x => x > 0);  // true if all\n[1,[2,[3]]].flat(Infinity); // [1,2,3]",
+    gotcha: "<code>find</code>/<code>findIndex</code> return the item/index; <code>filter</code> returns an array. <code>includes</code> finds <code>NaN</code> (<code>indexOf</code> does not)."
+  },
+  {
+    group: "D · Modern JS & Collections",
+    num: 32, cat: "core", diff: "med", title: "Template literals & tagged templates",
+    what: "Backticks allow interpolation <code>${}</code> and multi-line strings. A <strong>tagged template</strong> passes the string parts + values to a function for custom processing (e.g. sanitizing, styled-components).",
+    when: "String building, multi-line text, i18n, CSS-in-JS.",
+    example: "<code>`Hi ${name}, you have ${count} items`</code> — clean interpolation over concatenation.",
+    say: "Backticks give interpolation and multi-line strings; a tagged template routes the parts and values through a function for custom handling.",
+    bangla: "Backtick = ${} diye value boshano + multi-line. Tagged template = string ar value function-e pathiye custom kaj.",
+    code: "const s = `Hi ${name}`;\n// tagged\nfunction hi(strings, ...vals){ /* custom */ }\nhi`Hello ${name}!`;",
+    gotcha: "<code>${}</code> runs any expression, including function calls — keep it side-effect-free. Tagged templates are how <code>styled-components</code> and safe-SQL libs work."
+  }
+];
+
+// ---------- QUIZ (30 rapid-fire) ----------
+const QUIZ = [
+  { q: "let vs const vs var — one-line each.", a: "var: function-scoped, hoisted to undefined. let: block-scoped, reassignable, TDZ. const: block-scoped, no reassignment (contents still mutable)." },
+  { q: "What error does reassigning a const throw, and when?", a: "TypeError, at runtime when the line executes. (Redeclaring let twice is a SyntaxError at parse time.)" },
+  { q: "What is the Temporal Dead Zone?", a: "The window between a let/const being hoisted and its declaration line — accessing it there throws ReferenceError." },
+  { q: "Primitive vs reference — how are they copied?", a: "Primitives copy by value (independent). Objects/arrays/functions copy by reference (same memory)." },
+  { q: "typeof null returns what, and why?", a: "'object' — a legacy bug (null is all-zero bits, read as the object type tag). Kept for backward compatibility." },
+  { q: "Name all 8 falsy values.", a: "false, 0, -0, 0n, \"\", null, undefined, NaN. Everything else (incl. [] and {}) is truthy." },
+  { q: "?? vs || — the difference?", a: "|| falls back on any falsy value; ?? only on null/undefined. Use ?? when 0/\"\"/false are valid." },
+  { q: "1 + '2' + 3 — output and why?", a: "'123'. + with any string concatenates, left to right. It never switches back to math." },
+  { q: "1 - '2' — output and why?", a: "-1. Minus/star/slash have no string mode — they always coerce to number." },
+  { q: "How do you reliably check if something is an array?", a: "Array.isArray(x). typeof gives 'object' for arrays, so it can't tell." },
+  { q: "null == undefined vs null == 0?", a: "true vs false. null and undefined are loosely equal only to each other by a special spec rule." },
+  { q: "Why does 0.1 + 0.2 !== 0.3, and how do you compare?", a: "IEEE-754 floats can't store those decimals exactly. Compare with Math.abs(a-b) < Number.EPSILON; for money use integer cents." },
+  { q: "Shallow vs deep copy — and the modern deep-copy call?", a: "Spread/assign copy top level only (nested refs shared). Deep copy: structuredClone(obj)." },
+  { q: "Define a closure in one sentence.", a: "A function bundled with the variables from where it was created — it captures the variable, not a snapshot." },
+  { q: "Why does a var loop with setTimeout print the final value N times?", a: "All callbacks share ONE function-scoped variable; by the time they run the loop is done. let gives a fresh binding per iteration." },
+  { q: "What decides the value of `this`?", a: "The call site. Priority: new → explicit bind → object-left-of-dot → default (undefined/global). Arrows are lexical." },
+  { q: "const f = obj.method; f() — what is `this`?", a: "undefined (strict) / global — no object left of the dot at call time. `this` was lost." },
+  { q: "Arrow functions — 3 things they lack?", a: "No own this (lexical), no arguments, no prototype / can't be new-ed. Great for callbacks, wrong as methods/constructors." },
+  { q: "call vs apply vs bind?", a: "call/apply invoke now (call=comma args, Apply=Array). bind returns a new permanently-bound function to call later." },
+  { q: "hasOwnProperty vs the `in` operator?", a: "hasOwnProperty checks only own properties; `in` walks the prototype chain. Prototype method → in:true, hasOwnProperty:false." },
+  { q: "Where do class methods live vs instance data?", a: "Methods on the prototype (shared, one copy); instance data on the object itself (per instance)." },
+  { q: "reduce with no initial value on an empty array?", a: "Throws 'Reduce of empty array with no initial value'. Always pass an initial accumulator when the array may be empty." },
+  { q: "Debounce vs throttle — one-liner + a use case each.", a: "Debounce = wait for quiet, then fire once (search input). Throttle = fire on a fixed cadence during activity (scroll)." },
+  { q: "Which array methods mutate vs return new?", a: "Mutate: push, splice, sort, reverse. New: map, filter, concat, slice, spread." },
+  { q: "Event loop order: sync, microtask, macrotask?", a: "Run all sync → drain ALL microtasks (Promises/await) → one macrotask (setTimeout) → repeat. Microtasks always win." },
+  { q: "Does the Promise executor run sync or async?", a: "Synchronously and immediately. Only .then/.catch callbacks are async (microtasks). A promise settles once." },
+  { q: "What does await do to the code after it?", a: "Splits the function: code before runs sync, code after becomes a microtask — even when awaiting an already-resolved value." },
+  { q: "Promise.all vs allSettled vs race vs any?", a: "all: all fulfil, fail-fast. allSettled: waits all, never rejects. race: first settled. any: first fulfilled." },
+  { q: "Does fetch reject on a 404?", a: "No — only on network failure. Check res.ok yourself and throw; a 404/500 still resolves." },
+  { q: "Named vs default export, and are modules re-run per import?", a: "Named = exact name in braces; default = any name. Modules run once and are cached (singleton), shared across all importers." }
+];
+
+// ---------- RENDER ----------
+const cardsEl = document.getElementById('cards');
+let currentGroup = '';
+CONCEPTS.forEach((c) => {
+  if (c.group !== currentGroup) {
+    currentGroup = c.group;
+    const h = document.createElement('div');
+    h.className = 'section-title';
+    h.textContent = c.group;
+    h.dataset.group = c.group;
+    cardsEl.appendChild(h);
+  }
+  const diffLabel = c.diff === 'easy' ? '🟢 Easy' : c.diff === 'med' ? '🟡 Med' : '🔴 Hard';
+  const diffClass = c.diff === 'easy' ? 'b-easy' : c.diff === 'med' ? 'b-med' : 'b-hard';
+  const catLabel = c.cat === 'core' ? 'Core' : c.cat === 'func' ? 'Functions' : 'Async';
+  const catClass = c.cat === 'core' ? 't-core' : c.cat === 'func' ? 't-func' : 't-async';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.cat = c.cat;
+  card.dataset.diff = c.diff;
+  card.dataset.text = (c.title + ' ' + c.what + ' ' + c.when + ' ' + c.example + ' ' + c.say + ' ' + (c.bangla||'') + ' ' + (c.gotcha||'') + ' ' + (c.code||'')).toLowerCase();
+
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="num">${c.num}</span>
+      <span class="title">${c.title}</span>
+      <span class="tag ${catClass}">${catLabel}</span>
+      <span class="badge ${diffClass}">${diffLabel}</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="row"><span class="k what">What</span><div>${c.what}</div></div>
+      <div class="row"><span class="k when">When</span><div>${c.when}</div></div>
+      <div class="row"><span class="k example">Example</span><div>${c.example}</div></div>
+      ${c.code ? `<div class="row"><pre><code>${escapeHtml(c.code)}</code></pre></div>` : ''}
+      <div class="row"><span class="k say">Say this (interview line)</span><div class="say-box">${c.say}</div></div>
+      <div class="row"><span class="k bangla">Bangla hook (mne rakho)</span><div class="bangla-box">${c.bangla}</div></div>
+      ${c.gotcha ? `<div class="gotcha">⚠️ <strong>Gotcha:</strong> ${c.gotcha}</div>` : ''}
+    </div>
+  `;
+  card.querySelector('.card-head').addEventListener('click', () => card.classList.toggle('open'));
+  cardsEl.appendChild(card);
+});
+
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ---------- QUIZ RENDER ----------
+const quizEl = document.getElementById('quiz');
+function renderQuiz(list){
+  quizEl.innerHTML = '';
+  list.forEach((item, idx) => {
+    const q = document.createElement('div');
+    q.className = 'quiz-card';
+    q.innerHTML = `
+      <div class="quiz-q"><span class="qn">Q${idx+1}.</span><span>${item.q}</span></div>
+      <button class="reveal-btn">Reveal answer</button>
+      <div class="quiz-a">✅ ${item.a}</div>
+    `;
+    q.querySelector('.reveal-btn').addEventListener('click', () => {
+      q.classList.toggle('revealed');
+      q.querySelector('.reveal-btn').textContent = q.classList.contains('revealed') ? 'Hide' : 'Reveal answer';
+    });
+    quizEl.appendChild(q);
+  });
+}
+renderQuiz(QUIZ);
+
+// ---------- SEARCH + FILTER ----------
+const search = document.getElementById('search');
+const chips = document.querySelectorAll('.chip');
+let activeFilter = 'all';
+
+function applyFilter(){
+  const term = search.value.trim().toLowerCase();
+  let visibleCount = 0;
+  document.querySelectorAll('.card').forEach(card => {
+    const matchesFilter =
+      activeFilter === 'all' ||
+      (['core','func','async'].includes(activeFilter) && card.dataset.cat === activeFilter) ||
+      (['easy','med','hard'].includes(activeFilter) && card.dataset.diff === activeFilter);
+    const matchesTerm = !term || card.dataset.text.includes(term);
+    const show = matchesFilter && matchesTerm;
+    card.style.display = show ? '' : 'none';
+    if (show) visibleCount++;
+  });
+  document.querySelectorAll('.section-title[data-group]').forEach(title => {
+    let el = title.nextElementSibling;
+    let anyVisible = false;
+    while (el && !el.classList.contains('section-title')) {
+      if (el.classList.contains('card') && el.style.display !== 'none') anyVisible = true;
+      el = el.nextElementSibling;
+    }
+    title.style.display = anyVisible ? '' : 'none';
+  });
+  document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
+}
+search.addEventListener('input', applyFilter);
+chips.forEach(chip => chip.addEventListener('click', () => {
+  chips.forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeFilter = chip.dataset.filter;
+  applyFilter();
+}));
+
+// ---------- EXPAND/COLLAPSE ----------
+document.getElementById('expand-all').addEventListener('click', () =>
+  document.querySelectorAll('.card').forEach(c => c.classList.add('open')));
+document.getElementById('collapse-all').addEventListener('click', () =>
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('open')));
+
+// ---------- QUIZ CONTROLS ----------
+document.getElementById('reveal-all').addEventListener('click', () =>
+  document.querySelectorAll('.quiz-card').forEach(q => { q.classList.add('revealed'); q.querySelector('.reveal-btn').textContent='Hide'; }));
+document.getElementById('hide-all').addEventListener('click', () =>
+  document.querySelectorAll('.quiz-card').forEach(q => { q.classList.remove('revealed'); q.querySelector('.reveal-btn').textContent='Reveal answer'; }));
+document.getElementById('shuffle').addEventListener('click', () => {
+  const shuffled = [...QUIZ];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor((i + 1) * (parseInt(window.performance.now()) % 97) / 97) % (i + 1);
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  renderQuiz(shuffled);
+});
+</script>
+</body>
+</html>

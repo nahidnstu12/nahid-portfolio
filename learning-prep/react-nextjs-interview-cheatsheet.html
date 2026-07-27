@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>React &amp; Next.js — Interview Cheatsheet (RadiusDirectory)</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --panel-2: #1c2330;
+    --border: #2d333b;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --yellow: #d29922;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --code-bg: #0b0f14;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(13,17,23,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+  }
+  header h1 { margin: 0 0 4px; font-size: 18px; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center;
+  }
+  #search {
+    flex: 1 1 220px; min-width: 180px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 12px; border-radius: 8px; font-size: 14px;
+  }
+  #search:focus { outline: none; border-color: var(--accent); }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+    padding: 6px 11px; border-radius: 20px; font-size: 12px; cursor: pointer; user-select: none;
+    transition: all .15s;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--text); }
+  .chip.active { background: var(--accent); color: #06121f; border-color: var(--accent); font-weight: 600; }
+  .chip.react.active { background: var(--purple); border-color: var(--purple); }
+  .chip.next.active { background: var(--green); border-color: var(--green); }
+  main { max-width: 980px; margin: 0 auto; padding: 20px; }
+  .section-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+    margin: 28px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    margin-bottom: 12px; overflow: hidden;
+  }
+  .card-head {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer;
+  }
+  .card-head:hover { background: var(--panel-2); }
+  .num { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; min-width: 20px; }
+  .title { font-weight: 600; font-size: 15px; flex: 1; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .b-easy { background: rgba(63,185,80,.15); color: var(--green); }
+  .b-med { background: rgba(210,153,34,.15); color: var(--yellow); }
+  .b-hard { background: rgba(248,81,73,.15); color: var(--red); }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+  .t-react { background: rgba(188,140,255,.13); color: var(--purple); }
+  .t-next { background: rgba(88,166,255,.13); color: var(--accent); }
+  .arrow { color: var(--muted); transition: transform .2s; font-size: 12px; }
+  .card.open .arrow { transform: rotate(90deg); }
+  .card-body { display: none; padding: 4px 14px 16px; border-top: 1px solid var(--border); }
+  .card.open .card-body { display: block; }
+  .row { margin: 12px 0; }
+  .k {
+    display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--muted); margin-bottom: 3px;
+  }
+  .k.what { color: var(--accent); }
+  .k.when { color: var(--yellow); }
+  .k.example { color: var(--green); }
+  .k.say { color: var(--purple); }
+  .k.bangla { color: #ff9db0; }
+  .say-box {
+    background: var(--panel-2); border-left: 3px solid var(--purple);
+    padding: 8px 12px; border-radius: 6px; font-style: italic;
+  }
+  .bangla-box {
+    background: rgba(255,157,176,.06); border-left: 3px solid #ff9db0;
+    padding: 8px 12px; border-radius: 6px;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px; overflow-x: auto; margin: 6px 0; font-size: 13px;
+  }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; }
+  pre code { color: #c9d1d9; }
+  .inline-code {
+    background: var(--code-bg); border: 1px solid var(--border); padding: 1px 5px;
+    border-radius: 4px; font-size: 12px; font-family: "SF Mono", Menlo, monospace; color: #79c0ff;
+  }
+  .gotcha { color: var(--red); font-size: 13px; margin-top: 8px; }
+  .gotcha strong { color: var(--red); }
+  .wrong { color: var(--red); }
+  .right { color: var(--green); }
+  /* Teach-back explainers */
+  #teach-section { margin-top: 40px; }
+  .explain-intro { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .seg-title {
+    font-size: 16px; color: var(--text); margin: 30px 0 14px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--border); display: flex; align-items: center; gap: 10px;
+  }
+  .seg-title.react { border-bottom-color: var(--purple); }
+  .seg-title.next { border-bottom-color: var(--accent); }
+  .seg-title { cursor: pointer; user-select: none; }
+  .seg-title:hover { color: var(--accent); }
+  .seg-arrow { margin-left: auto; color: var(--muted); font-size: 13px; transition: transform .2s; }
+  .explain {
+    background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--purple);
+    border-radius: 10px; padding: 14px 16px 16px; margin-bottom: 12px;
+  }
+  .explain.next { border-left-color: var(--accent); }
+  .explain h3 { margin: 0 0 8px; font-size: 15px; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .explain h3 .n { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .explain .concept { margin: 0 0 4px; color: var(--text); font-size: 14px; }
+  .flow {
+    display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
+    margin: 12px 0 4px; padding: 10px 12px; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 8px;
+  }
+  .flow .flabel {
+    width: 100%; font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--yellow); margin-bottom: 4px;
+  }
+  .flow .step { background: var(--panel-2); border: 1px solid var(--border); padding: 4px 9px; border-radius: 6px; font-size: 12px; }
+  .flow .arr { color: var(--muted); font-size: 12px; }
+  .ex-box { background: rgba(63,185,80,.06); border-left: 3px solid var(--green); padding: 8px 12px; border-radius: 6px; margin-top: 10px; font-size: 13px; }
+  .ex-box .k { color: var(--green); margin-bottom: 3px; }
+  .mem { margin-top: 10px; font-size: 13px; color: var(--muted); }
+  .mem strong { color: var(--purple); }
+  /* Quiz */
+  #quiz-section { margin-top: 40px; }
+  .quiz-intro { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .quiz-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 10px;
+  }
+  .quiz-q { font-weight: 600; display: flex; gap: 8px; }
+  .quiz-q .qn { color: var(--accent); }
+  .quiz-a {
+    display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+    color: var(--text);
+  }
+  .quiz-card.revealed .quiz-a { display: block; }
+  .reveal-btn {
+    margin-top: 8px; background: transparent; border: 1px solid var(--border); color: var(--muted);
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  .reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary {
+    background: var(--accent); color: #06121f; border: none; padding: 8px 16px;
+    border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; margin-right: 8px;
+  }
+  .btn-ghost {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  .no-results { text-align: center; color: var(--muted); padding: 40px; display: none; }
+  .toc-toggle { color: var(--accent); cursor: pointer; font-size: 12px; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 30px 20px; }
+  a { color: var(--accent); }
+  .pill-legend { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1>⚛️ React &amp; Next.js — Interview Cheatsheet</h1>
+  <p>Mid-level, RadiusDirectory-flavored · <strong>What → When → Real example → Say-this → Bangla hook</strong>. Weak spot = precision, so drill the "Say this" lines.</p>
+  <div class="controls">
+    <input id="search" type="text" placeholder="🔍 Search concept, keyword, or 'hydration', 'cache'..." />
+    <div class="filters">
+      <span class="chip active" data-filter="all">All</span>
+      <span class="chip react" data-filter="react">React</span>
+      <span class="chip next" data-filter="next">Next.js</span>
+      <span class="chip" data-filter="easy">🟢 Easy</span>
+      <span class="chip" data-filter="med">🟡 Med</span>
+      <span class="chip" data-filter="hard">🔴 Hard</span>
+    </div>
+  </div>
+  <div class="pill-legend">
+    <span>💡 Click any card to expand</span>
+    <span>·</span>
+    <span><span class="toc-toggle" id="expand-all">Expand all</span> / <span class="toc-toggle" id="collapse-all">Collapse all</span></span>
+    <span>·</span>
+    <span><a href="#teach-section">🧠 Jump to Teach-Back</a></span>
+    <span>·</span>
+    <span><a href="#quiz-section">⚡ Jump to Rapid-Fire Quiz</a></span>
+  </div>
+</header>
+
+<main>
+  <div id="cards"></div>
+  <div class="no-results" id="no-results">No matches. Try another keyword.</div>
+
+  <section id="teach-section">
+    <h2 class="section-title" style="font-size:15px;color:var(--text)">🧠 Teach-Back — Explain It Yourself (React &amp; Next.js Internals)</h2>
+    <div class="explain-intro">
+      <strong>How to use:</strong> These aren't Q&amp;A — each block is a <em>full concept written the way you'd teach it to someone</em>. Read the <span style="color:var(--text)">concept</span> out loud, then recite the <span style="color:var(--yellow)">Flow to memorize</span> (the arrow chain is your mental hook), then ground it with the <span style="color:var(--green)">RadiusDirectory example</span>. If you can teach the flow chain from memory, you own the concept.
+    </div>
+
+    <h3 class="seg-title react">⚛️ Segment 1 — React Internals <span class="tag t-react">React</span></h3>
+
+    <div class="explain">
+      <h3><span class="n">R1</span> The Big Picture: Two Phases (Render + Commit)</h3>
+      <p class="concept">React never touches the screen the instant your state changes. It works in two phases. First the <strong>Render Phase</strong>: React re-runs your component functions, builds a fresh Virtual DOM in memory, compares it to the old one, and writes down a to-do list of the exact changes needed — nothing is on screen yet, this phase is pure and can even run more than once. Then the <strong>Commit Phase</strong>: React takes that to-do list and applies it to the Real DOM in one synchronous, uninterruptible pass, then runs your effects. In one line: <em>Render = think &amp; prepare, Commit = apply &amp; show.</em></p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">State change</span><span class="arr">→</span><span class="step">Render Phase (build VDOM → diff → to-do list)</span><span class="arr">→</span><span class="step">Commit Phase (write DOM → run effects)</span><span class="arr">→</span><span class="step">Screen updates</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Clicking the ❤️ favorite sets state; render figures out only the heart icon changed; commit writes that one change; the other 49 cards never move.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Age chinta (Render), pore apply (Commit)."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R2</span> Virtual DOM &amp; why it's fast</h3>
+      <p class="concept">The Virtual DOM is just a plain JavaScript object tree that mirrors what's on screen. Because it's plain JS, creating and comparing it is cheap. The <strong>Real DOM is expensive</strong> — every direct change can force the browser to recalculate layout and repaint. So React makes changes to the cheap copy first, finds the smallest set of real changes by diffing, and applies only those to the Real DOM in a batch. The Virtual DOM isn't magic speed — it's a strategy to do <em>less</em> real DOM work.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Build cheap JS tree</span><span class="arr">→</span><span class="step">Diff vs old</span><span class="arr">→</span><span class="step">Find minimal changes</span><span class="arr">→</span><span class="step">Batch-apply to Real DOM</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>A grid filter recomputes 1000 cards in memory, but only 12 changed on screen → only 12 real DOM updates happen.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Cheap copy te kaj, minimal tuku ashol DOM e."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R3</span> Reconciliation &amp; the 3 diffing rules</h3>
+      <p class="concept">Reconciliation is how React compares the new tree with the old to decide what to change. It skips a slow full-tree comparison and uses 3 shortcuts. <strong>(1) Different type</strong> — a <code>&lt;div&gt;</code> became a <code>&lt;span&gt;</code> → React throws away that whole branch and rebuilds it, losing its state. <strong>(2) Same type</strong> → React keeps the node, updates only the attributes that differ, then checks the children. <strong>(3) Lists</strong> → React matches items by their <code>key</code>, not by position, so it knows what was added, removed, or moved. These shortcuts make diffing roughly O(n) instead of O(n³).</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Compare node</span><span class="arr">→</span><span class="step">Different type? replace subtree</span><span class="arr">·</span><span class="step">Same type? update attrs + recurse</span><span class="arr">·</span><span class="step">List? match by key</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Swapping a card's <code>&lt;a&gt;</code> for <code>&lt;div&gt;</code> rebuilds it (state lost); changing only its className keeps it; reordering the grid relies on <code>key={listing.id}</code>.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Type bodlaile phelo, same hoile update, list e key."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R4</span> Where React starts (createRoot &amp; mount)</h3>
+      <p class="concept">A React app takes over one empty DOM node, usually <code>&lt;div id="root"&gt;</code>. The entry file grabs that node with <code>createRoot</code>, then calls <code>.render(&lt;App/&gt;)</code>, which hands React control to build and manage everything inside. From that point the framework owns that subtree. React 18+ uses <code>createRoot</code> (the old <code>ReactDOM.render</code> is legacy) because it unlocks concurrent features like interruptible rendering.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">HTML loads</span><span class="arr">→</span><span class="step">Find #root (empty)</span><span class="arr">→</span><span class="step">JS bundle loads</span><span class="arr">→</span><span class="step">createRoot(#root).render(&lt;App/&gt;)</span><span class="arr">→</span><span class="step">UI appears</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>In a Next.js project the framework does this mounting + hydration for you — but knowing it answers "how does React boot into a page."</div>
+      <div class="mem"><strong>Memory hook:</strong> "Ekta khali box (#root) — createRoot diye React dhore ney."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R5</span> Update scheduling &amp; priorities</h3>
+      <p class="concept">When state changes, React doesn't render right away — it <strong>schedules</strong> the work with a priority. Things the user feels instantly (clicks, typing) get high priority; background work (filtering a huge list, a transition) gets low priority. If an urgent update arrives while React is busy on low-priority work, it can pause, handle the urgent one, then resume. This is why the UI stays responsive during heavy re-renders — and why the Render Phase <em>must</em> be interruptible.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Update fires</span><span class="arr">→</span><span class="step">Assign priority</span><span class="arr">→</span><span class="step">Urgent (typing) preempts</span><span class="arr">→</span><span class="step">Low (big filter) pauses/resumes</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Listings search — typing stays instant while re-filtering 1000 listings runs as a low-priority transition React can pause.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Typing age, boro kaj pore — dorkar hole thamiye."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R6</span> Inside the Render Phase (3 steps)</h3>
+      <p class="concept">Zooming in, three things happen — all in memory. First React re-runs the component to build the new Virtual DOM from the latest state and props. Second it <strong>reconciles</strong> — diffs that new tree against the previous one. Third it produces an <strong>effect list</strong>: the precise DOM operations (insert this, update that text, remove this node) needed. At the end, nothing has changed on screen — React just holds a plan.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Re-run component</span><span class="arr">→</span><span class="step">Build new VDOM</span><span class="arr">→</span><span class="step">Diff vs old</span><span class="arr">→</span><span class="step">Produce effect list</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Quantity 0→1 → new VDOM → diff finds only the number changed → effect list = "update this text node." Screen still shows the old value.</div>
+      <div class="mem"><strong>Memory hook:</strong> "VDOM → diff → to-do list. Ekhono screen e kichu nai."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R7</span> Inside the Commit Phase (useLayoutEffect vs useEffect)</h3>
+      <p class="concept">The Commit Phase runs the effect list in order, and this is where the screen actually changes. It takes a snapshot if needed, then <strong>mutates the Real DOM</strong> with all the changes. Right after the DOM updates but <em>before</em> the browser paints, it runs your <code>useLayoutEffect</code> synchronously — so you can measure or adjust layout with no visible flicker. Then the <strong>browser paints</strong>. Finally, <em>after</em> paint, React runs your <code>useEffect</code> asynchronously — perfect for non-visual work like logging or fetching. Rule: <code>useLayoutEffect</code> = before paint (measure/adjust layout), <code>useEffect</code> = after paint (everything else, non-blocking).</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Snapshot</span><span class="arr">→</span><span class="step">Mutate Real DOM</span><span class="arr">→</span><span class="step">useLayoutEffect (sync, pre-paint)</span><span class="arr">→</span><span class="step">Browser paints</span><span class="arr">→</span><span class="step">useEffect (async, post-paint)</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Chat — pin scroll to the newest message with <code>useLayoutEffect</code> (no flicker); fire a page_view event with <code>useEffect</code> (after paint).</div>
+      <div class="mem"><strong>Memory hook:</strong> "useLayoutEffect = paint er age; useEffect = paint er pore."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R8</span> Fiber architecture</h3>
+      <p class="concept">Fiber is the engine that makes all this possible (since React 16). Instead of rendering with the JavaScript call stack (which runs start-to-finish and can't be paused), React turns each element into a <strong>fiber node</strong> — a small JS object storing its type, props, links to its child/sibling/parent, a pointer to its old version (<code>alternate</code>), and flags for what changed. These nodes form a linked tree React can walk one unit at a time. Because the work lives in a <em>data structure</em>, not the call stack, React can do a bit, pause to let the browser handle a click, then resume — or throw the work away. Fiber isn't an API you call; it's the internal design that makes rendering interruptible.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Element → fiber node</span><span class="arr">→</span><span class="step">Linked tree (child/sibling/parent)</span><span class="arr">→</span><span class="step">Work one unit at a time</span><span class="arr">→</span><span class="step">Pause / resume / abort</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>A big admin table — Fiber processes rows as small units and yields to a click, instead of freezing the tab through the whole tree (the old stack reconciler couldn't).</div>
+      <div class="mem"><strong>Memory hook:</strong> "Fiber = kaj ke chhoto tukro banay — tai thamano-cholano jay."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R9</span> Double buffering (current vs work-in-progress)</h3>
+      <p class="concept">React keeps two versions of the tree at once. One is <strong>current</strong> — exactly what's on screen right now. The other is <strong>work-in-progress</strong> — the new tree React builds during the Render Phase. React does all its mutating on the work-in-progress copy in memory. Only at commit does it swap a pointer so work-in-progress becomes current — instantly and completely. It's the same trick games use: draw the next frame off-screen, then flip to it, so the user never sees a half-drawn screen. That's why an interrupted or abandoned render can never leave broken UI visible.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Current tree (on screen)</span><span class="arr">+</span><span class="step">WIP tree (in memory)</span><span class="arr">→</span><span class="step">Build/mutate WIP</span><span class="arr">→</span><span class="step">Commit swaps pointer</span><span class="arr">→</span><span class="step">WIP becomes current</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Re-filtering a big grid — the current grid stays interactive on screen while the new one is built; the swap happens only when it's fully ready.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Purono ta screen e, notun ta memory te — ready hole flip."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R10</span> Browser rendering pipeline (after React commits)</h3>
+      <p class="concept">React's job ends when it writes the DOM — then the <strong>browser</strong> takes over with its own pipeline. It parses HTML into the DOM tree and CSS into the CSSOM, combines them into a <strong>Render Tree</strong> (visible elements only), runs <strong>Layout</strong> (a.k.a. reflow) to compute each element's exact size and position, <strong>Paints</strong> the pixels (colors, text, borders), then <strong>Composites</strong> the layers for the screen. Layout is the expensive step, so animating properties that skip it — <code>transform</code> and <code>opacity</code>, which are composite-only — stays smooth at 60fps.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">DOM + CSSOM</span><span class="arr">→</span><span class="step">Render Tree</span><span class="arr">→</span><span class="step">Layout (reflow)</span><span class="arr">→</span><span class="step">Paint</span><span class="arr">→</span><span class="step">Composite</span><span class="arr">→</span><span class="step">Pixels</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Changing a price text reflows just that box and repaints the text (cheap); a card hover using <code>transform</code> skips layout/paint entirely (composite-only).</div>
+      <div class="mem"><strong>Memory hook:</strong> "React DOM lekhe, browser take pixel banay. Reflow = expensive."</div>
+    </div>
+
+    <div class="explain">
+      <h3><span class="n">R11</span> The complete React flow (capstone)</h3>
+      <p class="concept">Put it all together and you can narrate any interaction end-to-end. A user does something → state or props change → React <strong>schedules</strong> the update by priority → the <strong>Render Phase</strong> builds the new Virtual DOM, diffs it, and prepares the effect list, all in memory and interruptibly → the <strong>Commit Phase</strong> writes the minimal changes to the Real DOM, runs <code>useLayoutEffect</code>, the browser paints, then <code>useEffect</code> runs → the browser's pipeline turns it into pixels → React goes idle until the next update. The one-line secret: <em>React thinks in memory first, then touches the DOM only for what changed.</em></p>
+      <div class="flow"><span class="flabel">Flow to memorize (the whole chain)</span><span class="step">Action</span><span class="arr">→</span><span class="step">State change</span><span class="arr">→</span><span class="step">Schedule (priority)</span><span class="arr">→</span><span class="step">Render (VDOM → diff → effect list)</span><span class="arr">→</span><span class="step">Commit (DOM → useLayoutEffect → paint → useEffect)</span><span class="arr">→</span><span class="step">Pixels</span><span class="arr">→</span><span class="step">Idle</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>❤️ favorite — click → setState → high-priority schedule → render finds one icon change → commit writes it → paint → useEffect logs analytics → filled heart shows.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Action → schedule → render (memory) → commit (DOM) → paint. Age chinta, pore apply."</div>
+    </div>
+
+    <h3 class="seg-title next">▲ Segment 2 — Next.js Internals <span class="tag t-next">Next.js</span></h3>
+
+    <div class="explain next">
+      <h3><span class="n">N1</span> Server vs Client Components (+ the boundary)</h3>
+      <p class="concept">In the App Router every component is a <strong>Server Component by default</strong>. Server Components run only on the server: they hit the database directly, keep secrets safe, and ship <strong>zero JavaScript</strong> to the browser — but they can't use state, effects, event handlers, or browser APIs. When you need interactivity you add <code>"use client"</code> at the top of a file, making that component (and everything it imports) a <strong>Client Component</strong> that ships to the browser. Best practice: keep pages as Server Components and push <code>"use client"</code> down to the small interactive <em>leaves</em> — a button, a toggle — so the bundle stays tiny. Escape hatch: a Server Component passed as <code>children</code> through a Client Component still runs on the server.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Default = Server (zero JS, DB access)</span><span class="arr">→</span><span class="step">Need interactivity? add "use client"</span><span class="arr">→</span><span class="step">Push boundary to the leaf</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>The product page is a Server Component that fetches the listing via Prisma; only <code>&lt;AddToCartButton&gt;</code> and the favorite toggle are <code>"use client"</code> leaves.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Default server (JS pathay na); interactive tuku matro client, leaf e namao."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N2</span> React Server Components — the deeper "why"</h3>
+      <p class="concept">A Server Component executes on the server and sends the client a <strong>lightweight rendered payload</strong> — a description of the UI — instead of a JavaScript bundle. That's different from classic SSR, which sends HTML but still ships and re-hydrates the component's JS. RSCs solve oversized bundles, slow Time-to-Interactive, duplicate data fetching, and needless API layers: the component reads the database directly and the browser never downloads its code. The hard limit is the trade-off — no <code>useState</code>, <code>useEffect</code>, browser APIs, or events in a Server Component; anything interactive must be a Client Component. Best practice: fetch data in Server Components, keep <code>"use client"</code> to interactive elements, and use Suspense for progressive rendering.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Server runs component + DB query</span><span class="arr">→</span><span class="step">Sends lightweight payload (not JS)</span><span class="arr">→</span><span class="step">Client Components handle only interactivity</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Listing detail — the server fetches listing + reviews and streams the payload; only the chat box and favorite button ship JS.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Server e chole, payload pathay (JS na); interactive tuku client."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N3</span> Rendering strategies: SSR / SSG / ISR / CSR</h3>
+      <p class="concept">Four ways to produce a page, chosen by two questions: is the content the same for everyone, and how fresh must it be. <strong>SSG</strong> builds the page once at build time — fastest, for content that rarely changes. <strong>ISR</strong> is SSG plus a revalidate timer, rebuilding in the background every N seconds — for content that updates periodically under high traffic. <strong>SSR</strong> renders fresh on every request on the server — for pages that depend on the specific user or must be up-to-the-second. <strong>CSR</strong> renders in the browser after load — for interactive, behind-auth screens where SEO doesn't matter.</p>
+      <div class="flow"><span class="flabel">Flow to memorize (decision tree)</span><span class="step">Same + rarely changes → SSG</span><span class="arr">·</span><span class="step">Same + periodic → ISR</span><span class="arr">·</span><span class="step">Per-user / must be fresh → SSR</span><span class="arr">·</span><span class="step">Interactive + no SEO → CSR</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Marketing page = SSG · listings homepage = ISR · user dashboard = SSR · a chart after a tab click = CSR.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Static SSG, timer ISR, per-request SSR, browser CSR."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N4</span> Data fetching in Server Components</h3>
+      <p class="concept">Reading data in the App Router is simple: make the component <code>async</code> and <code>await</code> your fetch or database call directly inside it. No <code>useEffect</code>, no <code>getServerSideProps</code>, no separate API route for reads. It runs on the server, so hitting Prisma directly is fine and secrets stay safe. The mental split: <strong>reads</strong> happen in async Server Components; <strong>writes</strong> (mutations) happen in Server Actions.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Make component async</span><span class="arr">→</span><span class="step">await db/fetch directly</span><span class="arr">→</span><span class="step">return UI</span><span class="arr">·</span><span class="step">reads = async component, writes = Server Action</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div><code>const listings = await db.listing.findMany()</code> right inside the async page component, then render the grid.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Porte chao → async + await direct. Likhte chao → Server Action."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N5</span> The 4 Next.js caches</h3>
+      <p class="concept">Next.js stacks four caches, and knowing them turns "why is my data stale?" into a precise diagnosis. <strong>(1) Request Memoization</strong> dedupes identical fetches within a single render pass — call the same fetch in layout and page, it runs once. <strong>(2) Data Cache</strong> stores fetch results across requests and deployments. <strong>(3) Full Route Cache</strong> stores the rendered HTML of static routes. <strong>(4) Router Cache</strong> stores visited routes on the client so back/forward is instant. Most stale-data bugs are the Data Cache (server) or the Router Cache (client).</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Request Memoization (one render)</span><span class="arr">→</span><span class="step">Data Cache (across requests)</span><span class="arr">→</span><span class="step">Full Route Cache (static HTML)</span><span class="arr">→</span><span class="step">Router Cache (client nav)</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>The same <code>getSettings</code> fetch in layout + page runs once (memoization); the listing showcase persists via the Data Cache.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Memo (ek render) → Data (server) → Route (HTML) → Router (browser). Stale = usually Data ba Router."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N6</span> revalidatePath vs revalidateTag</h3>
+      <p class="concept">These bust the Data Cache on demand, usually right after a mutation in a Server Action. <code>revalidatePath("/listings")</code> refreshes everything cached for that one route. <code>revalidateTag("listings")</code> is surgical: you first tag your fetches with <code>next: { tags: ["listings"] }</code>, then busting the tag refreshes every fetch carrying it — across the public directory, the showcase, and the admin table at once. Use Path when you think in routes, Tag when the same data appears in many places.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Tag your fetch (next.tags)</span><span class="arr">→</span><span class="step">Mutate in Server Action</span><span class="arr">→</span><span class="step">revalidateTag("x") busts all tagged reads</span><span class="arr">·</span><span class="step">revalidatePath busts one route</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Listing approval — fetches tagged <code>["listings"]</code>; after approving, <code>revalidateTag("listings")</code> refreshes public + showcase + admin together.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Path = ekta route; Tag = ja ja tag kora, shob."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N7</span> Server Actions</h3>
+      <p class="concept">A Server Action is an <code>async</code> function marked <code>"use server"</code> that always runs on the server, for <strong>mutations</strong> (create/update/delete). The magic: you call it directly from client code like a normal function — no API route, no manual <code>fetch</code>, type-safe end-to-end. Secrets stay on the server, and it even works before JavaScript loads via <code>&lt;form action={fn}&gt;</code> (progressive enhancement). After it writes, call <code>revalidatePath</code>/<code>revalidateTag</code> or <code>router.refresh()</code> so the UI shows fresh data.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">"use server" fn</span><span class="arr">→</span><span class="step">call like a local function</span><span class="arr">→</span><span class="step">runs on server, writes DB</span><span class="arr">→</span><span class="step">revalidate</span><span class="arr">→</span><span class="step">UI refreshes</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Approving a listing, creating a store, submitting a lead are all Server Actions; each revalidates after writing.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Server Action = mutation, function er moto call, API route lage na. Likhar por revalidate."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N8</span> Route Handlers (route.ts)</h3>
+      <p class="concept">Route Handlers are your actual HTTP endpoints in the App Router. In a <code>route.ts</code> file you export functions named after HTTP methods — <code>GET</code>, <code>POST</code>, etc. Use them for things that aren't rendering a page and need a real URL: webhooks, third-party payment callbacks, cron triggers, mobile API endpoints. The distinction from Server Actions: a Route Handler is a <strong>public HTTP endpoint for external callers</strong>; a Server Action is an internal mutation you call like a function from your own UI.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">route.ts</span><span class="arr">→</span><span class="step">export GET/POST/...</span><span class="arr">→</span><span class="step">real HTTP endpoint for external callers</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div><code>src/app/api/</code> handles SSLCommerz payment callbacks, cron triggers, and the internal revalidate-listing-cache endpoint.</div>
+      <div class="mem"><strong>Memory hook:</strong> "route.ts = ashol URL (webhook/callback). Nijer UI mutation = Server Action."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N9</span> Streaming &amp; loading.tsx (Suspense)</h3>
+      <p class="concept">Instead of waiting for the whole page, the server sends HTML in <strong>chunks</strong> as each part finishes. Suspense boundaries mark the chunks: the fast shell (header, filters) streams and paints immediately, while a slow section shows a fallback until its data arrives, then streams in. <code>loading.tsx</code> is just an automatic Suspense boundary for a whole route segment; you can also wrap individual slow components in your own <code>&lt;Suspense&gt;</code> to stream them independently.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Shell renders first</span><span class="arr">→</span><span class="step">Suspense fallback for slow parts</span><span class="arr">→</span><span class="step">Data arrives</span><span class="arr">→</span><span class="step">Chunk streams in, replaces fallback</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>Listings — the header/filters paint instantly via <code>loading.tsx</code> while the DB query streams; trending and reviews get their own Suspense.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Page tukro tukro kore ashe; loading.tsx = auto Suspense."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N10</span> Middleware (proxy.ts)</h3>
+      <p class="concept">Middleware runs <strong>before a request completes</strong>, on the Edge, making it the single place to gate many routes — auth checks, redirects, rewrites, headers. It's fast but limited: the Edge runtime has no Node APIs and no direct database access, so keep it to coarse checks like "is there a valid session token?" The real, fine-grained authorization ("does this user own <em>this</em> listing?") belongs in the Server Component or Server Action where you have the database.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Request</span><span class="arr">→</span><span class="step">Middleware (Edge, before render)</span><span class="arr">→</span><span class="step">Gate / redirect</span><span class="arr">→</span><span class="step">Route renders</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div><code>src/proxy.ts</code> guards <code>/admin/*</code> (admin role) and <code>/my/*</code> (authenticated), redirecting to <code>/login</code>.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Middleware = fast gate (token ache?). Ashol authz page/action e, DB diye."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N11</span> Server→Client serialization boundary</h3>
+      <p class="concept">When a Server Component passes props to a Client Component, those props travel over the network as data, so they must be <strong>serializable</strong>. Plain objects, arrays, strings, numbers, dates, and even promises can cross; <strong>functions and class instances cannot</strong>. That's why you pass a listing's plain fields (id, title, price) to a client button, not a live Prisma model or a method. Event handlers must be defined inside the Client Component. The one function type allowed to cross is a Server Action — designed for exactly that.</p>
+      <div class="flow"><span class="flabel">Flow to memorize</span><span class="step">Server Component</span><span class="arr">→</span><span class="step">props serialized as data</span><span class="arr">→</span><span class="step">Client Component</span><span class="arr">·</span><span class="step">plain data ✔ · functions/class ✗ · Server Action = exception</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>The server fetches a listing and passes plain fields to <code>&lt;FavoriteButton&gt;</code>, not the Prisma object; the click handler lives inside the button.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Prop = network diye data. Plain cholbe, function/class na. Server Action = exception."</div>
+    </div>
+
+    <div class="explain next">
+      <h3><span class="n">N12</span> The full Next.js rendering lifecycle (capstone)</h3>
+      <p class="concept">The senior-level narration ties everything together. A request comes in → <strong>Middleware</strong> runs on the Edge to gate it → <strong>Server Components</strong> render and fetch data on the server → the HTML <strong>streams</strong> to the browser in chunks with Suspense fallbacks → the static HTML <strong>paints</strong> fast → the JavaScript bundle loads → only the <strong>Client Components hydrate</strong> (attach state and handlers), because Server Components shipped no JS → the page is interactive. Why it's fast: Server Components stay HTML-only, keeping the client payload small, and hydration happens only at the interactive leaves.</p>
+      <div class="flow"><span class="flabel">Flow to memorize (the whole chain)</span><span class="step">Request</span><span class="arr">→</span><span class="step">Middleware gate</span><span class="arr">→</span><span class="step">Server render + fetch</span><span class="arr">→</span><span class="step">Stream HTML (Suspense)</span><span class="arr">→</span><span class="step">Paint</span><span class="arr">→</span><span class="step">JS loads</span><span class="arr">→</span><span class="step">Hydrate Client leaves only</span><span class="arr">→</span><span class="step">Interactive</span></div>
+      <div class="ex-box"><div class="k">Example — RadiusDirectory</div>proxy.ts checks auth → server fetches listings via Prisma → shell streams via <code>loading.tsx</code> → paints → favorite/chat leaves hydrate.</div>
+      <div class="mem"><strong>Memory hook:</strong> "Middleware → server render+fetch → stream → paint → shudhu client leaf hydrate → interactive."</div>
+    </div>
+  </section>
+
+  <div id="quiz-section">
+    <h2 class="section-title" style="font-size:15px;color:var(--text)">⚡ Rapid-Fire Quiz — Practice Precision</h2>
+    <div class="quiz-intro">
+      <strong>How to use:</strong> Read the question, say the answer <em>out loud in 2 sentences</em>, THEN reveal. Grade yourself on: (1) crisp definition first, (2) exact names/imports correct, (3) did you give a real example. If your spoken answer was fuzzy but you knew it — that's the exact gap failing your interviews.
+      <div style="margin-top:12px">
+        <button class="btn-primary" id="reveal-all">Reveal all</button>
+        <button class="btn-ghost" id="hide-all">Hide all</button>
+        <button class="btn-ghost" id="shuffle">🔀 Shuffle</button>
+      </div>
+    </div>
+    <div id="quiz"></div>
+  </div>
+</main>
+
+<footer>
+  Built for interview prep · RadiusDirectory (Next.js 16 · React 19 · Prisma · NextAuth) · Keep the "Say this" lines tight — delivery beats knowledge.
+</footer>
+
+<script>
+// ---------- DATA ----------
+// difficulty: easy | med | hard ; cat: react | next
+const CONCEPTS = [
+  // ===== CORE MOCK (1-20) =====
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 1, cat: "react", diff: "easy", title: "Props vs State",
+    what: "Props = inputs passed <em>down</em> from a parent (read-only, parent owns them). State = private data a component owns and changes via its <span class='inline-code'>setter</span>. Every state change re-renders.",
+    when: "Props → data that comes from outside. State → data that changes over time inside this component (toggles, inputs, counters).",
+    example: "In RD, a <span class='inline-code'>&lt;ListingCard listing={...} /&gt;</span> gets <code>listing</code> (title, price) as <strong>props</strong> — can't edit price. Whether the ❤️ favorite is filled is <strong>state</strong> inside the card.",
+    say: "Props come from outside and can't be changed here; state lives inside and changes through its setter, triggering a re-render.",
+    bangla: "Props = baba theke pawa (bairer, change kora jay na). State = nijer ghorer jinis (setter diye change hoy).",
+    code: null,
+    gotcha: "You never mutate state directly (<code>liked = true</code> ❌). Always call the setter <code>setLiked(true)</code> ✔ — it hands React a new value."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 2, cat: "react", diff: "easy", title: "What triggers a re-render",
+    what: "A component re-renders when: (1) its own <strong>state</strong> changes, (2) its <strong>parent re-renders</strong> (cascades to all children), (3) a <strong>context</strong> it consumes changes.",
+    when: "Anytime you debug 'why did this render again' — check these 3 sources.",
+    example: "In RD's listings page, updating the filter store re-renders the grid; the parent layout re-rendering would cascade to child cards unless memoized.",
+    say: "A re-render is React re-running the function. It happens on state change, context change, or a parent re-rendering. Re-running is cheap — React diffs and only touches the DOM where something changed.",
+    bangla: "Re-render = function abar cholche (DOM update na). 3 ta karon: nijer state, parent render, context change.",
+    code: null,
+    gotcha: "'Effect runs' does NOT trigger a re-render — that's backwards. And render ≠ DOM update: the <strong>commit phase</strong> touches the DOM only for the diffed changes."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 3, cat: "react", diff: "easy", title: "useEffect (timing, deps, cleanup)",
+    what: "Runs a side-effect <strong>after</strong> the DOM is painted. The deps array controls when it re-runs. The returned function is <strong>cleanup</strong>.",
+    when: "Syncing with the outside world: subscriptions, timers, event listeners, non-render fetches.",
+    example: "RD chat: subscribe to a Pusher channel on mount, and the cleanup unsubscribes when the chat closes — otherwise you stack duplicate listeners.",
+    say: "Cleanup is a function I return from the effect. React runs it before the next effect and on unmount. Rule: if an effect starts something, its cleanup must stop it.",
+    bangla: "Cleanup = 'ja start korlam, seta bondho koro'. Timer/subscription cleanup na korle stack hoye jay.",
+    code: "useEffect(() => {\n  const id = setInterval(tick, 1000);\n  return () => clearInterval(id); // cleanup\n}, [count]);\n// [count] → after mount + whenever count changes\n// []      → once on mount\n// (none)  → after every render",
+    gotcha: "Forgetting cleanup on a timer/subscription → it keeps firing after unmount, stacks up, and may setState on an unmounted component."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 4, cat: "react", diff: "med", title: "State batching + updater function",
+    what: "State updates are batched and async. Three <code>setCount(count+1)</code> in one handler all read the SAME stale <code>count</code> → result is +1, not +3.",
+    when: "Whenever the next state depends on the previous state.",
+    example: "A 'add 3 to cart quantity' button that calls setQty three times — use the updater form or it only adds 1.",
+    say: "If my next state depends on the previous state, I use the updater function. React queues each updater against the latest pending state, so 0→1→2→3.",
+    bangla: "Purono state theke notun state banale → updater form use koro. Value pass korle stale closure e atke jay.",
+    code: "// ❌ all read stale count=0 → ends at 1\nsetCount(count + 1); setCount(count + 1);\n\n// ✔ updater sees latest → ends at 3\nsetCount(c => c + 1); setCount(c => c + 1); setCount(c => c + 1);",
+    gotcha: "The updater's argument is always the freshest state — that's how it escapes the render's frozen closure."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 5, cat: "react", diff: "med", title: "useMemo vs useCallback",
+    what: "Both fight the SAME enemy: <strong>new references every render</strong>. <code>useMemo</code> caches a computed value; <code>useCallback</code> caches a function reference. (<code>useCallback(fn,d) = useMemo(()=>fn, d)</code>.)",
+    when: "Only when a reference-equality consumer exists downstream: a <code>React.memo</code> child, or a dependency array.",
+    example: "In RD, passing a stable <code>onFavorite</code> callback to a memoized <code>&lt;ListingCard&gt;</code> so the whole grid doesn't re-render when one card changes.",
+    say: "Both preserve the same reference across renders so reference-checks don't misfire. useMemo also skips expensive recompute. Pointless if nothing downstream compares by reference.",
+    bangla: "Protyek render e notun reference toiri hoy — memo/callback sei reference dhore rakhe. Downstream e memo child ba deps na thakle use korar dorkar nei.",
+    code: "const items = useMemo(() => filter(list), [list]);   // stable value\nconst onPick = useCallback((id) => pick(id), []);      // stable fn",
+    gotcha: "useMemo has TWO jobs: skip expensive recompute AND keep a stable object/array reference. React Compiler now auto-does most of this."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 6, cat: "react", diff: "med", title: "Keys in lists",
+    what: "<code>key</code> gives each item a <strong>stable identity</strong> so React's reconciliation knows which items were added/removed/moved — instead of matching by position.",
+    when: "Every <code>.map()</code> that renders a list.",
+    example: "RD listing grid: <code>key={listing.id}</code> (DB id), never the array index — because listings get sorted/filtered/inserted.",
+    say: "Index breaks the moment the list reorders or inserts, because identity gets tied to position, not the item. I use a real data-owned id.",
+    bangla: "Index key = position er sathe bandha. List sort/insert hole state bhul item e chole jay. Data'r asol id use koro.",
+    code: "// ❌ index — state attaches to wrong row on reorder\ntodos.map((t, i) => <Item key={i} />)\n// ✔ stable id\ntodos.map((t) => <Item key={t.id} />)",
+    gotcha: "<code>useId()</code> is NOT for list keys — it's for accessibility (label↔input). Never generate a uuid inside map() during render."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 7, cat: "next", diff: "med", title: "Server vs Client Components",
+    what: "App Router default = <strong>Server Component</strong> (runs on server, ships ZERO JS, can hit DB directly). <code>\"use client\"</code> opts into a <strong>Client Component</strong> (state, effects, events, browser APIs).",
+    when: "Default to server. Add <code>\"use client\"</code> only where you need interactivity.",
+    example: "RD <code>ProductPage</code> (server) fetches the listing from Prisma; only the <code>&lt;AddToCartButton&gt;</code> is a client component.",
+    say: "Server Components ship zero JS and can access the DB directly — that's why Next defaults to them. Client Components ship to the browser so they can be interactive.",
+    bangla: "Server component = kono JS pathay na, DB direct dhorte pare. Client component (\"use client\") = interactive, browser e jay.",
+    code: "// server (default) — async, direct DB\nexport default async function Page() {\n  const items = await db.listing.findMany();\n  return <Grid items={items} />;\n}",
+    gotcha: "#1 advantage is zero client JS / smaller bundle → then direct data access → then SEO. Don't lead with SEO."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 8, cat: "next", diff: "med", title: "The client boundary (push it to leaves)",
+    what: "Don't slap <code>\"use client\"</code> on a whole page. Extract just the interactive part as a client leaf; keep the page a Server Component.",
+    when: "Any page that's mostly static but has one interactive widget.",
+    example: "RD product page stays server (direct Prisma fetch); the 'Add to Cart' / favorite / quick-view buttons are small client leaves.",
+    say: "I push the client boundary down to the leaves. If I make the whole page client I lose direct DB access and ship a huge bundle. A Server Component can also be passed as children through a client component.",
+    bangla: "\"use client\" upore dile purota client hoye jay (DB access chole jay, bundle boro). Choto interactive part'ke leaf banao.",
+    code: null,
+    gotcha: "Exception: imports below \"use client\" become client, BUT a server component passed as <code>children</code> stays on the server. \"use client\" taints the import graph, not the children graph."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 9, cat: "next", diff: "easy", title: "App Router file conventions",
+    what: "<code>page.tsx</code> = route UI · <code>layout.tsx</code> = persistent shell wrapping children · <code>loading.tsx</code> = auto Suspense fallback · <code>error.tsx</code> = segment error boundary (client component).",
+    when: "Structuring any route in <code>app/</code>.",
+    example: "RD <code>/admin</code> uses a layout for the persistent sidebar; navigating between admin pages swaps only the page, sidebar keeps its state.",
+    say: "layout persists across navigation between sibling routes — only page.tsx swaps. loading.tsx is a Suspense fallback during server render. error.tsx must be a client component.",
+    bangla: "layout = navigation e thake (sidebar), page = bodlay. loading = server render er somoy fallback. error = client component hote hobe.",
+    code: "app/dashboard/\n  layout.tsx   // persists (sidebar/nav)\n  page.tsx     // swaps on navigation\n  loading.tsx  // shown while page renders\n  error.tsx    // \"use client\" boundary",
+    gotcha: "The key exam point: <strong>layout.tsx persists (doesn't re-render) when navigating between sibling routes.</strong>"
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 10, cat: "next", diff: "med", title: "Rendering strategies: SSR / SSG / ISR / CSR",
+    what: "SSG = build once (static). SSR = per-request on server (fresh). ISR = SSG + revalidate timer. CSR = rendered in browser.",
+    when: "Same-for-all + rarely changes → SSG. Same-for-all + periodic updates → ISR. Per-user / must be fresh → SSR. Interactive + behind auth, no SEO → CSR.",
+    example: "RD marketing page = SSG · listings homepage (updates often, high traffic) = ISR · user's dashboard = SSR · interactive chart after tab click = CSR.",
+    say: "Decision tree by freshness + audience. Per-user fresh data must be SSR because SSG is built once with no user context. ISR is SSG plus a revalidate timer.",
+    bangla: "Shobar jonno same + kom change = SSG. Same + majhe majhe update = ISR. Prottek user alada + fresh = SSR. Interactive/login-er pichone = CSR.",
+    code: null,
+    gotcha: "Don't justify SSR with 'low JS bundle' — that's a Server Component benefit. SSR is about per-request freshness + user data."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 11, cat: "next", diff: "easy", title: "Navigation — &lt;Link&gt;",
+    what: "<code>&lt;Link&gt;</code> from <strong><code>next/link</code></strong> does client-side navigation (no full reload) + prefetches the route.",
+    when: "All internal navigation between routes.",
+    example: "RD listing cards link to detail pages via <code>&lt;Link href={`/listings/${slug}`}&gt;</code> — instant nav, layout stays mounted.",
+    say: "Link from next/link does SPA-style navigation with prefetch and preserved layouts. A plain anchor does a full reload and loses client state.",
+    bangla: "Link = next/link theke (component). next/navigation = hooks (useRouter). &lt;a&gt; = full reload, state hariye jay.",
+    code: "import Link from \"next/link\";       // component\nimport { useRouter } from \"next/navigation\"; // hooks",
+    gotcha: "Common mistake: importing Link from <code>next/navigation</code>. It's <strong>next/link</strong>. <code>next/navigation</code> is for useRouter / usePathname / redirect."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 12, cat: "next", diff: "med", title: "Data fetching in Server Components",
+    what: "Make the component <code>async</code> and <code>await</code> directly (fetch or DB). No hook, no getServerSideProps, no Server Action for reads.",
+    when: "Reading/displaying data for a page.",
+    example: "RD: <code>const listings = await db.listing.findMany()</code> straight inside the async page component.",
+    say: "To read data I make the component async and await directly — it runs on the server and hits the DB. Reads = async component; writes = Server Action. useEffect-fetching is the old client pattern.",
+    bangla: "Data dekhate → async component + await (DB direct). Data likhte (create/update) → Server Action. useEffect diye fetch = purono client style.",
+    code: "export default async function Page() {\n  const listings = await db.listing.findMany();\n  return <Grid items={listings} />;\n}",
+    gotcha: "Server Actions (<code>\"use server\"</code>) are for MUTATIONS, not reads. And you can't use useEffect in a Server Component — effects only run in the browser after hydration."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 13, cat: "next", diff: "med", title: "Caching & revalidation (fetch options)",
+    what: "<code>cache</code> (top-level) controls WHETHER; <code>next.revalidate</code> controls HOW OFTEN; <code>next.tags</code> enables on-demand busting.",
+    when: "Every server-side fetch where you care about freshness vs speed.",
+    example: "RD listing showcase: cache with a revalidate window for speed under traffic, plus tags so an admin approval can bust it on demand.",
+    say: "cache no-store = always fresh; force-cache = static; next.revalidate:60 = ISR; next.tags lets revalidateTag bust it. Remember the next: wrapper — that's the #1 syntax slip.",
+    bangla: "cache = hobe ki na. next.revalidate = koto khon por por. next.tags = on-demand bust. 'next:' wrapper bhulo na.",
+    code: "fetch(url, { cache: \"no-store\" });            // always fresh\nfetch(url, { next: { revalidate: 60 } });     // ISR: every 60s\nfetch(url, { next: { tags: [\"listings\"] } }); // bust via tag",
+    gotcha: "<code>{ revalidate: 60 }</code> is WRONG — it must be <code>{ next: { revalidate: 60 } }</code>. Also: Next 15+ defaults fetch to UNcached (RD is on 16)."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 14, cat: "next", diff: "med", title: "Server Actions",
+    what: "Async function marked <code>\"use server\"</code>, always runs on the server, for <strong>mutations</strong>. Callable directly from the client like a normal function.",
+    when: "Form submits, create/update/delete triggered from the UI.",
+    example: "RD: approving a listing, creating a store, submitting a lead — all via Server Actions, then revalidate to refresh.",
+    say: "A Server Action is a server-side mutation function I call like a local function — no API route, no fetch, type-safe. After it writes I call revalidatePath/Tag or router.refresh() to show fresh data.",
+    bangla: "Server Action = server-e cholay mutation, direct function er moto call kora jay (API route lage na). Likhar por revalidate koro.",
+    code: "\"use server\";\nexport async function approveListing(id) {\n  await db.listing.update({ where:{id}, data:{status:\"publish\"} });\n  revalidateTag(\"listings\");\n}",
+    gotcha: "Bonus advantages: type-safe end-to-end, secrets stay server-side, progressive enhancement (works before JS via &lt;form action={fn}&gt;)."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 15, cat: "next", diff: "easy", title: "Dynamic routes &amp; params",
+    what: "Folder <code>[slug]</code> = one dynamic segment. Read it from the <strong><code>params</code> prop</strong> (a Promise in Next 15+, so await it). <code>[...slug]</code> = catch-all (array).",
+    when: "Any route where part of the path is data-driven.",
+    example: "RD uses <code>[...slug]</code> catch-all in <code>app/[locale]/[...slug]/page.tsx</code> for directory/category/listing paths.",
+    say: "The dynamic value comes in as the params prop, not a request object. In Next 15+ I await params. [...slug] catches multiple segments as an array.",
+    bangla: "params = prop hishebe ashe (req.params NA). Next 15+ e await koro. [...slug] = onek segment array hishebe.",
+    code: "export default async function Page({ params }) {\n  const { slug } = await params;   // Next 15+\n}",
+    gotcha: "<code>req.params</code> ❌ doesn't exist in a page. <code>req</code> is only in route handlers &amp; middleware. Query strings use the <code>searchParams</code> prop."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 16, cat: "react", diff: "med", title: "Closures / stale state in effects",
+    what: "An empty-deps effect captures state from the first render forever. A <code>setInterval</code> reading <code>count</code> stays stuck computing from the stale value.",
+    when: "Any interval/subscription inside <code>useEffect(..., [])</code> that reads state.",
+    example: "A live counter/timer in RD that freezes at 1 instead of counting up — classic stale closure.",
+    say: "Empty-deps effect plus a closure reading state is a stale closure. Best fix: the updater function, which always gets the latest state, so I keep [] and the interval stays alive.",
+    bangla: "Empty deps effect purono state dhore rakhe (stale closure). Best fix: updater form — always latest state, interval o bnche thake.",
+    code: "// ✔ Fix A (best): updater + keep []\nsetInterval(() => setCount(c => c + 1), 1000);\n\n// Fix B (works, worse): add [count] → recreates interval each tick",
+    gotcha: "Fix A (updater + []) is preferred. Adding [count] works but destroys & recreates the interval every second. Don't do both together."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 17, cat: "next", diff: "easy", title: "Metadata / SEO",
+    what: "Static page → <code>export const metadata = {}</code>. Dynamic page → <code>export async function generateMetadata()</code>.",
+    when: "Every page that needs a title/description/OG tags.",
+    example: "RD blog post: generateMetadata fetches the post by slug and returns its title + description for SEO/OG cards.",
+    say: "Static uses the metadata export; dynamic uses async generateMetadata. Both are lowercase 'data', exact names, or Next silently ignores them.",
+    bangla: "Static = metadata (const). Dynamic = generateMetadata (async). Duita e lowercase 'data', naam bhul hole chuppi kore ignore hoy.",
+    code: "export const metadata = { title: \"Blog\", description: \"...\" };\n\nexport async function generateMetadata({ params }) {\n  const { slug } = await params;\n  const post = await getPost(slug);\n  return { title: post.title, description: post.excerpt };\n}",
+    gotcha: "Casing is exact: <code>metadata</code> / <code>generateMetadata</code> — NOT metaData/generateMetaData. Wrong casing = silently ignored, default title, no error."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 18, cat: "react", diff: "hard", title: "React.memo",
+    what: "Wraps a component to <strong>skip re-rendering when props are shallow-equal</strong>. Stops the 'parent re-rendered → child re-renders' cascade.",
+    when: "A pure child that re-renders often with the same props (e.g., item in a big list).",
+    example: "RD: memoize <code>&lt;ListingCard&gt;</code> so scrolling/updating the header doesn't re-render 50 cards.",
+    say: "React.memo skips re-render on shallow-equal props. It fails when I pass new references each render — inline functions, object/array literals, or children. Fix by stabilizing those props with useCallback/useMemo.",
+    bangla: "React.memo = props same thakle re-render skip. Fail hoy jokhon protyek render e notun reference pass kori (inline fn, {} , []). useCallback/useMemo diye stable koro.",
+    code: "const ListingCard = React.memo(function ListingCard({ listing, onFav }) {\n  return <div>{listing.title}</div>;\n});\n// onFav must be useCallback-stable, else memo is useless",
+    gotcha: "It does NOT (and shouldn't) block a component's OWN state/context updates. And passing <code>children</code>/inline JSX creates a new element each render → memo re-renders."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 19, cat: "next", diff: "med", title: "Environment variables (NEXT_PUBLIC_)",
+    what: "<code>NEXT_PUBLIC_*</code> = inlined into the browser bundle at build time (public forever). Unprefixed = server-only, never sent to browser.",
+    when: "Public config (API base URL, publishable keys) → prefix. Secrets → NEVER prefix.",
+    example: "RD: <code>NEXT_PUBLIC_...</code> for public site URL / ImageKit endpoint; <code>DATABASE_URL</code>, Stripe/SSLCommerz secret keys stay unprefixed.",
+    say: "NEXT_PUBLIC vars are hard-coded into the client bundle at build — anyone can read them in DevTools. So they're only for non-secrets; secrets get no prefix and stay server-side.",
+    bangla: "NEXT_PUBLIC_ = build er somoy JS bundle e bosano, shobai dekhte pare. Secret e prefix diyo NA — server-e rakho.",
+    code: "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_...  // safe, public\nSTRIPE_SECRET_KEY=sk_...                    // server-only",
+    gotcha: "Putting a secret key in NEXT_PUBLIC_ ships it to every visitor's browser — an attacker can charge cards, issue refunds, read all customers. Rule: if leaking it hurts, never prefix."
+  },
+  {
+    group: "Core Fundamentals (Mock Q1–20)",
+    num: 20, cat: "react", diff: "hard", title: "Hydration",
+    what: "Server sends static HTML (fast paint, SEO). Then the JS bundle loads and React <strong>attaches</strong> state/handlers/effects to that existing HTML — without rebuilding the DOM.",
+    when: "Every SSR/Server-Component page becoming interactive in the browser.",
+    example: "RD listing page: HTML (header, filters, cards) paints instantly; buttons don't work until the client bundle hydrates the interactive leaves.",
+    say: "Hydration attaches JS behavior to server HTML. Only Client Components hydrate — Server Components ship no JS, so there's nothing to hydrate. That's the efficiency win.",
+    bangla: "Hydration = server HTML er upor JS behavior boshano. Shudhu Client Component hydrate hoy; Server Component e JS nei, tai kichu hydrate korar nei.",
+    code: null,
+    gotcha: "Hydration <strong>mismatch</strong> = client's first render ≠ server HTML. Causes: <code>Date.now()</code>/<code>Math.random()</code>, reading <code>window</code>/<code>localStorage</code> in render, invalid nesting (&lt;p&gt;&lt;div&gt;&lt;/p&gt;), browser extensions."
+  },
+
+  // ===== PHASE 1: REACT MODERN (1-8) =====
+  {
+    group: "React Modern (Phase 1)",
+    num: 21, cat: "react", diff: "med", title: "Suspense",
+    what: "A component that shows a <code>fallback</code> while its children are still loading (data or code).",
+    when: "Wrapping an async section so the rest of the page renders instantly.",
+    example: "RD directory page: wrap <code>&lt;ListingGrid&gt;</code> in Suspense so the skeleton shows while listings stream from the DB; filters/header render immediately.",
+    say: "Suspense shows a fallback declaratively while a child loads, instead of a manual loading flag. In the App Router, loading.tsx is Suspense under the hood.",
+    bangla: "Suspense = child load howa porjonto fallback dekhay (manual loading flag lage na). loading.tsx tai Suspense-i.",
+    code: "<Suspense fallback={<ListingSkeleton />}>\n  <ListingGrid />   {/* async server component */}\n</Suspense>",
+    gotcha: null
+  },
+  {
+    group: "React Modern (Phase 1)",
+    num: 22, cat: "react", diff: "med", title: "Error Boundaries",
+    what: "Catches errors thrown <strong>during render</strong> in its child tree and shows a fallback instead of white-screening.",
+    when: "Isolating a risky subtree so one crash doesn't kill the page.",
+    example: "RD: a listing's custom-field renderer throws → the segment's <code>error.tsx</code> shows a retry UI, rest of admin stays alive.",
+    say: "Error boundaries catch render-time errors and show a fallback. In the App Router I use error.tsx — a client component with a reset() to retry — instead of hand-writing the class.",
+    bangla: "Error boundary = render-er error dhore fallback dekhay. App Router e error.tsx (client component, reset() diye retry).",
+    code: "\"use client\";\nexport default function Error({ error, reset }) {\n  return <button onClick={reset}>Retry</button>;\n}",
+    gotcha: "Do NOT catch errors in event handlers or async code — only render. Use try/catch for those."
+  },
+  {
+    group: "React Modern (Phase 1)",
+    num: 23, cat: "react", diff: "med", title: "React Compiler",
+    what: "A build-time compiler (React 19 era) that <strong>auto-memoizes</strong> — inserts useMemo/useCallback/React.memo equivalents for you.",
+    when: "New React 19 projects; lets you drop most manual memoization.",
+    example: "In RD you'd write plain handlers with no useCallback; the compiler stabilizes them automatically.",
+    say: "React Compiler auto-memoizes at build time, so I rarely hand-write useMemo/useCallback. It doesn't change what I write — it optimizes it. Understanding memo still matters for reasoning.",
+    bangla: "React Compiler = build-time e nije memoize kore. Manual useMemo/useCallback lage na — but bujhte hobe keno lage.",
+    code: null,
+    gotcha: "It relies on Rules of Hooks + no mutation. Break those and the compiler bails out on that component."
+  },
+  {
+    group: "React Modern (Phase 1)",
+    num: 24, cat: "react", diff: "med", title: "useReducer + useContext",
+    what: "useReducer = state via <code>(state, action) =&gt; newState</code> for complex/related transitions. useContext = share a value without prop-drilling. Together = Redux-lite.",
+    when: "Many components share state that updates via clear 'actions'.",
+    example: "RD uses Zustand for filters, but the concept is identical: central state + dispatched actions.",
+    say: "useReducer centralizes complex transitions as actions; useContext shares them without prop-drilling. Combined they're Redux-lite for when several components share state.",
+    bangla: "useReducer = action diye complex state change. useContext = prop-drilling chhara share. Duita mile = choto Redux.",
+    code: "const [state, dispatch] = useReducer(reducer, initial);\ndispatch({ type: \"SET_CATEGORY\", payload: \"cars\" });",
+    gotcha: "Every consumer of a Context re-renders when the context value changes — that's why big global state moves to Zustand (selective subscriptions)."
+  },
+  {
+    group: "React Modern (Phase 1)",
+    num: 25, cat: "react", diff: "easy", title: "useRef (two jobs)",
+    what: "A box <code>{current}</code> that persists across renders and does NOT trigger a re-render. Two jobs: (1) DOM access, (2) mutable value (timer id, previous value).",
+    when: "Focus/scroll a DOM node, or hold a value you don't want to render on.",
+    example: "RD chat: ref to auto-focus the message input and scroll to the latest message; a ref to hold the search debounce timer id.",
+    say: "useRef is a value that survives re-renders but never causes one. Two uses: pointing at a DOM node, or holding a mutable value like a timer id.",
+    bangla: "useRef = render survive kore kintu re-render kore NA. DOM dhora, ba timer id/purono value rakha.",
+    code: "const inputRef = useRef(null);\nuseEffect(() => inputRef.current?.focus(), []);\n<input ref={inputRef} />",
+    gotcha: "Key contrast: state change → re-render; ref change → NO re-render."
+  },
+  {
+    group: "React Modern (Phase 1)",
+    num: 26, cat: "react", diff: "hard", title: "useTransition / useDeferredValue",
+    what: "Mark updates as <strong>non-urgent</strong> to keep the UI responsive. useTransition wraps a state update (gives <code>isPending</code>); useDeferredValue gives a lagging copy of a value.",
+    when: "Heavy re-render (filter/search over a big list) while keeping typing snappy.",
+    example: "RD listings search: typing is urgent (instant input); re-filtering 1000 listings is wrapped in startTransition so input stays smooth, with an 'updating…' hint via isPending.",
+    say: "These mark updates non-urgent so React prioritizes interactions. useTransition wraps a state update and gives isPending; useDeferredValue defers a value so the expensive render lags behind.",
+    bangla: "Non-urgent update mark kore UI responsive rakhe. Typing urgent, boro list filter non-urgent (startTransition).",
+    code: "const [isPending, startTransition] = useTransition();\nstartTransition(() => setQuery(input));",
+    gotcha: null
+  },
+  {
+    group: "React Modern (Phase 1)",
+    num: 27, cat: "react", diff: "hard", title: "The use() hook",
+    what: "Reads a resource — a <strong>Promise</strong> or <strong>Context</strong> — during render, and integrates with Suspense. Can be called conditionally (unlike other hooks).",
+    when: "A Server Component starts a fetch and passes the unawaited promise to a Client Component.",
+    example: "RD listing page (server) kicks off the reviews fetch without awaiting, passes the promise to a client <code>&lt;Reviews&gt;</code> that calls <code>use()</code> under a Suspense boundary.",
+    say: "use() reads a promise or context in render and works with Suspense. Pattern: server starts the fetch, passes the promise down, client use()s it. Unlike other hooks it can be conditional.",
+    bangla: "use() = render er moddhe promise/context pore, Suspense er sathe kaj kore. Server promise pathay, client use() kore.",
+    code: "\"use client\";\nfunction Reviews({ reviewsPromise }) {\n  const reviews = use(reviewsPromise); // suspends\n}",
+    gotcha: null
+  },
+  {
+    group: "React Modern (Phase 1)",
+    num: 28, cat: "react", diff: "med", title: "Fragments · Portals · forwardRef",
+    what: "Fragment = group without an extra DOM node. Portal = render children elsewhere in the DOM. forwardRef = pass a ref through a custom component to its inner node.",
+    when: "Fragment: avoid div soup. Portal: modals/tooltips escaping overflow/z-index. forwardRef: reusable input/button components.",
+    example: "RD chat modal / quick-view / image lightbox render via a Portal to <code>document.body</code> to escape parent overflow &amp; z-index traps.",
+    say: "Fragment groups without a wrapper node. Portal renders elsewhere in the DOM — perfect for modals escaping overflow/z-index. forwardRef passes a ref to a custom component's inner node.",
+    bangla: "Fragment = wrapper div chhara group. Portal = onno jaygay render (modal). forwardRef = ref child er bhitor er node porjonto pathano.",
+    code: "createPortal(<Modal />, document.body);\nconst Input = forwardRef((p, ref) => <input ref={ref} {...p} />);",
+    gotcha: "React 19: <code>ref</code> can be a normal prop — forwardRef is becoming optional. Mention that as a 'I know what's current' flex."
+  },
+
+  // ===== PHASE 2: NEXT.JS (9-16) =====
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 29, cat: "next", diff: "med", title: "Middleware / proxy.ts",
+    what: "Code that runs <strong>before a request completes</strong>, on the Edge — for auth gates, redirects, rewrites, headers.",
+    when: "One place to protect many routes without repeating checks.",
+    example: "RD's <code>src/proxy.ts</code> guards <code>/admin/*</code> (admin role) and <code>/my/*</code> (authenticated), redirecting to /login.",
+    say: "Middleware runs before the request resolves — I use it for auth gating and redirects across route groups. It's the fast coarse gate; real authorization happens in the Server Component with DB access.",
+    bangla: "Middleware = request er age chole (edge). Auth gate/redirect. RD-te proxy.ts /admin ar /my pahara dey.",
+    code: "export const config = { matcher: [\"/admin/:path*\", \"/my/:path*\"] };",
+    gotcha: "Edge runtime = no Node APIs, no DB calls. Keep it light — do heavy auth/authz in the page/Server Component."
+  },
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 30, cat: "next", diff: "hard", title: "The 4 Next.js caches",
+    what: "(1) Request Memoization — dedupes identical fetches in one render. (2) Data Cache — fetch results across requests. (3) Full Route Cache — rendered HTML of static routes. (4) Router Cache — visited routes in the browser.",
+    when: "Diagnosing 'stale data' or 'why is this slow/fast'.",
+    example: "RD: same <code>getSettings</code> fetch in layout + page = one call (memoization); listing showcase persists via Data Cache with a strip-query safety net.",
+    say: "Four caches: request memoization, the Data Cache, the Full Route Cache, and the client Router Cache. Most stale-data bugs are the Data Cache (server) or Router Cache (client).",
+    bangla: "4 ta cache: request memo (ek render), Data Cache (request er beshi), Full Route Cache (HTML), Router Cache (browser). Stale data mane usually sesher duita.",
+    code: null,
+    gotcha: "'Changed DB but page shows old data' → Data Cache (fix: revalidateTag/Path) or Router Cache (fix: router.refresh())."
+  },
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 31, cat: "next", diff: "med", title: "revalidatePath vs revalidateTag",
+    what: "Both bust the Data Cache on demand (usually in a Server Action). <code>revalidatePath(\"/x\")</code> targets a route; <code>revalidateTag(\"x\")</code> targets tagged fetches app-wide.",
+    when: "After a mutation, to refresh cached reads.",
+    example: "RD listing approval: tag fetches <code>next:{tags:[\"listings\"]}</code>, then <code>revalidateTag(\"listings\")</code> refreshes public directory + showcase + admin table.",
+    say: "Both invalidate the Data Cache on demand. Path targets a route; Tag is surgical — I tag fetches and bust by tag after a mutation.",
+    bangla: "revalidatePath = ekta route. revalidateTag = tagged fetch shob jaygay. Tag beshi surgical.",
+    code: "// tag it\nfetch(url, { next: { tags: [\"listings\"] } });\n// bust it in a Server Action\nrevalidateTag(\"listings\");",
+    gotcha: "RD's worker runs OUTSIDE Next.js so it can't call revalidateTag — it POSTs to an internal route that does it inside the app."
+  },
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 32, cat: "next", diff: "med", title: "Route Handlers (route.ts)",
+    what: "API endpoints in the App Router. <code>route.ts</code> exports functions named after HTTP methods (GET, POST…).",
+    when: "Webhooks, third-party callbacks, cron triggers — anything that isn't rendering a page.",
+    example: "RD <code>src/app/api/</code> handles SSLCommerz payment callbacks, auth, RBAC, cron triggers, and the internal revalidate-listing-cache endpoint.",
+    say: "Route handlers are route.ts files exporting GET/POST — my REST endpoints. I use them for webhooks and payment callbacks. Internal UI mutations use Server Actions instead.",
+    bangla: "route.ts = HTTP endpoint (GET/POST). Webhook/payment callback er jonno. Nijer UI mutation = Server Action.",
+    code: "// app/api/payments/webhook/route.ts\nexport async function POST(req) {\n  const body = await req.json();\n  return NextResponse.json({ ok: true });\n}",
+    gotcha: "Key distinction: Server Action = internal mutation called like a function; Route Handler = real HTTP endpoint for external callers."
+  },
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 33, cat: "next", diff: "med", title: "Streaming &amp; loading.tsx",
+    what: "The server sends HTML <strong>in chunks as it's ready</strong> instead of waiting for the whole page. Suspense boundaries define the chunks.",
+    when: "Fast first paint when part of the page is slow.",
+    example: "RD listings: the shell (header, filters) paints instantly via loading.tsx while the DB query streams in; slow widgets (trending, reviews) get their own Suspense.",
+    say: "Streaming sends HTML in chunks gated by Suspense boundaries. loading.tsx is the automatic segment fallback; manual Suspense streams individual slow components while the rest is interactive.",
+    bangla: "Streaming = HTML tukro tukro kore ashe (Suspense diye). loading.tsx = segment fallback; manual Suspense = choto slow part alada stream.",
+    code: null,
+    gotcha: "loading.tsx IS Suspense — same mechanism as the React Suspense concept."
+  },
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 34, cat: "next", diff: "hard", title: "Parallel &amp; Intercepting routes",
+    what: "Parallel (<code>@folder</code>) = render multiple pages in one layout simultaneously (slots). Intercepting (<code>(.)folder</code>) = intercept a navigation to show it as a modal while keeping a shareable URL.",
+    when: "Parallel: dashboards with independent sections. Intercepting: modal that becomes a full page on refresh.",
+    example: "RD listing <strong>quick-view modal</strong> is textbook intercepting-route: click a card → modal over the directory (URL updates); refresh → full listing page.",
+    say: "Parallel routes render multiple slots in one layout — good for dashboards. Intercepting routes show a route as a modal over the current page while keeping a shareable URL.",
+    bangla: "@folder = ek layout e onek slot (dashboard). (.)folder = navigation intercept kore modal, kintu URL share kora jay (refresh e full page).",
+    code: "app/feed/\n  (.)photo/[id]/page.tsx  // modal over feed\n  photo/[id]/page.tsx     // full page on refresh",
+    gotcha: null
+  },
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 35, cat: "next", diff: "easy", title: "next/image &amp; next/font",
+    what: "next/image = auto resize, lazy-load, WebP/AVIF, reserves space (no layout shift). next/font = self-hosts fonts at build time, no external request, no font-swap flash.",
+    when: "Every image and every custom font. Free Core Web Vitals wins.",
+    example: "RD listing thumbnails / store logos via next/image (ImageKit as source); fonts loaded via next/font in the root layout.",
+    say: "next/image auto-optimizes images — resizing, lazy-load, WebP, reserving space to kill layout shift. next/font self-hosts fonts at build time so there's no external request or swap flash.",
+    bangla: "next/image = image optimize + jayga rekhe dey (CLS bondho). next/font = font build-time e self-host (flash nei).",
+    code: "<Image src={listing.image} width={400} height={300} alt={listing.title} />",
+    gotcha: "next/image needs width+height (or fill) to reserve space — that's the whole point. External domains must be allowlisted in next.config."
+  },
+  {
+    group: "Next.js App Router (Phase 2)",
+    num: 36, cat: "next", diff: "med", title: "Server→Client serialization boundary",
+    what: "Props from a Server Component to a Client Component must be <strong>serializable</strong> — sent over the network as data. Functions and class instances can't cross.",
+    when: "Any time you pass data from server into a client leaf.",
+    example: "RD: a server component fetches a listing via Prisma and passes <strong>plain fields</strong> (id, title, price) to a client <code>&lt;FavoriteButton&gt;</code> — not the live Prisma object or a method.",
+    say: "The server→client prop boundary is a serialization boundary — props go over the network as data. I can pass plain objects, arrays, dates, promises; not functions or class instances. Server Actions are the exception designed to cross it.",
+    bangla: "Server theke client e prop = network diye data jay. Plain object/array/date/promise cholbe; function/class instance NA. Server Action exception.",
+    code: null,
+    gotcha: "Event handlers must live INSIDE the client component. The only 'function' you can pass across is a Server Action."
+  },
+
+  // ===== PHASE 3: PRACTICAL (17-20) =====
+  {
+    group: "Practical &amp; Cross-cutting (Phase 3)",
+    num: 37, cat: "next", diff: "med", title: "Auth patterns (NextAuth)",
+    what: "Three places: Middleware (fast gate), Server Component (<code>getServerSession</code> — direct, no API call), Client Component (<code>useSession</code>).",
+    when: "Reading the user and protecting routes.",
+    example: "RD uses NextAuth v4, JWT, 30-day expiry, Google/Facebook/Credentials; proxy.ts gates first; RBAC (roles+permissions) filters the admin sidebar.",
+    say: "I gate routes in middleware for speed, then read the real session in Server Components with getServerSession — no API round-trip. Client components use useSession. Real authorization needs the DB, not the client.",
+    bangla: "Middleware = fast gate. Server Component = getServerSession (direct). Client = useSession. Asol authorization DB diye, client bishwas koro na.",
+    code: "const session = await getServerSession(authOptions);\nif (!session) redirect(\"/login\");",
+    gotcha: "Middleware is a coarse gate (is there a token?). 'Does this user OWN this listing?' belongs in the Server Component/Action."
+  },
+  {
+    group: "Practical &amp; Cross-cutting (Phase 3)",
+    num: 38, cat: "react", diff: "med", title: "Zustand (state management)",
+    what: "Minimal global state. A store is a hook; components subscribe to <strong>slices</strong>, so they re-render only when their slice changes.",
+    when: "Many components share frequently-changing state (filters, user, settings).",
+    example: "RD uses Zustand v5 for <code>filter.store</code>, <code>user.store</code>, <code>settings.store</code>, <code>pageEditor.store</code>.",
+    say: "Zustand is global state without provider boilerplate. Its win over Context is selective subscriptions — a component re-renders only when its slice changes, not on every store update.",
+    bangla: "Zustand = provider chhara global state. Context er theke bhalo karon slice-subscribe: shudhu nijer part change hole re-render.",
+    code: "const category = useFilterStore((s) => s.category); // only re-renders on category change",
+    gotcha: "Progression: useState (local) → Context (few, rarely-changing) → Zustand (many, frequently-changing). Don't reach for global state by default."
+  },
+  {
+    group: "Practical &amp; Cross-cutting (Phase 3)",
+    num: 39, cat: "next", diff: "hard", title: "Full rendering lifecycle",
+    what: "Request → Middleware gate → Server Components render + fetch on server → HTML streams to browser (Suspense fallbacks) → static HTML paints → JS loads → only Client Components hydrate → interactive.",
+    when: "The narrate-this-and-you-sound-senior question.",
+    example: "RD request: proxy.ts checks auth → server fetches listings via Prisma → shell streams with loading.tsx → paints → client leaves (favorite, chat) hydrate.",
+    say: "Request → middleware gate → Server Components render and fetch on the server → HTML streams with Suspense fallbacks → static HTML paints fast → JS loads → only Client Components hydrate → interactive. Server Components stay HTML-only, keeping the payload small.",
+    bangla: "Request → middleware → server render+fetch → HTML stream (Suspense) → fast paint → JS load → shudhu client component hydrate → interactive.",
+    code: null,
+    gotcha: "Ties together: server/client, hydration, Suspense, middleware, caching, streaming. Practice narrating it out loud — it's the most impressive single answer."
+  },
+  {
+    group: "Practical &amp; Cross-cutting (Phase 3)",
+    num: 40, cat: "react", diff: "med", title: "Top performance pitfalls",
+    what: "1) \"use client\" too high → huge bundle. 2) Index keys in dynamic lists. 3) Stale closures in effects. 4) useEffect-fetching what a Server Component could do. 5) Unstable props defeating React.memo.",
+    when: "Code review / 'how would you optimize this' questions.",
+    example: "RD: keep listing pages server-rendered; memoize cards with stable callbacks; use next/image for thumbnails; single query instead of N fetches in a loop.",
+    say: "The big ones: keeping use client too high, index keys, stale closures, fetching in useEffect when a Server Component would do, and unstable props killing memoization. Two root causes: client boundary too wide, and new references every render.",
+    bangla: "5 ta bhul, 2 ta mul karon: (1) client boundary boro, (2) protyek render e notun reference.",
+    code: null,
+    gotcha: "Bonus: unoptimized &lt;img&gt; instead of next/image; over-fetching in a loop instead of request memoization / one query."
+  },
+
+  // ===== PHASE 4: REACT INTERNALS — BEHIND THE SCENES (41-51) =====
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 41, cat: "react", diff: "hard", title: "The 2 phases: Render vs Commit",
+    what: "Every update runs in two phases. <strong>Render Phase</strong> = React builds the new Virtual DOM in memory, diffs it against the old, and prepares a list of changes — pure, interruptible, may run multiple times, touches <strong>no DOM</strong>. <strong>Commit Phase</strong> = React applies those changes to the Real DOM and runs effects — synchronous, non-interruptible, runs once.",
+    when: "The mental model behind every 'why did this render' / 'when does the DOM actually update' question.",
+    example: "RD favorite toggle: clicking ❤️ runs the Render Phase (new VDOM computed, diff finds only the icon changed), then the Commit Phase writes that one DOM change and paints — the other 49 cards never touch the DOM.",
+    say: "React splits work into two phases. The Render Phase thinks and prepares in memory — pure and interruptible. The Commit Phase applies the minimal changes to the Real DOM and runs effects — synchronous and can't be paused. Render can run many times; commit runs once.",
+    bangla: "Dui phase. Render = memory te chinta/prepare (pure, thamano jay). Commit = real DOM e apply + effect (ekbar, thamano jay na).",
+    code: null,
+    gotcha: "The Render Phase must be side-effect free — that's why StrictMode double-invokes it in dev to catch impurity. Never mutate state or the DOM during render."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 42, cat: "react", diff: "easy", title: "Virtual DOM vs Real DOM",
+    what: "The Virtual DOM is a lightweight JavaScript object tree describing the UI. React builds a new one each render, diffs it against the previous, and updates <strong>only the changed nodes</strong> in the Real DOM — instead of rebuilding the whole page.",
+    when: "The classic 'why is React fast' question.",
+    example: "RD listings grid: filtering re-computes the VDOM for 1000 cards, but the diff finds only the 12 now-visible cards changed → only those hit the Real DOM. Direct DOM manipulation would repaint/reflow far more.",
+    say: "The Virtual DOM is a JS representation of the Real DOM. React diffs the new tree against the old and touches the Real DOM only where something changed. Direct DOM updates are expensive — every change can trigger reflow and repaint.",
+    bangla: "Virtual DOM = Real DOM er JS copy. React notun-purono diff kore, shudhu jetuku change hoise setuku Real DOM e lagay. Real DOM direct chhuya expensive (reflow/repaint).",
+    code: null,
+    gotcha: "The Virtual DOM isn't magically 'faster than the DOM' — it's a batching + diffing strategy that does <em>less</em> DOM work. Minimal, batched DOM writes are the real win."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 43, cat: "react", diff: "med", title: "Reconciliation &amp; the diffing rules",
+    what: "Reconciliation is React's diffing algorithm — comparing the new Virtual DOM with the old to find the minimal set of changes. 3 rules: (1) <strong>different element type</strong> → replace the whole subtree; (2) <strong>same type</strong> → keep the node, update changed attributes, recurse into children; (3) <strong>lists use <code>key</code></strong> to match items by identity, not position.",
+    when: "Understanding when React reuses vs throws away DOM/state, and why keys matter.",
+    example: "RD: swapping a card's <code>&lt;a&gt;</code> for a <code>&lt;div&gt;</code> destroys and rebuilds that subtree (rule 1); changing only its className keeps the node (rule 2); reordering the grid relies on stable <code>key={listing.id}</code> (rule 3).",
+    say: "Reconciliation diffs the two trees. Different type replaces the subtree; same type updates attributes and recurses; lists are matched by key. It's roughly O(n) because React uses those heuristics instead of a true tree diff.",
+    bangla: "Reconciliation = notun-purono tree diff. Type alada hole subtree replace; same type hole attribute update; list e key diye match. Tai O(n).",
+    code: null,
+    gotcha: "Changing element type throws away that subtree's DOM <em>and</em> its state. That's why conditionally rendering a different wrapper around an <code>&lt;input&gt;</code> can silently reset the field."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 44, cat: "react", diff: "easy", title: "Where React starts: createRoot &amp; mount",
+    what: "A React app mounts into one real DOM node (<code>&lt;div id=\"root\"&gt;</code>). The entry file calls <code>createRoot(domNode).render(&lt;App/&gt;)</code>, handing React control to render the whole tree inside it.",
+    when: "The 'how does React boot / take over the page' question.",
+    example: "Browser loads index.html → finds <code>#root</code> (empty) → loads the JS bundle → <code>createRoot</code> mounts <code>&lt;App/&gt;</code> → UI appears.",
+    say: "Every React app has a single root DOM node. createRoot creates a React root and render mounts the component tree into it. React 18+ uses createRoot instead of the legacy ReactDOM.render — it's what enables concurrent features.",
+    bangla: "Ekta root DOM node (#root). createRoot diye React root banai, render diye App mount kori. React 18+ e createRoot (purono ReactDOM.render na).",
+    code: "import { createRoot } from \"react-dom/client\";\nconst root = createRoot(document.getElementById(\"root\"));\nroot.render(<StrictMode><App /></StrictMode>);",
+    gotcha: "Next.js does this for you — there's no createRoot in an App Router project. Know it for the boot question, but in RD the framework owns mounting + hydration."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 45, cat: "react", diff: "med", title: "Update scheduling &amp; priorities",
+    what: "When an update fires, React doesn't render immediately — it <strong>schedules</strong> the work with a priority. Discrete user input (click, type) = high; transitions/background updates = low. The scheduler can interrupt low-priority work to handle urgent updates first.",
+    when: "Understanding useTransition, concurrent rendering, and why React stays responsive under load.",
+    example: "RD listings search: keystrokes are high priority (input stays instant) while re-filtering 1000 listings is scheduled as a low-priority transition — React pauses the filter to keep typing smooth.",
+    say: "React assigns each update a priority and schedules it — it doesn't render synchronously. Urgent updates like typing preempt low-priority ones like a big list re-filter. That's what makes the Render Phase interruptible in React 18.",
+    bangla: "Update sathe sathe render hoy na — priority diye schedule hoy. Typing (urgent) > boro list filter (low). Urgent ta age, tai UI responsive.",
+    code: null,
+    gotcha: "This is <em>why</em> the Render Phase must be pure — React may start, pause, throw away, and restart it. Side effects there would fire multiple times or on discarded work."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 46, cat: "react", diff: "med", title: "Inside the Render Phase (3 steps)",
+    what: "Three steps, all in memory: (1) build the new Virtual DOM from current state/props; (2) <strong>reconcile</strong> — diff against the old tree; (3) build an <strong>effect list</strong> — the minimal DOM operations (insert/update/delete) to apply. No DOM is touched.",
+    when: "Explaining what 'render' actually computes.",
+    example: "RD quantity widget: state 0→1 → new VDOM built → diff finds only the number text changed → effect list = 'update this text node'. Nothing is on screen yet.",
+    say: "The Render Phase builds the new tree, diffs it, and produces an effect list of minimal DOM ops. It's pure and interruptible and can run multiple times, so it must have no side effects — the DOM isn't touched until commit.",
+    bangla: "Render phase = notun tree banao → diff koro → effect list (ki ki DOM change lagbe) banao. Shob memory te, DOM chhuya hoy na.",
+    code: null,
+    gotcha: "'Render ran' ≠ 'DOM updated' ≠ 'component mounted'. Render just computes the plan; the effect list is handed to the Commit Phase."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 47, cat: "react", diff: "hard", title: "Inside the Commit Phase (useLayoutEffect vs useEffect)",
+    what: "Commit applies the effect list in sub-steps: (1) before-mutation snapshot, (2) <strong>mutation</strong> — write the Real DOM, (3) <strong>layout</strong> — run <code>useLayoutEffect</code> synchronously (DOM updated, <em>before</em> paint), (4) browser <strong>paints</strong>, (5) <strong>passive</strong> — run <code>useEffect</code> asynchronously <em>after</em> paint.",
+    when: "Choosing between useLayoutEffect and useEffect; understanding effect timing.",
+    example: "RD chat: pinning the scroll to the latest message needs <code>useLayoutEffect</code> (read/write layout before paint → no flicker); firing a page_view analytics event uses <code>useEffect</code> (after paint, non-blocking).",
+    say: "Commit writes the DOM, runs useLayoutEffect synchronously before the browser paints, the browser paints, then useEffect runs asynchronously after paint. So useLayoutEffect is for reading/writing layout without flicker; useEffect is for everything else.",
+    bangla: "Commit e DOM lekha → useLayoutEffect (paint er age, sync) → browser paint → useEffect (paint er pore, async). Layout mapa/flicker thamate useLayoutEffect; baki shob useEffect.",
+    code: "useLayoutEffect(() => {\n  el.scrollTop = el.scrollHeight; // measured before paint → no flicker\n}, [messages]);",
+    gotcha: "useLayoutEffect <strong>blocks paint</strong> — overusing it hurts performance. Default to useEffect; reach for useLayoutEffect only when you must read/mutate layout before the user sees a frame."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 48, cat: "react", diff: "hard", title: "Fiber architecture",
+    what: "Fiber is React's reconciliation engine (React 16+). Each element becomes a <strong>fiber node</strong> — a JS object holding <code>type</code>, <code>props</code>, and pointers (<code>child</code>, <code>sibling</code>, <code>return</code>/parent) plus <code>alternate</code> (old/new) and <code>flags</code> (effects). This linked-tree structure lets React work one unit at a time and pause/resume.",
+    when: "The 'what is Fiber / how is rendering interruptible' question.",
+    example: "RD large admin tables: Fiber lets React process rows as small units of work and yield to a click, instead of blocking the main thread through the whole tree (the old synchronous stack reconciler couldn't).",
+    say: "Fiber is a re-implementation of React's core as a linked tree of fiber nodes, each a unit of work. Because it's a data structure — not the call stack — React can pause, resume, reprioritize, and abort rendering. That's what powers concurrent features.",
+    bangla: "Fiber = React er reconciliation engine. Prottek element ekta fiber node (unit of work), linked tree. Call stack na hoye data structure howay React pause/resume/abort korte pare.",
+    code: null,
+    gotcha: "Fiber isn't an API you call — it's internal architecture. The old 'stack reconciler' was synchronous and blocking; Fiber made rendering interruptible."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 49, cat: "react", diff: "hard", title: "Double buffering (current vs work-in-progress)",
+    what: "React keeps <strong>two fiber trees</strong>: <strong>current</strong> (what's on screen) and <strong>work-in-progress</strong> (built during render). React mutates the WIP tree in memory; on commit it swaps pointers so WIP becomes current — like double-buffering in graphics.",
+    when: "Explaining how React renders without ever showing half-finished UI.",
+    example: "While RD re-filters a big grid, the current tree stays on screen (interactive) while the WIP tree is built; only after commit does the swap happen — the user never sees a partial render.",
+    say: "React maintains two trees — current (on screen) and work-in-progress (being built). It works on WIP in memory and swaps it in atomically at commit. That's why an interrupted or abandoned render never leaves a broken UI on screen.",
+    bangla: "Duita tree — current (screen e) ar work-in-progress (banano hocche). WIP memory te toiri, commit e pointer swap kore current banano hoy. Tai adha-render kokhono dekha jay na.",
+    code: null,
+    gotcha: "Each fiber's <code>alternate</code> pointer links its current↔WIP counterpart, so React reuses nodes across renders instead of reallocating the whole tree."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 50, cat: "react", diff: "med", title: "Browser rendering pipeline (after React commits)",
+    what: "Once React writes the DOM, the browser runs its own pipeline: parse HTML → <strong>DOM</strong>, parse CSS → <strong>CSSOM</strong>, combine into the <strong>Render Tree</strong>, <strong>Layout/reflow</strong> (compute geometry), <strong>Paint</strong> (fill pixels), <strong>Composite</strong> (merge layers), display.",
+    when: "Understanding where React ends and the browser begins; reflow vs repaint vs composite performance.",
+    example: "RD: React updates a card's price text → browser reflows just that element's box, repaints the text, composites — cheap. Animating <code>transform</code>/<code>opacity</code> skips layout+paint (composite-only), which is why they're smooth.",
+    say: "React only updates the DOM — the browser then parses, builds the render tree, lays out geometry, paints pixels, and composites layers. Layout (reflow) is the expensive step; animating transform/opacity stays on the compositor and avoids it.",
+    bangla: "React shudhu DOM update kore — er por browser: DOM+CSSOM → render tree → layout (reflow) → paint → composite. Reflow expensive; transform/opacity animate korle layout/paint skip hoy (composite only), tai smooth.",
+    code: null,
+    gotcha: "Reading layout props (<code>offsetWidth</code>, <code>getBoundingClientRect</code>) right after a DOM write forces a synchronous reflow ('layout thrashing'). Batch reads and writes separately."
+  },
+  {
+    group: "React Internals — Behind the Scenes (Phase 4)",
+    num: 51, cat: "react", diff: "hard", title: "The complete React flow (capstone)",
+    what: "End-to-end: User action → state/props change → React <strong>schedules</strong> an update (priority) → <strong>Render Phase</strong> (new VDOM, reconcile, effect list — in memory, interruptible) → <strong>Commit Phase</strong> (mutate Real DOM → useLayoutEffect → paint → useEffect) → browser rendering pipeline → updated pixels → React idles until the next update.",
+    when: "The senior-signal 'walk me through what happens when I click a button' question.",
+    example: "RD ❤️ favorite: click → setState → scheduled high-priority → render computes the one icon change → commit writes it → useLayoutEffect (none) → paint → useEffect fires the analytics event → screen shows the filled heart.",
+    say: "Click triggers a state change; React schedules it by priority, runs the Render Phase in memory to diff and build an effect list, then the Commit Phase writes the minimal DOM changes, runs layout effects, the browser paints, and passive effects run after. Two phases — think, then apply — is the whole secret to React's speed.",
+    bangla: "Click → state change → priority diye schedule → Render phase (memory te diff + effect list) → Commit phase (DOM lekha, useLayoutEffect, paint, useEffect) → browser paint → screen update. Dui phase (age chinta, pore apply) — eitai React er speed.",
+    code: null,
+    gotcha: "Common myths: React updates the DOM directly (no — VDOM first); useEffect runs before paint (no — after; useLayoutEffect is before); the Render Phase is synchronous (no — interruptible in React 18+)."
+  }
+];
+
+// ---------- QUIZ (rapid-fire) ----------
+const QUIZ = [
+  { q: "Props vs state — one-line difference?", a: "Props come from outside and are read-only here; state lives inside and changes through its setter, triggering a re-render." },
+  { q: "Name the 3 things that trigger a re-render.", a: "Own state change · parent re-render (cascades) · consumed context change. (Effect running does NOT.)" },
+  { q: "Does render = DOM update?", a: "No. Render = re-running the function. The commit phase touches the DOM, only for the diffed changes." },
+  { q: "What is the useEffect cleanup and when does it run?", a: "A function you return; React runs it before the next effect and on unmount. Rule: if the effect starts something, cleanup stops it." },
+  { q: "setCount(count+1) three times — result and fix?", a: "Result is +1 (all read the same stale count). Fix: setCount(c => c+1) — updater sees the latest pending state → +3." },
+  { q: "What problem do useMemo AND useCallback both solve?", a: "New references every render. They preserve a stable reference so React.memo / dependency arrays don't misfire. Pointless with no reference-consumer downstream." },
+  { q: "Why is index as a key dangerous, and the fix?", a: "On reorder/insert, identity ties to position → state attaches to the wrong item. Fix: a stable data-owned id. (useId is for a11y, not keys.)" },
+  { q: "Default component type in App Router + how to opt into client?", a: "Server Component by default. Add \"use client\" at the top. Server ships zero JS; client is interactive." },
+  { q: "Better pattern than making a whole page \"use client\"?", a: "Push the boundary to the leaf — keep the page a Server Component (direct DB, small bundle), extract the interactive button as a client leaf." },
+  { q: "Which App Router file persists across sibling navigation?", a: "layout.tsx — it stays mounted; only page.tsx swaps. (loading = Suspense fallback; error = client boundary.)" },
+  { q: "Pick strategy: per-user dashboard that must be fresh.", a: "SSR — per-request server render with user context. SSG can't (built once, no user)." },
+  { q: "Where is <Link> imported from?", a: "next/link (the component). next/navigation is for hooks: useRouter, usePathname, redirect." },
+  { q: "How do you fetch data in a Server Component?", a: "Make it async and await directly (fetch or db). Reads = async component; writes = Server Action. No useEffect." },
+  { q: "Syntax: re-fetch every 60s vs never cache?", a: "fetch(url, { next: { revalidate: 60 } }) and fetch(url, { cache: \"no-store\" }). Don't forget the next: wrapper." },
+  { q: "What is a Server Action + how to refresh after it?", a: "\"use server\" mutation function called like a local function (no API/fetch, type-safe). After: revalidatePath/Tag or router.refresh()." },
+  { q: "How do you read a dynamic route param?", a: "From the params prop (await it in Next 15+), not req.params. [...slug] catches multiple segments as an array." },
+  { q: "Why does a setInterval counter freeze at 1 (empty deps)?", a: "Stale closure — the interval captured count=0 forever. Best fix: setCount(c => c+1) and keep []." },
+  { q: "Static vs dynamic metadata exports (exact names)?", a: "export const metadata = {} (static) · export async function generateMetadata() (dynamic). Lowercase 'data' — wrong casing is silently ignored." },
+  { q: "React.memo — what it does and 2 reasons it 'fails'.", a: "Skips re-render on shallow-equal props. Fails on: new-reference props (inline fn / {} / []) and children/inline JSX. Never blocks own state/context." },
+  { q: "Why is NEXT_PUBLIC_ dangerous for secrets?", a: "It's inlined into the browser bundle at build — readable by anyone in DevTools. Secrets get no prefix, stay server-side." },
+  { q: "What is hydration + why can't Server Components hydrate?", a: "Attaching JS behavior to server HTML. Server Components ship zero JS → nothing to hydrate. Only Client Components hydrate." },
+  { q: "One concrete cause of a hydration mismatch.", a: "Date.now()/Math.random() in render, reading window/localStorage during render, or invalid nesting (<p><div>)." },
+  { q: "What is Suspense (and its App Router form)?", a: "Shows a fallback while a child loads. loading.tsx is Suspense under the hood." },
+  { q: "Do error boundaries catch event-handler errors?", a: "No — only render errors. Use try/catch for events/async. App Router: error.tsx (client component, has reset())." },
+  { q: "What does React Compiler do?", a: "Auto-memoizes at build time (useMemo/useCallback/React.memo equivalents), so manual memoization is rarely needed." },
+  { q: "Context's downside vs Zustand?", a: "Every context consumer re-renders on value change; Zustand allows selective slice subscriptions." },
+  { q: "useRef's two jobs + key contrast with state?", a: "DOM access + mutable value (timer id). Persists across renders but never triggers one (state does)." },
+  { q: "useTransition — what for?", a: "Mark a state update non-urgent so interactions stay responsive; gives isPending. Great for filtering a big list while typing." },
+  { q: "The use() hook pattern?", a: "Server starts a fetch, passes the unawaited promise to a client component that use()s it under Suspense. Can be called conditionally." },
+  { q: "When do you use a Portal?", a: "Render children elsewhere in the DOM (document.body) — modals/tooltips escaping parent overflow & z-index." },
+  { q: "What is middleware for + its runtime limit?", a: "Runs before the request (Edge) for auth gates/redirects. No Node APIs / DB — keep it light; real authz in the Server Component." },
+  { q: "Name the 4 Next.js caches.", a: "Request Memoization · Data Cache · Full Route Cache · Router Cache. Stale data = usually Data Cache (server) or Router Cache (client)." },
+  { q: "revalidatePath vs revalidateTag?", a: "Path targets a route; Tag busts tagged fetches app-wide (surgical). Both invalidate the Data Cache on demand." },
+  { q: "Route Handler vs Server Action?", a: "Route Handler (route.ts) = real HTTP endpoint for external callers/webhooks. Server Action = internal mutation called like a function." },
+  { q: "What is streaming + how does loading.tsx relate?", a: "Server sends HTML in chunks gated by Suspense; loading.tsx is the automatic segment-level Suspense fallback." },
+  { q: "Intercepting route use-case?", a: "Show a route as a modal over the current page while keeping a shareable URL — refresh gives the full page (e.g. listing quick-view)." },
+  { q: "Why next/image needs width+height?", a: "To reserve space and prevent layout shift (CLS) — plus auto resize, lazy-load, WebP/AVIF." },
+  { q: "What can't cross the server→client prop boundary?", a: "Functions and class instances — props are serialized as data. Plain objects/arrays/dates/promises are fine; Server Actions are the exception." },
+  { q: "Where do you read the session in a Server Component?", a: "getServerSession(authOptions) — direct, no API round-trip. Client uses useSession. Real authz needs the DB." },
+  { q: "Narrate the rendering lifecycle in one breath.", a: "Middleware → Server Components render+fetch → HTML streams (Suspense) → paints → JS loads → only Client Components hydrate → interactive." },
+
+  // ===== REACT INTERNALS — BEHIND THE SCENES =====
+  { q: "Name React's two update phases and one property of each.", a: "Render Phase — pure, interruptible, in memory, no DOM. Commit Phase — synchronous, non-interruptible, applies changes to the Real DOM + runs effects." },
+  { q: "Why is the Virtual DOM fast? (careful — not 'faster than the DOM')", a: "It's a batching + diffing strategy: React diffs new vs old and does the *minimum* Real DOM work, batched — avoiding needless reflow/repaint." },
+  { q: "The 3 reconciliation rules?", a: "Different element type → replace the whole subtree. Same type → keep node, update attributes, recurse. Lists → match by key (identity, not position)." },
+  { q: "What does changing an element's type cost?", a: "React throws away that subtree's DOM AND its state, then rebuilds — which is how a swapped wrapper can silently reset a form field." },
+  { q: "How does a React app boot into the page?", a: "One root DOM node (#root); createRoot(node).render(<App/>) mounts the tree. React 18+ uses createRoot (not legacy ReactDOM.render) to enable concurrent features." },
+  { q: "Does an update render immediately?", a: "No — React schedules it with a priority. Discrete input (click/type) is high; transitions are low. The scheduler can interrupt low-priority work. That's why Render is interruptible in React 18." },
+  { q: "What are the 3 steps inside the Render Phase?", a: "Build the new Virtual DOM → reconcile (diff vs old) → build the effect list (minimal DOM ops). All in memory; the DOM isn't touched." },
+  { q: "useLayoutEffect vs useEffect — exact timing?", a: "Commit writes DOM → useLayoutEffect runs synchronously BEFORE paint → browser paints → useEffect runs asynchronously AFTER paint. Layout reads/writes = useLayoutEffect; everything else = useEffect." },
+  { q: "What is Fiber and why does it enable interruptible rendering?", a: "React's reconciliation engine: each element is a fiber node (a unit of work) in a linked tree. Being a data structure (not the call stack) lets React pause, resume, reprioritize, and abort." },
+  { q: "What is double buffering in React?", a: "Two fiber trees — current (on screen) and work-in-progress (being built in memory). Commit swaps pointers atomically, so a partial/aborted render never shows on screen." },
+  { q: "After React commits, what's the browser's expensive step — and how do you avoid it?", a: "Layout (reflow). Animate transform/opacity to stay composite-only (skips layout+paint). Avoid reading layout props right after a write (layout thrashing)." },
+  { q: "Walk the complete React flow from a click.", a: "User action → state change → schedule by priority → Render Phase (new VDOM, reconcile, effect list, in memory) → Commit Phase (mutate DOM → useLayoutEffect → paint → useEffect) → browser pipeline → updated pixels." },
+  { q: "3 common React-internals myths to correct?", a: "React updates the DOM directly (no — VDOM diff first); useEffect runs before paint (no — after; useLayoutEffect is before); Render Phase is synchronous (no — interruptible in React 18+)." }
+];
+
+// ---------- RENDER ----------
+const cardsEl = document.getElementById('cards');
+let currentGroup = '';
+CONCEPTS.forEach((c, i) => {
+  if (c.group !== currentGroup) {
+    currentGroup = c.group;
+    const h = document.createElement('div');
+    h.className = 'section-title';
+    h.textContent = c.group;
+    h.dataset.group = c.group;
+    cardsEl.appendChild(h);
+  }
+  const diffLabel = c.diff === 'easy' ? '🟢 Easy' : c.diff === 'med' ? '🟡 Med' : '🔴 Hard';
+  const diffClass = c.diff === 'easy' ? 'b-easy' : c.diff === 'med' ? 'b-med' : 'b-hard';
+  const catLabel = c.cat === 'react' ? 'React' : 'Next.js';
+  const catClass = c.cat === 'react' ? 't-react' : 't-next';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.cat = c.cat;
+  card.dataset.diff = c.diff;
+  card.dataset.text = (c.title + ' ' + c.what + ' ' + c.when + ' ' + c.example + ' ' + c.say + ' ' + (c.bangla||'') + ' ' + (c.gotcha||'') + ' ' + (c.code||'')).toLowerCase();
+
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="num">${c.num}</span>
+      <span class="title">${c.title}</span>
+      <span class="tag ${catClass}">${catLabel}</span>
+      <span class="badge ${diffClass}">${diffLabel}</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="row"><span class="k what">What</span><div>${c.what}</div></div>
+      <div class="row"><span class="k when">When</span><div>${c.when}</div></div>
+      <div class="row"><span class="k example">Real example — RadiusDirectory</span><div>${c.example}</div></div>
+      ${c.code ? `<div class="row"><pre><code>${escapeHtml(c.code)}</code></pre></div>` : ''}
+      <div class="row"><span class="k say">Say this (interview line)</span><div class="say-box">${c.say}</div></div>
+      <div class="row"><span class="k bangla">Bangla hook (mne rakho)</span><div class="bangla-box">${c.bangla}</div></div>
+      ${c.gotcha ? `<div class="gotcha">⚠️ <strong>Gotcha:</strong> ${c.gotcha}</div>` : ''}
+    </div>
+  `;
+  card.querySelector('.card-head').addEventListener('click', () => card.classList.toggle('open'));
+  cardsEl.appendChild(card);
+});
+
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ---------- QUIZ RENDER ----------
+const quizEl = document.getElementById('quiz');
+function renderQuiz(list){
+  quizEl.innerHTML = '';
+  list.forEach((item, idx) => {
+    const q = document.createElement('div');
+    q.className = 'quiz-card';
+    q.innerHTML = `
+      <div class="quiz-q"><span class="qn">Q${idx+1}.</span><span>${item.q}</span></div>
+      <button class="reveal-btn">Reveal answer</button>
+      <div class="quiz-a">✅ ${item.a}</div>
+    `;
+    q.querySelector('.reveal-btn').addEventListener('click', () => {
+      q.classList.toggle('revealed');
+      q.querySelector('.reveal-btn').textContent = q.classList.contains('revealed') ? 'Hide' : 'Reveal answer';
+    });
+    quizEl.appendChild(q);
+  });
+}
+renderQuiz(QUIZ);
+
+// ---------- SEARCH + FILTER ----------
+const search = document.getElementById('search');
+const chips = document.querySelectorAll('.chip');
+let activeFilter = 'all';
+
+function applyFilter(){
+  const term = search.value.trim().toLowerCase();
+  let visibleCount = 0;
+  const groupsWithVisible = new Set();
+  document.querySelectorAll('.card').forEach(card => {
+    const matchesFilter =
+      activeFilter === 'all' ||
+      (activeFilter === 'react' && card.dataset.cat === 'react') ||
+      (activeFilter === 'next' && card.dataset.cat === 'next') ||
+      (activeFilter === 'easy' && card.dataset.diff === 'easy') ||
+      (activeFilter === 'med' && card.dataset.diff === 'med') ||
+      (activeFilter === 'hard' && card.dataset.diff === 'hard');
+    const matchesTerm = !term || card.dataset.text.includes(term);
+    const show = matchesFilter && matchesTerm;
+    card.style.display = show ? '' : 'none';
+    if (show) { visibleCount++; groupsWithVisible.add(card.previousGroup); }
+  });
+  // show/hide section titles based on whether following cards are visible
+  document.querySelectorAll('.section-title[data-group]').forEach(title => {
+    let el = title.nextElementSibling;
+    let anyVisible = false;
+    while (el && !el.classList.contains('section-title')) {
+      if (el.classList.contains('card') && el.style.display !== 'none') anyVisible = true;
+      el = el.nextElementSibling;
+    }
+    title.style.display = anyVisible ? '' : 'none';
+  });
+  document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
+}
+search.addEventListener('input', applyFilter);
+chips.forEach(chip => chip.addEventListener('click', () => {
+  chips.forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeFilter = chip.dataset.filter;
+  applyFilter();
+}));
+
+// ---------- EXPAND/COLLAPSE ----------
+document.getElementById('expand-all').addEventListener('click', () =>
+  document.querySelectorAll('.card').forEach(c => c.classList.add('open')));
+document.getElementById('collapse-all').addEventListener('click', () =>
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('open')));
+
+// ---------- QUIZ CONTROLS ----------
+document.getElementById('reveal-all').addEventListener('click', () =>
+  document.querySelectorAll('.quiz-card').forEach(q => { q.classList.add('revealed'); q.querySelector('.reveal-btn').textContent='Hide'; }));
+document.getElementById('hide-all').addEventListener('click', () =>
+  document.querySelectorAll('.quiz-card').forEach(q => { q.classList.remove('revealed'); q.querySelector('.reveal-btn').textContent='Reveal answer'; }));
+document.getElementById('shuffle').addEventListener('click', () => {
+  const shuffled = [...QUIZ];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor((i + 1) * (parseInt(window.performance.now()) % 97) / 97) % (i + 1);
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  renderQuiz(shuffled);
+});
+
+// ---------- TEACH-BACK COLLAPSIBLE SEGMENTS ----------
+document.querySelectorAll('.seg-title').forEach(title => {
+  const blocks = [];
+  let el = title.nextElementSibling;
+  while (el && !el.classList.contains('seg-title')) {
+    blocks.push(el);
+    el = el.nextElementSibling;
+  }
+  const arrow = document.createElement('span');
+  arrow.className = 'seg-arrow';
+  arrow.textContent = '▾';
+  title.appendChild(arrow);
+  title.addEventListener('click', () => {
+    const collapsed = title.classList.toggle('collapsed');
+    blocks.forEach(b => b.style.display = collapsed ? 'none' : '');
+    arrow.textContent = collapsed ? '▸' : '▾';
+  });
+});
+</script>
+</body>
+</html>

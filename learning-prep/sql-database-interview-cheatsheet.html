@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SQL &amp; Databases — Interview Cheatsheet</title>
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --panel: #ffffff;
+    --panel-2: #f0f3f6;
+    --border: #d0d7de;
+    --text: #1f2328;
+    --muted: #656d76;
+    --accent: #0969da;
+    --green: #1a7f37;
+    --yellow: #9a6700;
+    --red: #cf222e;
+    --purple: #8250df;
+    --code-bg: #f6f8fa;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 20px;
+  }
+  header h1 { margin: 0 0 4px; font-size: 18px; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  .controls {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center;
+  }
+  #search {
+    flex: 1 1 220px; min-width: 180px;
+    background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 12px; border-radius: 8px; font-size: 14px;
+  }
+  #search:focus { outline: none; border-color: var(--accent); }
+  .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    background: var(--panel); border: 1px solid var(--border); color: var(--muted);
+    padding: 6px 11px; border-radius: 20px; font-size: 12px; cursor: pointer; user-select: none;
+    transition: all .15s;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--text); }
+  .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+  .chip.design.active { background: var(--purple); border-color: var(--purple); color: #fff; }
+  .chip.theory.active { background: var(--green); border-color: var(--green); color: #fff; }
+  main { max-width: 980px; margin: 0 auto; padding: 20px; }
+  .section-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+    margin: 28px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    margin-bottom: 12px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(31,35,40,0.04);
+  }
+  .card-head {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer;
+  }
+  .card-head:hover { background: var(--panel-2); }
+  .num { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; min-width: 20px; }
+  .title { font-weight: 600; font-size: 15px; flex: 1; }
+  .badge { font-size: 10px; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+  .b-easy { background: rgba(26,127,55,.12); color: var(--green); }
+  .b-med { background: rgba(154,103,0,.13); color: var(--yellow); }
+  .b-hard { background: rgba(207,34,46,.12); color: var(--red); }
+  .tag { font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+  .t-core { background: rgba(9,105,218,.11); color: var(--accent); }
+  .t-func { background: rgba(130,80,223,.12); color: var(--purple); }
+  .t-async { background: rgba(26,127,55,.12); color: var(--green); }
+  .arrow { color: var(--muted); transition: transform .2s; font-size: 12px; }
+  .card.open .arrow { transform: rotate(90deg); }
+  .card-body { display: none; padding: 4px 14px 16px; border-top: 1px solid var(--border); }
+  .card.open .card-body { display: block; }
+  .row { margin: 12px 0; }
+  .k {
+    display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .5px; color: var(--muted); margin-bottom: 3px;
+  }
+  .k.what { color: var(--accent); }
+  .k.when { color: var(--yellow); }
+  .k.example { color: var(--green); }
+  .k.say { color: var(--purple); }
+  .say-box {
+    background: rgba(130,80,223,.06); border-left: 3px solid var(--purple);
+    padding: 8px 12px; border-radius: 6px; font-style: italic;
+  }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px; overflow-x: auto; margin: 6px 0; font-size: 13px;
+  }
+  code { font-family: "SF Mono", Menlo, Monaco, Consolas, monospace; }
+  pre code { color: #1f2328; }
+  .inline-code {
+    background: var(--code-bg); border: 1px solid var(--border); padding: 1px 5px;
+    border-radius: 4px; font-size: 12px; font-family: "SF Mono", Menlo, monospace; color: #0550ae;
+  }
+  .gotcha { color: var(--red); font-size: 13px; margin-top: 8px; }
+  .gotcha strong { color: var(--red); }
+  .wrong { color: var(--red); }
+  .right { color: var(--green); }
+  /* Quiz */
+  #quiz-section { margin-top: 40px; }
+  .quiz-intro { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .quiz-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; margin-bottom: 10px;
+  }
+  .quiz-q { font-weight: 600; display: flex; gap: 8px; }
+  .quiz-q .qn { color: var(--accent); }
+  .quiz-a {
+    display: none; margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border);
+    color: var(--text);
+  }
+  .quiz-card.revealed .quiz-a { display: block; }
+  .reveal-btn {
+    margin-top: 8px; background: transparent; border: 1px solid var(--border); color: var(--muted);
+    padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;
+  }
+  .reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-primary {
+    background: var(--accent); color: #fff; border: none; padding: 8px 16px;
+    border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; margin-right: 8px;
+  }
+  .btn-ghost {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  .no-results { text-align: center; color: var(--muted); padding: 40px; display: none; }
+  .toc-toggle { color: var(--accent); cursor: pointer; font-size: 12px; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 30px 20px; }
+  a { color: var(--accent); }
+  .pill-legend { display: flex; gap: 12px; font-size: 11px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
+  .schema-note {
+    background: rgba(9,105,218,.06); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 16px; font-size: 13px; color: var(--muted); margin-bottom: 4px;
+  }
+  .schema-note strong { color: var(--text); }
+
+  /* Mental models + reference */
+  .mm-wrap { display: grid; gap: 12px; margin-bottom: 8px; }
+  .mm-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px; box-shadow: 0 1px 2px rgba(31,35,40,0.04);
+  }
+  .mm-card h3 { margin: 0 0 4px; font-size: 14px; }
+  .mm-card .mm-sub { color: var(--muted); font-size: 12px; margin: 0 0 12px; }
+  .flow { display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px; }
+  .flow-step {
+    flex: 1 1 118px; min-width: 110px; position: relative;
+    background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 8px 10px;
+  }
+  .flow-step .fs-n { font-size: 10px; font-weight: 700; color: var(--muted); }
+  .flow-step .fs-k { font-family: "SF Mono", Menlo, monospace; font-size: 13px; font-weight: 700; color: var(--accent); display: block; margin: 1px 0 2px; }
+  .flow-step .fs-d { font-size: 11px; color: var(--muted); line-height: 1.35; }
+  .flow-arrow { align-self: center; color: var(--muted); font-size: 14px; }
+  .mm-note { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .mm-note strong { color: var(--text); }
+  .mm-note code, .mm-card code {
+    background: var(--code-bg); border: 1px solid var(--border); padding: 0 4px;
+    border-radius: 4px; font-size: 11.5px; color: #0550ae;
+  }
+
+  #ref-search {
+    width: 100%; background: var(--panel); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 12px; border-radius: 8px; font-size: 14px; margin-bottom: 12px;
+  }
+  #ref-search:focus { outline: none; border-color: var(--accent); }
+  .ref-group-title {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
+    color: var(--purple); margin: 16px 0 8px;
+  }
+  .ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 640px) { .ref-grid { grid-template-columns: 1fr; } }
+  .ref-item {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 7px 11px; display: flex; gap: 10px; align-items: baseline;
+  }
+  .ref-item code {
+    font-family: "SF Mono", Menlo, monospace; font-size: 12.5px; font-weight: 700;
+    color: #0550ae; white-space: nowrap; flex: 0 0 auto; min-width: 96px;
+  }
+  .ref-item span { font-size: 12.5px; color: var(--text); line-height: 1.4; }
+  .ref-no-results { display: none; color: var(--muted); padding: 16px; text-align: center; }
+
+  /* Collapsible sections */
+  .collapse-head { cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px; }
+  .collapse-head:hover { color: var(--accent); }
+  .collapse-head .c-arrow { font-size: 12px; color: var(--muted); transition: transform .2s; }
+  .collapse-head.open .c-arrow { transform: rotate(90deg); }
+  .collapse-head .c-hint { font-size: 11px; font-weight: 400; color: var(--muted); text-transform: none; letter-spacing: 0; }
+  .section-content { display: none; }
+  .section-content.open { display: block; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🗄️ SQL &amp; Databases — Interview Cheatsheet</h1>
+  <p>PostgreSQL, mid-level · <strong>What → When → Example → Sample SQL → Say-this</strong>. Built on the <em>SkillHire</em> freelance-marketplace schema. Drill the "Say this" lines out loud — interviews test explaining, not just writing.</p>
+  <div class="controls">
+    <input id="search" type="text" placeholder="🔍 Search: 'join', 'index', 'having', 'acid', 'window'..." />
+    <div class="filters">
+      <span class="chip active" data-filter="all">All</span>
+      <span class="chip" data-filter="query">Querying</span>
+      <span class="chip design" data-filter="design">Design</span>
+      <span class="chip theory" data-filter="theory">Theory</span>
+      <span class="chip" data-filter="easy">🟢 Easy</span>
+      <span class="chip" data-filter="med">🟡 Med</span>
+      <span class="chip" data-filter="hard">🔴 Hard</span>
+    </div>
+  </div>
+  <div class="pill-legend">
+    <span>💡 Click any card to expand</span>
+    <span>·</span>
+    <span><span class="toc-toggle" id="expand-all">Expand all</span> / <span class="toc-toggle" id="collapse-all">Collapse all</span></span>
+    <span>·</span>
+    <span><a href="#quiz-section">⚡ Jump to Rapid-Fire Quiz</a></span>
+  </div>
+</header>
+
+<main>
+  <div class="schema-note">
+    <strong>The example schema (SkillHire — a freelance marketplace):</strong>
+    <code class="inline-code">users</code> → <code class="inline-code">freelancer_profiles</code> / <code class="inline-code">client_profiles</code> ·
+    a client posts a <code class="inline-code">jobs</code> → freelancers file <code class="inline-code">applications</code> →
+    it becomes a <code class="inline-code">projects</code> → split into <code class="inline-code">milestones</code> → both leave <code class="inline-code">reviews</code>.
+    Bridge tables: <code class="inline-code">job_skills</code>, <code class="inline-code">freelancer_skills</code>.
+  </div>
+  <!-- ===== MENTAL MODELS ===== -->
+  <h2 class="section-title collapse-head" data-target="mm-content" style="font-size:15px;color:var(--text)"><span class="c-arrow">▶</span>🧠 Mental Models — the pictures to keep in your head <span class="c-hint">(click to expand)</span></h2>
+  <div class="section-content" id="mm-content">
+  <div class="mm-wrap">
+
+    <div class="mm-card">
+      <h3>1. The order SQL <em>actually</em> runs (not top-to-bottom)</h3>
+      <p class="mm-sub">You write SELECT first, but the engine runs it almost last. Memorize this pipeline — it explains 90% of "why doesn't this work?"</p>
+      <div class="flow">
+        <div class="flow-step"><span class="fs-n">1</span><code class="fs-k">FROM / JOIN</code><span class="fs-d">Grab &amp; combine the tables</span></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><span class="fs-n">2</span><code class="fs-k">WHERE</code><span class="fs-d">Filter individual rows</span></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><span class="fs-n">3</span><code class="fs-k">GROUP BY</code><span class="fs-d">Collapse rows into groups</span></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><span class="fs-n">4</span><code class="fs-k">HAVING</code><span class="fs-d">Filter the groups</span></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><span class="fs-n">5</span><code class="fs-k">SELECT</code><span class="fs-d">Pick columns; window fns run here</span></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><span class="fs-n">6</span><code class="fs-k">ORDER BY</code><span class="fs-d">Sort the result</span></div>
+        <span class="flow-arrow">→</span>
+        <div class="flow-step"><span class="fs-n">7</span><code class="fs-k">LIMIT</code><span class="fs-d">Cut the list</span></div>
+      </div>
+      <p class="mm-note">
+        <strong>What it explains:</strong>
+        • <code>WHERE</code> can't see aggregates or <code>SELECT</code> aliases (runs before them) → use <code>HAVING</code> for aggregates.
+        • <code>ORDER BY</code> <em>can</em> use a SELECT alias (runs after step 5).
+        • Window functions can't go in <code>WHERE</code> (they're step 5) → rank in a CTE, filter outside.
+      </p>
+    </div>
+
+    <div class="mm-card">
+      <h3>2. A JOIN = following an arrow (foreign key)</h3>
+      <p class="mm-sub">Any <code>something_id</code> column is an arrow pointing at another table's <code>id</code>. Joining is just walking that arrow.</p>
+      <p class="mm-note" style="margin-top:0">
+        <code>jobs.client_id → users.id</code> · <code>applications.job_id → jobs.id</code> · <code>milestones.project_id → projects.id</code><br>
+        <strong>INNER</strong> = keep only rows where the arrow lands on a match. &nbsp;<strong>LEFT</strong> = keep all left rows, put <code>NULL</code> where the arrow lands on nothing → that NULL is how you find "records with no related row" (<code>WHERE right.id IS NULL</code>).
+      </p>
+    </div>
+
+    <div class="mm-card">
+      <h3>3. An index = the index at the back of a book</h3>
+      <p class="mm-sub">Instead of reading every page (Seq Scan), flip to the sorted index and jump straight to the row (Index Scan).</p>
+      <p class="mm-note" style="margin-top:0">
+        Sorted → fast for <code>=</code>, ranges, and <code>ORDER BY</code>. Composite <code>(a,b)</code> reads <strong>left-to-right</strong> like a phone book sorted last-name-then-first: works for <code>a</code> or <code>a+b</code>, never <code>b</code> alone. Trade-off: faster reads, slower writes.
+      </p>
+    </div>
+
+    <div class="mm-card">
+      <h3>4. Pre-compute &amp; store = the one idea behind "scalable design"</h3>
+      <p class="mm-sub">Three features in this repo are the same move: do the expensive work <em>once</em>, store the answer, then keep it fresh.</p>
+      <p class="mm-note" style="margin-top:0">
+        <code>applications_count</code> (denormalized column, kept fresh by a <strong>trigger</strong>) · <code>average_rating</code> (denormalized) · <code>top_freelancers</code> (<strong>materialized view</strong>, kept fresh by <code>REFRESH</code>). The cost is always the same: the stored copy can go <strong>stale</strong>.
+      </p>
+    </div>
+
+  </div>
+  </div><!-- /mm-content -->
+
+  <!-- ===== KEYWORD & FUNCTION REFERENCE ===== -->
+  <h2 class="section-title collapse-head" data-target="ref-content" style="font-size:15px;color:var(--text)"><span class="c-arrow">▶</span>📖 Keyword &amp; Function Quick Reference — one line each <span class="c-hint">(click to expand)</span></h2>
+  <div class="section-content" id="ref-content">
+  <input id="ref-search" type="text" placeholder="🔍 Filter keywords: 'distinct', 'lower', 'coalesce', 'now'..." />
+  <div id="ref"></div>
+  <div class="ref-no-results" id="ref-no-results">No keyword matches.</div>
+  </div><!-- /ref-content -->
+
+  <h2 class="section-title collapse-head open" data-target="cards-content" style="font-size:15px;color:var(--text)"><span class="c-arrow">▶</span>🃏 Concept Cards <span class="c-hint">(click to collapse)</span></h2>
+  <div class="section-content open" id="cards-content">
+  <div id="cards"></div>
+  <div class="no-results" id="no-results">No matches. Try another keyword.</div>
+  </div><!-- /cards-content -->
+
+  <div id="quiz-section">
+    <h2 class="section-title collapse-head" data-target="quiz-content" style="font-size:15px;color:var(--text)"><span class="c-arrow">▶</span>⚡ Rapid-Fire Quiz — 37 Precision Drills <span class="c-hint">(click to expand)</span></h2>
+    <div class="section-content" id="quiz-content">
+    <div class="quiz-intro">
+      <strong>How to use:</strong> Read the question, say the answer <em>out loud in 1–2 sentences</em>, THEN reveal. Grade yourself on: (1) crisp definition first, (2) correct vocabulary (say "leftmost-prefix", "index-only scan", "MVCC"), (3) a one-line example. Knowing it but speaking fuzzy is exactly what fails interviews.
+      <div style="margin-top:12px">
+        <button class="btn-primary" id="reveal-all">Reveal all</button>
+        <button class="btn-ghost" id="hide-all">Hide all</button>
+        <button class="btn-ghost" id="shuffle">🔀 Shuffle</button>
+      </div>
+    </div>
+    <div id="quiz"></div>
+    </div><!-- /quiz-content -->
+  </div>
+</main>
+
+<footer>
+  Built for backend / full-stack interview prep · SQL + database foundation · Delivery beats knowledge — keep the "Say this" lines tight.
+</footer>
+
+<script>
+// ---------- DATA ----------
+// diff: easy | med | hard ; cat: query | design | theory
+const CONCEPTS = [
+  // ===== GROUP A: QUERYING FOUNDATIONS =====
+  {
+    group: "A · Querying Foundations",
+    num: 1, cat: "query", diff: "easy", title: "SELECT / WHERE / ORDER BY / LIMIT",
+    what: "<code>SELECT</code> picks columns, <code>FROM</code> the table, <code>WHERE</code> filters <strong>rows</strong>, <code>ORDER BY</code> sorts, <code>LIMIT</code> caps the result.",
+    when: "Every read query starts here.",
+    example: "Show the 10 cheapest available freelancers.",
+    say: "SELECT chooses columns, WHERE filters rows before grouping, ORDER BY sorts the result, LIMIT caps it.",
+    code: "SELECT name, hourly_rate\nFROM freelancer_profiles\nWHERE is_available = true AND hourly_rate < 50\nORDER BY hourly_rate ASC\nLIMIT 10;",
+    gotcha: "Useful <code>WHERE</code> operators: <code>BETWEEN</code>, <code>IN (...)</code>, <code>LIKE '%x%'</code>, <code>IS NULL</code>. You can't use a <code>SELECT</code> alias in <code>WHERE</code> — SELECT runs later."
+  },
+  {
+    group: "A · Querying Foundations",
+    num: 2, cat: "query", diff: "easy", title: "Aggregates: COUNT / SUM / AVG / MIN / MAX",
+    what: "Aggregate functions collapse <strong>many rows into one value</strong>.",
+    when: "Totals, averages, min/max over a set of rows.",
+    example: "Count how many jobs are open.",
+    say: "Aggregates collapse rows into a single value; COUNT(*) counts rows, COUNT(col) counts non-NULL values.",
+    code: "SELECT COUNT(*) AS total_open\nFROM jobs\nWHERE status = 'open';",
+    gotcha: "<code>COUNT(*)</code> is the safe default (and usually faster). Use <code>COUNT(col)</code> only when you deliberately want to skip NULLs."
+  },
+  {
+    group: "A · Querying Foundations",
+    num: 3, cat: "query", diff: "med", title: "GROUP BY + HAVING",
+    what: "<code>GROUP BY</code> produces <strong>one row per group</strong>; <code>HAVING</code> filters those groups.",
+    when: "Per-category counts, per-location averages, etc.",
+    example: "Statuses that have more than 10 jobs.",
+    say: "GROUP BY collapses rows into one per group; HAVING filters those groups, because WHERE can't see aggregates.",
+    code: "SELECT status, COUNT(*) AS n\nFROM jobs\nGROUP BY status\nHAVING COUNT(*) > 10;",
+    gotcha: "Every non-aggregated column in <code>SELECT</code> must be in <code>GROUP BY</code> — \"group it, or aggregate it — no third option.\""
+  },
+  {
+    group: "A · Querying Foundations",
+    num: 4, cat: "query", diff: "med", title: "WHERE vs HAVING + logical execution order",
+    what: "<code>WHERE</code> filters <strong>rows</strong> before grouping (can't see aggregates); <code>HAVING</code> filters <strong>groups</strong> after.",
+    when: "The single most-asked GROUP BY follow-up.",
+    example: "Filter cheap freelancers first (WHERE), then keep busy locations (HAVING).",
+    say: "WHERE filters rows before GROUP BY and can't see aggregates; HAVING filters the groups after they're formed.",
+    code: "-- Logical order SQL actually runs in:\n-- FROM -> WHERE -> GROUP BY -> HAVING\n--   -> SELECT -> ORDER BY -> LIMIT\nSELECT location, COUNT(*) AS cnt\nFROM freelancer_profiles\nWHERE hourly_rate < 50      -- rows first\nGROUP BY location\nHAVING COUNT(*) > 3;        -- groups after",
+    gotcha: "<code>WHERE COUNT(*) &gt; 3</code> errors — the count doesn't exist yet at WHERE time. <code>ORDER BY</code> <em>can</em> use SELECT aliases; WHERE/GROUP BY/HAVING generally can't."
+  },
+
+  // ===== GROUP B: JOINS =====
+  {
+    group: "B · Joins",
+    num: 5, cat: "query", diff: "med", title: "INNER JOIN vs LEFT JOIN",
+    what: "A JOIN follows a foreign key to combine rows. <strong>INNER</strong> keeps only rows matching in both tables; <strong>LEFT</strong> keeps all left rows, filling the right side with <code>NULL</code> when there's no match.",
+    when: "Any query spanning two tables.",
+    example: "Each job with its client's email.",
+    say: "INNER returns only matching rows; LEFT keeps every left row and NULLs the right side when there's no match.",
+    code: "SELECT j.title, u.email\nFROM jobs j\nJOIN users u ON j.client_id = u.id;   -- INNER",
+    gotcha: "Start with INNER; switch to LEFT only when you must keep rows that might have no match. Join direction doesn't matter for INNER."
+  },
+  {
+    group: "B · Joins",
+    num: 6, cat: "query", diff: "med", title: "The \"find X with no Y\" pattern (LEFT JOIN + IS NULL)",
+    what: "LEFT JOIN keeps unmatched rows with NULLs, so filtering the right side <code>IS NULL</code> finds records that have <strong>no related row</strong>.",
+    when: "Classic interview question — 'orphans', 'never applied', 'no orders'.",
+    example: "Jobs that received zero applications.",
+    say: "The LEFT JOIN keeps unmatched jobs and NULLs their application columns, so IS NULL on the right side isolates the ones with no match.",
+    code: "SELECT j.id, j.title\nFROM jobs j\nLEFT JOIN applications a ON j.id = a.job_id\nWHERE a.id IS NULL;   -- zero applications",
+    gotcha: "The NULL is created by the LEFT JOIN, not by the data. This exact pattern gets asked constantly."
+  },
+  {
+    group: "B · Joins",
+    num: 7, cat: "query", diff: "med", title: "Bridge / many-to-many joins",
+    what: "A many-to-many link needs a <strong>bridge table</strong>; you join <em>through</em> it in two hops.",
+    when: "Jobs ↔ skills, freelancers ↔ skills.",
+    example: "Each job title with a skill it requires.",
+    say: "Many-to-many is modelled with a bridge table whose primary key is the pair of foreign keys; you join through it in two hops.",
+    code: "SELECT j.title, s.name\nFROM jobs j\nJOIN job_skills js ON js.job_id = j.id\nJOIN skills s      ON s.id = js.skill_id;",
+    gotcha: "The bridge's primary key is the composite <code>(job_id, skill_id)</code> — that prevents duplicate links."
+  },
+  {
+    group: "B · Joins",
+    num: 8, cat: "query", diff: "hard", title: "JOIN + GROUP BY (the analytics combo)",
+    what: "Join to bring columns together, <strong>then</strong> GROUP BY and aggregate. This is what most 'analytics' interview questions really are.",
+    when: "Counts/sums across related tables.",
+    example: "Clients who posted more than 5 jobs.",
+    say: "I join first to combine the columns, then GROUP BY and aggregate; after a LEFT JOIN I use COUNT(child.id) so no-match rows count as zero.",
+    code: "SELECT u.email, COUNT(j.id) AS jobs\nFROM users u\nLEFT JOIN jobs j ON u.id = j.client_id\nGROUP BY u.id, u.email\nHAVING COUNT(j.id) > 5;",
+    gotcha: "GROUP BY the <strong>id</strong>, not the name — names aren't unique. Use <code>COUNT(a.id)</code>, not <code>COUNT(*)</code>, after a LEFT JOIN or unmatched rows count as 1."
+  },
+
+  // ===== GROUP C: SUBQUERIES, CTEs, WINDOWS =====
+  {
+    group: "C · Subqueries, CTEs &amp; Window Functions",
+    num: 9, cat: "query", diff: "med", title: "Subqueries (scalar / IN / EXISTS)",
+    what: "A query inside a query. In <code>WHERE</code>: a <strong>scalar</strong> subquery returns one value to compare; <code>IN</code> matches a list; <code>EXISTS</code> checks whether any related row exists.",
+    when: "Filter by a computed value or by membership.",
+    example: "Jobs with an above-average budget.",
+    say: "A scalar subquery returns one value for comparison, IN matches against a list, and EXISTS checks whether at least one related row exists.",
+    code: "SELECT title\nFROM jobs\nWHERE budget_amount > (SELECT AVG(budget_amount) FROM jobs);\n\n-- EXISTS: clients who posted at least one job\nSELECT u.email FROM users u\nWHERE EXISTS (SELECT 1 FROM jobs j WHERE j.client_id = u.id);",
+    gotcha: "<code>EXISTS</code> often beats <code>IN</code> on large sets — it stops at the first match."
+  },
+  {
+    group: "C · Subqueries, CTEs &amp; Window Functions",
+    num: 10, cat: "query", diff: "med", title: "CTEs (WITH)",
+    what: "A <strong>named temporary result</strong> you build first, then query — like steps you read top to bottom.",
+    when: "When a query gets complex, or you reuse an intermediate result.",
+    example: "Compute application counts, then keep jobs with &gt; 30.",
+    say: "A CTE is a named intermediate result that makes multi-step queries readable — I build it first and query it after.",
+    code: "WITH app_counts AS (\n  SELECT job_id, COUNT(*) AS ct\n  FROM applications\n  GROUP BY job_id\n)\nSELECT job_id FROM app_counts WHERE ct > 30;",
+    gotcha: "Interviewers love clean CTEs over deeply nested subqueries. The CTE name must match exactly where you reference it."
+  },
+  {
+    group: "C · Subqueries, CTEs &amp; Window Functions",
+    num: 11, cat: "query", diff: "hard", title: "Window functions",
+    what: "A calculation <strong>across a set of rows that keeps every row</strong> — unlike GROUP BY, which collapses them. Shape: <code>fn() OVER (PARTITION BY ... ORDER BY ...)</code>.",
+    when: "Ranking, running totals, per-group aggregate shown on each row.",
+    example: "Rank jobs by budget; show each job's category average beside it.",
+    say: "GROUP BY collapses rows into one per group; a window function keeps all rows and adds the calculation alongside via OVER.",
+    code: "SELECT title, category_id, budget_amount,\n       AVG(budget_amount) OVER (PARTITION BY category_id) AS cat_avg,\n       RANK() OVER (ORDER BY budget_amount DESC) AS rnk\nFROM jobs;",
+    gotcha: "<code>PARTITION BY</code> = restart per group. <code>ROW_NUMBER</code> (1,2,3,4) vs <code>RANK</code> (ties skip: 1,1,3) vs <code>DENSE_RANK</code> (ties, no skip: 1,1,2)."
+  },
+  {
+    group: "C · Subqueries, CTEs &amp; Window Functions",
+    num: 12, cat: "query", diff: "hard", title: "Top-N-per-group (window + CTE)",
+    what: "Rank inside each partition, then filter the rank in an outer query. The flagship window-function interview question.",
+    when: "Top 3 jobs per category, highest earner per location.",
+    example: "The single highest-paid freelancer in each location.",
+    say: "You can't filter a window function in WHERE because it's computed after WHERE, so I rank it in a CTE and filter the rank in the outer query.",
+    code: "WITH ranked AS (\n  SELECT name, location, hourly_rate,\n         ROW_NUMBER() OVER (PARTITION BY location\n                            ORDER BY hourly_rate DESC) AS rn\n  FROM freelancer_profiles\n)\nSELECT location, name, hourly_rate\nFROM ranked WHERE rn = 1;",
+    gotcha: "<code>DISTINCT</code> never solves 'top per group'. Window functions can't sit in <code>WHERE</code> / <code>GROUP BY</code> — that's why the CTE is needed."
+  },
+
+  // ===== GROUP D: INDEXING =====
+  {
+    group: "D · Indexing",
+    num: 13, cat: "design", diff: "easy", title: "What an index is",
+    what: "A <strong>sorted lookup structure</strong> (B-tree by default) that turns a full-table scan into a direct jump — like a book's index instead of reading every page.",
+    when: "Columns you search, filter, join, or sort by often.",
+    example: "Fast login by email.",
+    say: "An index is a sorted structure that lets the database jump straight to rows instead of scanning the whole table — an O(log n) lookup.",
+    code: "CREATE INDEX idx_users_email ON users(email);",
+    gotcha: "Speeds <strong>reads</strong>, at the cost of slightly slower <strong>writes</strong> and extra storage. Index the columns your queries actually filter/join/sort on."
+  },
+  {
+    group: "D · Indexing",
+    num: 14, cat: "design", diff: "med", title: "B-tree internals &amp; O(log n)",
+    what: "The default index is a balanced, <strong>sorted</strong> tree. Each level multiplies reach, so even a million rows is only ~3–4 hops deep.",
+    when: "Explaining why an index is fast, in interviews.",
+    example: "Finding one email among millions in 3–4 steps.",
+    say: "A B-tree keeps values sorted so lookups take log-n steps — a million rows is only a few levels deep; it's great for equality, ranges, and ORDER BY.",
+    code: "-- WHERE email = 'x'  -> ~3 hops, not 250k row scan\n-- Also serves:  BETWEEN 20 AND 50,  ORDER BY hourly_rate",
+    gotcha: "For JSONB / arrays / full-text you need a <strong>GIN</strong> index, not a B-tree — e.g. the freelancer <code>skills</code> JSONB column."
+  },
+  {
+    group: "D · Indexing",
+    num: 15, cat: "design", diff: "med", title: "Composite index + leftmost-prefix rule",
+    what: "An index on multiple columns <code>(a, b)</code> is sorted by <code>a</code>, then <code>b</code>. It serves queries on <code>a</code> or <code>a + b</code> — <strong>never <code>b</code> alone</strong>.",
+    when: "Queries that filter on the same two columns together.",
+    example: "WHERE user_type = 'freelancer' AND account_status = 'active'.",
+    say: "A composite index works left-to-right, so it serves the leftmost column or a left prefix but not a trailing column alone — I put the most-filtered column first.",
+    code: "CREATE INDEX idx_users_type_status\n  ON users(user_type, account_status);\n-- serves: user_type       ✅\n-- serves: user_type+status ✅\n-- serves: account_status  ❌ (not leftmost)",
+    gotcha: "Like a phone book sorted by last-then-first name: useless if you only know the first name."
+  },
+  {
+    group: "D · Indexing",
+    num: 16, cat: "design", diff: "med", title: "Index extras: unique / partial / covering",
+    what: "<strong>Unique</strong> = enforces no duplicates + indexes. <strong>Partial</strong> = indexes only some rows via a WHERE. <strong>Covering</strong> = index holds every column a query needs, so the table is never read (an <em>index-only scan</em>).",
+    when: "Enforcing uniqueness, indexing a hot subset, or squeezing max read speed.",
+    example: "Index only open jobs; email uniqueness.",
+    say: "Unique indexes enforce no duplicates, partial indexes cover a subset of rows, and a covering index answers a query from the index alone — an index-only scan.",
+    code: "CREATE INDEX idx_open_jobs ON jobs(created_at)\n  WHERE status = 'open';   -- partial",
+    gotcha: "<code>PRIMARY KEY</code> and <code>UNIQUE</code> auto-create indexes — you don't add them yourself."
+  },
+  {
+    group: "D · Indexing",
+    num: 17, cat: "design", diff: "med", title: "When indexes DON'T get used",
+    what: "Even with an index present, some queries silently fall back to a full scan (Seq Scan).",
+    when: "Debugging 'I added an index but it's still slow'.",
+    example: "LOWER(email) or LIKE '%dev' defeats the index.",
+    say: "A function on the column, a leading-wildcard LIKE, or low selectivity all defeat an index — and on tiny tables the planner skips it on purpose.",
+    code: "WHERE LOWER(email) = 'x'   -- ❌ index on email unused\nWHERE title LIKE '%dev'    -- ❌ unknown start\nWHERE title LIKE 'dev%'    -- ✅ known start",
+    gotcha: "Fix the first with an <em>expression index</em>: <code>CREATE INDEX ... ON users(LOWER(email))</code>. Low selectivity (matches most rows) → planner rightly ignores the index."
+  },
+  {
+    group: "D · Indexing",
+    num: 18, cat: "design", diff: "med", title: "EXPLAIN ANALYZE",
+    what: "Shows the planner's chosen plan and real timings — <code>Index Scan</code> vs <code>Seq Scan</code>, the join type, estimated vs actual rows.",
+    when: "Proving an index is (or isn't) used — never guess.",
+    example: "Compare an indexed vs non-indexed lookup.",
+    say: "EXPLAIN ANALYZE reveals the planner's choices; on big tables I want an Index Scan, though a Seq Scan is optimal on small ones.",
+    code: "EXPLAIN ANALYZE\nSELECT * FROM users WHERE email = 'x@x.com';\n-- look for: Index Scan (good) vs Seq Scan (full scan)",
+    gotcha: "<code>cost=</code> is estimate units (compare plans only); <code>actual time=</code> is real ms. A Seq Scan on a 250-row table is the <em>correct</em> choice."
+  },
+
+  // ===== GROUP E: DESIGN & SCALE =====
+  {
+    group: "E · Data Design &amp; Scaling",
+    num: 19, cat: "design", diff: "med", title: "Normalization (1NF / 2NF / 3NF)",
+    what: "Store each fact <strong>once</strong>, in its own table, connected by foreign keys — no duplication.",
+    when: "Default posture for write-correctness.",
+    example: "A skill's name lives once in skills; jobs reference skill_id.",
+    say: "Normalization stores every fact once to avoid update anomalies — 3NF means every non-key column depends on the key, the whole key, and nothing but the key.",
+    code: "-- skills.name stored ONCE; jobs link via job_skills(skill_id)\n-- rename a skill in one place -> everyone sees it",
+    gotcha: "1NF = one value per cell; 2NF = depends on the whole key; 3NF = no non-key depends on another non-key."
+  },
+  {
+    group: "E · Data Design &amp; Scaling",
+    num: 20, cat: "design", diff: "med", title: "Denormalization (deliberate duplication)",
+    what: "Copy a value where it's read so you skip repeated joins/aggregations. Trade correctness-effort for read speed.",
+    when: "Hot read paths that are expensive to compute live.",
+    example: "jobs.applications_count, users.average_rating, jobs.category_name.",
+    say: "I denormalize hot read paths — like a cached applications_count — to skip repeated joins and aggregations; the cost is keeping the copy in sync.",
+    code: "-- read one ready column instead of COUNT(*) per job:\nSELECT title, applications_count FROM jobs;",
+    gotcha: "The copy can go <strong>stale</strong>. Keep it fresh with a trigger or application logic. This is the whole interview trade-off."
+  },
+  {
+    group: "E · Data Design &amp; Scaling",
+    num: 21, cat: "design", diff: "med", title: "Triggers",
+    what: "Code that runs <strong>automatically</strong> on an INSERT / UPDATE / DELETE. Always two parts: a <em>function</em> (what) + a <em>trigger</em> (when).",
+    when: "Keeping denormalized values in sync at the DB level.",
+    example: "Auto-update jobs.applications_count when an application is added/removed.",
+    say: "A trigger runs a function automatically on a table event; I use an AFTER trigger for side-effects like keeping a denormalized count correct no matter which service writes.",
+    code: "CREATE TRIGGER t_app_count\n  AFTER INSERT OR DELETE ON applications\n  FOR EACH ROW EXECUTE FUNCTION update_job_applications_count();\n-- INSERT uses NEW.job_id (+1); DELETE uses OLD.job_id (-1)",
+    gotcha: "<code>NEW</code> = inserted/updated row, <code>OLD</code> = deleted/pre-update row. <code>BEFORE</code> to validate/modify the row; <code>AFTER</code> for side-effects on other tables."
+  },
+  {
+    group: "E · Data Design &amp; Scaling",
+    num: 22, cat: "design", diff: "med", title: "Views vs Materialized Views",
+    what: "A <strong>view</strong> is a saved query — always fresh, no speedup (it re-runs each time). A <strong>materialized view</strong> stores the results on disk — fast reads, but stale until you <code>REFRESH</code>.",
+    when: "View: reuse/simplify. Matview: expensive query over slow-changing data.",
+    example: "A 'top freelancers' leaderboard.",
+    say: "A view is a saved query that runs every time; a materialized view stores the results for fast reads on slow-changing data — the trade-off is it's stale until REFRESH.",
+    code: "CREATE MATERIALIZED VIEW top_freelancers AS\n  SELECT ... expensive joins + counts ...;\nCREATE INDEX idx_top_rating ON top_freelancers(average_rating);\nREFRESH MATERIALIZED VIEW top_freelancers;  -- on a schedule",
+    gotcha: "Only <strong>materialized</strong> views store data and can be indexed. It's the same idea as denormalization — pre-compute, then keep fresh."
+  },
+  {
+    group: "E · Data Design &amp; Scaling",
+    num: 23, cat: "design", diff: "med", title: "Partitioning",
+    what: "Split one huge table into smaller physical pieces by a key, while it still looks like a single table.",
+    when: "Time-series / very large tables — messages, notifications, logs.",
+    example: "Messages partitioned by month.",
+    say: "Partitioning splits a large table by a key — usually a date range — so queries prune to the relevant partitions and old data can be dropped cheaply.",
+    code: "CREATE TABLE messages (...) PARTITION BY RANGE(sent_at);\nCREATE TABLE messages_2025_01 PARTITION OF messages\n  FOR VALUES FROM ('2025-01-01') TO ('2025-02-01');",
+    gotcha: "Types: <strong>RANGE</strong> (dates), <strong>LIST</strong> (category), <strong>HASH</strong> (even spread). Dropping an old month = instant <code>DROP TABLE</code> vs a slow <code>DELETE</code> (this is 'partition pruning')."
+  },
+  {
+    group: "E · Data Design &amp; Scaling",
+    num: 24, cat: "design", diff: "med", title: "Scaling out (replication / sharding / pooling)",
+    what: "<strong>Replication</strong>: copy the DB — a primary takes writes, read replicas serve reads. <strong>Sharding</strong>: split data <em>across</em> servers by key. <strong>Pooling</strong>: reuse a small set of connections.",
+    when: "'How would you scale this database?'",
+    example: "Route reads to replicas; shard users A–M / N–Z.",
+    say: "Read replicas spread read load, sharding splits data across servers to scale writes, and a connection pooler reuses a small set of DB connections instead of one per request.",
+    code: "-- primary (writes)  ->  read replicas (reads)\n-- PgBouncer in front pools connections",
+    gotcha: "<strong>CAP theorem:</strong> under a network partition you get Consistency OR Availability, not both."
+  },
+
+  // ===== GROUP F: TRANSACTIONS & INTERNALS =====
+  {
+    group: "F · Transactions &amp; Internals",
+    num: 25, cat: "theory", diff: "med", title: "Transactions",
+    what: "A group of statements that <strong>all succeed or all fail</strong> — one atomic unit.",
+    when: "Any multi-step write that must not half-complete.",
+    example: "Debit one account, credit another — never one without the other.",
+    say: "A transaction is an all-or-nothing unit — BEGIN, then COMMIT to save everything or ROLLBACK to undo everything.",
+    code: "BEGIN;\n  UPDATE accounts SET balance = balance - 100 WHERE id = 1;\n  UPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;   -- both saved together, or ROLLBACK undoes both",
+    gotcha: "Wrap coupled writes (accept application <em>and</em> create project) in one transaction so they can't drift apart."
+  },
+  {
+    group: "F · Transactions &amp; Internals",
+    num: 26, cat: "theory", diff: "hard", title: "ACID",
+    what: "The four guarantees a transaction gives.",
+    when: "The most-asked pure DB-theory question.",
+    example: "The money-transfer example is the go-to for Atomicity.",
+    say: "ACID = Atomicity (all-or-nothing), Consistency (only valid states, constraints hold), Isolation (concurrent transactions don't interfere), Durability (committed data survives a crash).",
+    code: "-- A: all-or-nothing     C: valid states only\n-- I: no interference     D: survives crashes (via WAL)",
+    gotcha: "Durability is backed by the <strong>WAL</strong>; Isolation is implemented efficiently by <strong>MVCC</strong>."
+  },
+  {
+    group: "F · Transactions &amp; Internals",
+    num: 27, cat: "theory", diff: "hard", title: "Isolation levels &amp; concurrency bugs",
+    what: "Three classic anomalies — <strong>dirty read</strong> (uncommitted data), <strong>non-repeatable read</strong> (row changed between reads), <strong>phantom read</strong> (new rows appear). Levels block progressively more.",
+    when: "Concurrency / correctness discussions.",
+    example: "Postgres defaults to Read Committed.",
+    say: "Higher isolation blocks more anomalies — Read Committed stops dirty reads, Repeatable Read stops non-repeatable reads, Serializable stops phantoms — at the cost of throughput.",
+    code: "-- Read Committed (PG default) -> blocks dirty reads\n-- Repeatable Read -> + non-repeatable\n-- Serializable   -> + phantoms (acts fully sequential)",
+    gotcha: "Raise to Serializable only when correctness under concurrency matters more than speed. Deadlocks: lock rows in a consistent order to avoid them."
+  },
+  {
+    group: "F · Transactions &amp; Internals",
+    num: 28, cat: "theory", diff: "hard", title: "MVCC + WAL (the Postgres secret)",
+    what: "<strong>MVCC</strong> keeps multiple row versions so readers never block writers and writers never block readers. <strong>WAL</strong> (write-ahead log) records a change <em>before</em> applying it.",
+    when: "Big bonus points — how Postgres does isolation &amp; durability.",
+    example: "Each transaction sees a consistent snapshot.",
+    say: "MVCC gives each transaction a consistent snapshot via row versions, so reads never block writes; the WAL writes changes to a log first, which enables crash recovery and replication.",
+    code: "-- MVCC: readers see a snapshot, no read locks\n-- WAL: log-first -> replay after a crash (Durability)",
+    gotcha: "This is the mechanism <em>behind</em> Isolation and Durability — naming MVCC/WAL signals real depth."
+  },
+  {
+    group: "F · Transactions &amp; Internals",
+    num: 29, cat: "theory", diff: "med", title: "Query lifecycle",
+    what: "How a query runs: <strong>Parser → Planner/Optimizer → Executor</strong>.",
+    when: "'What happens when you run a query?'",
+    example: "The planner is what EXPLAIN shows.",
+    say: "Postgres parses the SQL, the planner picks the cheapest plan — which index, which join type — then the executor fetches and combines the rows.",
+    code: "SQL text\n  -> Parser     (valid SQL? build a tree)\n  -> Planner    (cheapest plan: index? join type?)  <- EXPLAIN\n  -> Executor   (actually run it)",
+    gotcha: "The planner's choices (Index Scan, Hash Join, ...) are exactly what <code>EXPLAIN ANALYZE</code> reveals."
+  },
+  {
+    group: "F · Transactions &amp; Internals",
+    num: 30, cat: "theory", diff: "easy", title: "Constraints &amp; cascades",
+    what: "DB-level integrity rules: <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code>, <code>UNIQUE</code>, <code>NOT NULL</code>, <code>CHECK</code>, <code>DEFAULT</code>. On delete: <code>CASCADE</code> or <code>SET NULL</code>.",
+    when: "Schema design questions.",
+    example: "Delete a user → their jobs auto-delete (CASCADE).",
+    say: "Constraints enforce integrity at the database level; ON DELETE CASCADE removes dependent rows, while SET NULL nulls the foreign key instead.",
+    code: "client_id INT REFERENCES users(id) ON DELETE CASCADE,\ncategory_id INT REFERENCES categories(id) ON DELETE SET NULL,\nCHECK (budget_amount >= 0)",
+    gotcha: "A <code>FOREIGN KEY</code> guarantees the referenced row exists — you can't insert an application for a non-existent job."
+  },
+  {
+    group: "F · Transactions &amp; Internals",
+    num: 31, cat: "theory", diff: "med", title: "Remaining SQL bits worth naming",
+    what: "Join variants, set operations, delete family, NULL/branch helpers.",
+    when: "Quick-fire follow-ups.",
+    example: "UNION vs UNION ALL; TRUNCATE vs DELETE.",
+    say: "UNION dedups and is slower, UNION ALL keeps everything; TRUNCATE wipes all rows fast while DELETE removes chosen rows and fires triggers; COALESCE swaps NULLs for a default.",
+    code: "SELECT COALESCE(applications_count, 0) FROM jobs;\nSELECT CASE WHEN budget_amount > 1000 THEN 'high'\n            ELSE 'low' END AS tier FROM jobs;",
+    gotcha: "<strong>SELF JOIN</strong> = a table joined to itself (message sender→receiver). <strong>FULL OUTER JOIN</strong> = unmatched rows from both sides. <strong>CROSS JOIN</strong> = every combination."
+  }
+];
+
+// ---------- QUIZ (rapid-fire) ----------
+const QUIZ = [
+  { q: "WHERE vs HAVING — the difference?", a: "WHERE filters individual rows before GROUP BY and can't see aggregates; HAVING filters the groups after they're formed. WHERE COUNT(*) > 3 errors." },
+  { q: "State SQL's logical execution order.", a: "FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT. (That's why WHERE can't use SELECT aliases but ORDER BY can.)" },
+  { q: "Rule for non-aggregated columns in a GROUP BY query?", a: "Each must appear in GROUP BY or inside an aggregate — 'group it or aggregate it, no third option.'" },
+  { q: "COUNT(*) vs COUNT(col)?", a: "COUNT(*) counts rows; COUNT(col) counts non-NULL values and is slightly slower. Default to COUNT(*)." },
+  { q: "INNER JOIN vs LEFT JOIN?", a: "INNER keeps only rows matching in both tables; LEFT keeps every left row and NULLs the right side when there's no match." },
+  { q: "How do you find jobs with zero applications?", a: "LEFT JOIN applications, then WHERE a.id IS NULL — the LEFT JOIN NULLs unmatched rows so IS NULL isolates them." },
+  { q: "After a LEFT JOIN, why COUNT(a.id) not COUNT(*)?", a: "COUNT(*) counts the NULL placeholder row as 1; COUNT(a.id) correctly returns 0 for no-match rows." },
+  { q: "Why GROUP BY the id instead of the name?", a: "Names aren't unique — two people named 'Rahim' would merge. ids are unique, so group by id (add name for display)." },
+  { q: "Scalar subquery vs IN vs EXISTS?", a: "Scalar returns one value to compare; IN matches a list; EXISTS checks whether any related row exists (often fastest, stops at first match)." },
+  { q: "What is a CTE and why use it?", a: "A named temporary result via WITH — build it first, query it after. Makes multi-step queries readable and lets you reuse a result." },
+  { q: "GROUP BY vs a window function?", a: "GROUP BY collapses rows into one per group; a window function keeps all rows and adds the calculation alongside via OVER." },
+  { q: "ROW_NUMBER vs RANK vs DENSE_RANK?", a: "ROW_NUMBER = 1,2,3,4 (no ties). RANK = ties share then skip (1,1,3). DENSE_RANK = ties share, no skip (1,1,2)." },
+  { q: "Why can't you filter a window function in WHERE?", a: "It's computed at SELECT, after WHERE runs, so the column doesn't exist yet. Compute it in a CTE and filter in the outer query." },
+  { q: "Write the top-N-per-group pattern.", a: "ROW_NUMBER() OVER (PARTITION BY g ORDER BY x DESC) inside a CTE, then WHERE rn <= N in the outer query." },
+  { q: "What is an index, in one line?", a: "A sorted structure (B-tree by default) that turns a full scan into a direct O(log n) lookup." },
+  { q: "Which columns should you index?", a: "Ones frequently used in WHERE, JOIN (foreign keys), and ORDER BY." },
+  { q: "Leftmost-prefix rule?", a: "A composite index (a,b) serves queries on a or a+b, never b alone — put the most-filtered / equality column first." },
+  { q: "Three things that stop an index being used?", a: "A function on the column (LOWER(x)), a leading-wildcard LIKE '%x', and low selectivity. Also: tiny tables (planner skips it)." },
+  { q: "B-tree vs GIN index?", a: "B-tree for scalar equality, ranges, and ORDER BY; GIN for JSONB, arrays, and full-text search." },
+  { q: "What is an index-only scan (covering index)?", a: "When the index contains every column the query needs, so Postgres answers from the index and never reads the table." },
+  { q: "What do indexes cost?", a: "Slower writes (every INSERT/UPDATE updates the indexes too) and extra storage — so don't over-index." },
+  { q: "How do you verify an index is used?", a: "EXPLAIN ANALYZE — you want an Index Scan, not a Seq Scan (though Seq Scan is optimal on small tables)." },
+  { q: "Normalization in one line?", a: "Store each fact once, connected by foreign keys, to avoid duplication and update anomalies. 3NF: depends on the key, the whole key, and nothing but the key." },
+  { q: "Why denormalize? Give an example.", a: "To skip repeated joins/aggregations on hot reads — e.g. a cached applications_count or average_rating. Risk: the copy goes stale." },
+  { q: "How do you keep a denormalized value in sync?", a: "A trigger (DB-level) or application logic that updates it on every relevant write." },
+  { q: "NEW vs OLD inside a trigger?", a: "NEW = the inserted/updated row (used on INSERT/UPDATE); OLD = the deleted/pre-update row (used on DELETE/UPDATE)." },
+  { q: "BEFORE vs AFTER trigger?", a: "BEFORE runs before the write — used to validate/modify the incoming row. AFTER runs after — used for side-effects like updating another table." },
+  { q: "View vs materialized view?", a: "A view is a saved query — always fresh, no speedup. A materialized view stores results for fast reads but is stale until REFRESH (and can be indexed)." },
+  { q: "Why partition messages by month?", a: "Queries prune to the relevant partition, and old months drop instantly (DROP TABLE) instead of a slow DELETE." },
+  { q: "Partitioning types?", a: "RANGE (dates/numbers), LIST (by category), HASH (even spread)." },
+  { q: "What is a transaction?", a: "An all-or-nothing group of statements: BEGIN, then COMMIT to save everything or ROLLBACK to undo everything." },
+  { q: "Spell out ACID.", a: "Atomicity (all-or-nothing), Consistency (valid states only), Isolation (concurrent txns don't interfere), Durability (committed data survives crashes)." },
+  { q: "Name the three concurrency read anomalies.", a: "Dirty read (reads uncommitted data), non-repeatable read (a row changes between reads), phantom read (new rows appear for the same WHERE)." },
+  { q: "What is MVCC?", a: "Multi-Version Concurrency Control — Postgres keeps multiple row versions so readers never block writers; each transaction sees a consistent snapshot." },
+  { q: "What does the WAL do?", a: "Write-Ahead Log — records changes before applying them, enabling crash recovery and replication. It's what backs Durability." },
+  { q: "UNION vs UNION ALL?", a: "UNION removes duplicate rows (slower); UNION ALL keeps everything (faster)." },
+  { q: "DELETE vs TRUNCATE vs DROP?", a: "DELETE removes chosen rows (logged, fires triggers); TRUNCATE wipes all rows fast (no per-row logging); DROP removes the whole table." }
+];
+
+// ---------- RENDER ----------
+const cardsEl = document.getElementById('cards');
+let currentGroup = '';
+CONCEPTS.forEach((c) => {
+  if (c.group !== currentGroup) {
+    currentGroup = c.group;
+    const h = document.createElement('div');
+    h.className = 'section-title';
+    h.innerHTML = c.group;
+    h.dataset.group = c.group;
+    cardsEl.appendChild(h);
+  }
+  const diffLabel = c.diff === 'easy' ? '🟢 Easy' : c.diff === 'med' ? '🟡 Med' : '🔴 Hard';
+  const diffClass = c.diff === 'easy' ? 'b-easy' : c.diff === 'med' ? 'b-med' : 'b-hard';
+  const catLabel = c.cat === 'query' ? 'Querying' : c.cat === 'design' ? 'Design' : 'Theory';
+  const catClass = c.cat === 'query' ? 't-core' : c.cat === 'design' ? 't-func' : 't-async';
+
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.dataset.cat = c.cat;
+  card.dataset.diff = c.diff;
+  card.dataset.text = (c.title + ' ' + c.what + ' ' + c.when + ' ' + c.example + ' ' + c.say + ' ' + (c.gotcha||'') + ' ' + (c.code||'')).toLowerCase();
+
+  card.innerHTML = `
+    <div class="card-head">
+      <span class="num">${c.num}</span>
+      <span class="title">${c.title}</span>
+      <span class="tag ${catClass}">${catLabel}</span>
+      <span class="badge ${diffClass}">${diffLabel}</span>
+      <span class="arrow">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="row"><span class="k what">What</span><div>${c.what}</div></div>
+      <div class="row"><span class="k when">When</span><div>${c.when}</div></div>
+      <div class="row"><span class="k example">Example</span><div>${c.example}</div></div>
+      ${c.code ? `<div class="row"><pre><code>${escapeHtml(c.code)}</code></pre></div>` : ''}
+      <div class="row"><span class="k say">Say this (interview line)</span><div class="say-box">${c.say}</div></div>
+      ${c.gotcha ? `<div class="gotcha">⚠️ <strong>Gotcha:</strong> ${c.gotcha}</div>` : ''}
+    </div>
+  `;
+  card.querySelector('.card-head').addEventListener('click', () => card.classList.toggle('open'));
+  cardsEl.appendChild(card);
+});
+
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ---------- QUIZ RENDER ----------
+const quizEl = document.getElementById('quiz');
+function renderQuiz(list){
+  quizEl.innerHTML = '';
+  list.forEach((item, idx) => {
+    const q = document.createElement('div');
+    q.className = 'quiz-card';
+    q.innerHTML = `
+      <div class="quiz-q"><span class="qn">Q${idx+1}.</span><span>${item.q}</span></div>
+      <button class="reveal-btn">Reveal answer</button>
+      <div class="quiz-a">✅ ${item.a}</div>
+    `;
+    q.querySelector('.reveal-btn').addEventListener('click', () => {
+      q.classList.toggle('revealed');
+      q.querySelector('.reveal-btn').textContent = q.classList.contains('revealed') ? 'Hide' : 'Reveal answer';
+    });
+    quizEl.appendChild(q);
+  });
+}
+renderQuiz(QUIZ);
+
+// ---------- KEYWORD & FUNCTION REFERENCE ----------
+const REFERENCE = [
+  { group: "Core clauses", items: [
+    ["SELECT", "Choose which columns to return."],
+    ["FROM", "Which table(s) the rows come from."],
+    ["WHERE", "Filter individual rows (before grouping)."],
+    ["GROUP BY", "Collapse rows into one per group."],
+    ["HAVING", "Filter groups (can see aggregates; WHERE can't)."],
+    ["ORDER BY", "Sort the result — ASC (default) or DESC."],
+    ["LIMIT / OFFSET", "Cap rows / skip N rows (pagination)."],
+    ["AS", "Rename a column or table (alias)."],
+    ["DISTINCT", "Remove duplicate rows from the result."],
+    ["DISTINCT ON (col)", "Postgres: keep one row per col value (pair with ORDER BY)."],
+  ]},
+  { group: "Filtering & operators", items: [
+    ["=  <>  <  >", "Equality / not-equal / comparisons."],
+    ["AND / OR / NOT", "Combine or negate conditions."],
+    ["IN (...)", "Match any value in a list or subquery."],
+    ["BETWEEN a AND b", "Inclusive range (a ≤ x ≤ b)."],
+    ["LIKE '%x%'", "Pattern match; % = any chars, _ = one char."],
+    ["ILIKE", "Postgres: case-insensitive LIKE."],
+    ["IS NULL / IS NOT NULL", "Test for missing value (never use = NULL)."],
+    ["EXISTS (subquery)", "True if the subquery returns any row."],
+    ["ANY / ALL", "Compare a value against a set (> ALL, = ANY)."],
+  ]},
+  { group: "Aggregates", items: [
+    ["COUNT(*)", "Count rows (COUNT(col) skips NULLs)."],
+    ["SUM(col)", "Add up numeric values."],
+    ["AVG(col)", "Average of numeric values."],
+    ["MIN / MAX", "Smallest / largest value."],
+    ["STRING_AGG(col, ',')", "Concatenate group values into one string."],
+    ["JSON_AGG(col)", "Aggregate group values into a JSON array."],
+  ]},
+  { group: "String functions", items: [
+    ["LOWER(x) / UPPER(x)", "Case conversion — LOWER for case-insensitive compares."],
+    ["TRIM(x)", "Strip leading/trailing spaces (LTRIM/RTRIM for one side)."],
+    ["LENGTH(x)", "Number of characters."],
+    ["a || b", "Concatenate strings (Postgres)."],
+    ["CONCAT(a, b)", "Concatenate; treats NULL as empty."],
+    ["SUBSTRING(x, 1, 3)", "Extract part of a string."],
+    ["REPLACE(x, 'a', 'b')", "Swap all occurrences of a substring."],
+    ["POSITION('x' IN s)", "Index of a substring (0 if absent)."],
+  ]},
+  { group: "NULL & conditional", items: [
+    ["COALESCE(a, b, 0)", "First non-NULL value — turn NULLs into a default."],
+    ["NULLIF(a, b)", "Return NULL if a = b (guard divide-by-zero)."],
+    ["CASE WHEN ... THEN ... END", "Inline if/else inside a query."],
+    ["GREATEST / LEAST", "Largest / smallest across the listed values."],
+  ]},
+  { group: "Numbers & dates", items: [
+    ["ROUND(x, 2)", "Round to N decimals (CEIL / FLOOR / ABS also)."],
+    ["NOW() / CURRENT_TIMESTAMP", "Current date + time."],
+    ["CURRENT_DATE", "Today's date (no time)."],
+    ["AGE(ts)", "Interval between now and a timestamp."],
+    ["DATE_TRUNC('month', ts)", "Chop a timestamp to a unit (month/day/hour)."],
+    ["EXTRACT(YEAR FROM ts)", "Pull a field (year/month/dow) out of a date."],
+    ["INTERVAL '7 days'", "A span of time for date math."],
+  ]},
+  { group: "Sets & dedup", items: [
+    ["UNION", "Stack two result sets, remove duplicates (slower)."],
+    ["UNION ALL", "Stack two result sets, keep everything (faster)."],
+    ["INTERSECT", "Rows present in both queries."],
+    ["EXCEPT", "Rows in the first query but not the second."],
+    ["UNIQUE (constraint)", "Table rule: no duplicate values in a column."],
+  ]},
+  { group: "Window functions", items: [
+    ["OVER (PARTITION BY ... ORDER BY ...)", "Defines the window a function runs across."],
+    ["ROW_NUMBER()", "Sequential number, no ties: 1,2,3,4."],
+    ["RANK()", "Ties share a rank, then skip: 1,1,3."],
+    ["DENSE_RANK()", "Ties share, no skip: 1,1,2."],
+    ["LAG(col) / LEAD(col)", "Value from the previous / next row."],
+    ["SUM(col) OVER (...)", "Running total / per-group total kept on each row."],
+  ]},
+  { group: "Writing data (DML/DDL)", items: [
+    ["INSERT INTO ... VALUES", "Add new rows."],
+    ["UPDATE ... SET ... WHERE", "Change existing rows (always add WHERE!)."],
+    ["DELETE FROM ... WHERE", "Remove chosen rows (logged, fires triggers)."],
+    ["TRUNCATE", "Wipe ALL rows fast, no per-row logging."],
+    ["ON CONFLICT ... DO UPDATE", "Upsert — insert or update if it already exists."],
+    ["RETURNING *", "Postgres: get back the rows you just wrote."],
+    ["CREATE INDEX / VIEW", "Add an index or a saved query."],
+  ]},
+];
+
+const refEl = document.getElementById('ref');
+function renderRef(){
+  refEl.innerHTML = '';
+  REFERENCE.forEach(section => {
+    const title = document.createElement('div');
+    title.className = 'ref-group-title';
+    title.textContent = section.group;
+    title.dataset.refgroup = '1';
+    refEl.appendChild(title);
+    const grid = document.createElement('div');
+    grid.className = 'ref-grid';
+    section.items.forEach(([k, d]) => {
+      const item = document.createElement('div');
+      item.className = 'ref-item';
+      item.dataset.text = (k + ' ' + d).toLowerCase();
+      item.innerHTML = `<code>${escapeHtml(k)}</code><span>${d}</span>`;
+      grid.appendChild(item);
+    });
+    refEl.appendChild(grid);
+  });
+}
+renderRef();
+
+const refSearch = document.getElementById('ref-search');
+refSearch.addEventListener('input', () => {
+  const term = refSearch.value.trim().toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('#ref .ref-item').forEach(it => {
+    const show = !term || it.dataset.text.includes(term);
+    it.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  // hide a group title if all its items are hidden
+  document.querySelectorAll('#ref .ref-group-title').forEach(title => {
+    const grid = title.nextElementSibling;
+    const anyVisible = grid && [...grid.children].some(c => c.style.display !== 'none');
+    title.style.display = anyVisible ? '' : 'none';
+    if (grid) grid.style.display = anyVisible ? '' : 'none';
+  });
+  document.getElementById('ref-no-results').style.display = visible === 0 ? 'block' : 'none';
+});
+
+// ---------- COLLAPSIBLE SECTIONS ----------
+document.querySelectorAll('.collapse-head').forEach(head => {
+  head.addEventListener('click', () => {
+    const target = document.getElementById(head.dataset.target);
+    const nowOpen = target.classList.toggle('open');
+    head.classList.toggle('open', nowOpen);
+    const hint = head.querySelector('.c-hint');
+    if (hint) hint.textContent = nowOpen ? '(click to collapse)' : '(click to expand)';
+  });
+});
+
+// ---------- SEARCH + FILTER ----------
+const search = document.getElementById('search');
+const chips = document.querySelectorAll('.chip');
+let activeFilter = 'all';
+
+function applyFilter(){
+  const term = search.value.trim().toLowerCase();
+  // If the user searches/filters, make sure the (collapsible) cards section is open
+  if (term || activeFilter !== 'all') {
+    const head = document.querySelector('.collapse-head[data-target="cards-content"]');
+    const content = document.getElementById('cards-content');
+    content.classList.add('open');
+    head.classList.add('open');
+    const hint = head.querySelector('.c-hint');
+    if (hint) hint.textContent = '(click to collapse)';
+  }
+  let visibleCount = 0;
+  document.querySelectorAll('.card').forEach(card => {
+    const matchesFilter =
+      activeFilter === 'all' ||
+      (['query','design','theory'].includes(activeFilter) && card.dataset.cat === activeFilter) ||
+      (['easy','med','hard'].includes(activeFilter) && card.dataset.diff === activeFilter);
+    const matchesTerm = !term || card.dataset.text.includes(term);
+    const show = matchesFilter && matchesTerm;
+    card.style.display = show ? '' : 'none';
+    if (show) visibleCount++;
+  });
+  document.querySelectorAll('.section-title[data-group]').forEach(title => {
+    let el = title.nextElementSibling;
+    let anyVisible = false;
+    while (el && !el.classList.contains('section-title')) {
+      if (el.classList.contains('card') && el.style.display !== 'none') anyVisible = true;
+      el = el.nextElementSibling;
+    }
+    title.style.display = anyVisible ? '' : 'none';
+  });
+  document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
+}
+search.addEventListener('input', applyFilter);
+chips.forEach(chip => chip.addEventListener('click', () => {
+  chips.forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeFilter = chip.dataset.filter;
+  applyFilter();
+}));
+
+// ---------- EXPAND/COLLAPSE ----------
+document.getElementById('expand-all').addEventListener('click', () =>
+  document.querySelectorAll('.card').forEach(c => c.classList.add('open')));
+document.getElementById('collapse-all').addEventListener('click', () =>
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('open')));
+
+// ---------- QUIZ CONTROLS ----------
+document.getElementById('reveal-all').addEventListener('click', () =>
+  document.querySelectorAll('.quiz-card').forEach(q => { q.classList.add('revealed'); q.querySelector('.reveal-btn').textContent='Hide'; }));
+document.getElementById('hide-all').addEventListener('click', () =>
+  document.querySelectorAll('.quiz-card').forEach(q => { q.classList.remove('revealed'); q.querySelector('.reveal-btn').textContent='Reveal answer'; }));
+document.getElementById('shuffle').addEventListener('click', () => {
+  const shuffled = [...QUIZ];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor((i + 1) * (parseInt(window.performance.now()) % 97) / 97) % (i + 1);
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  renderQuiz(shuffled);
+});
+</script>
+</body>
+</html>

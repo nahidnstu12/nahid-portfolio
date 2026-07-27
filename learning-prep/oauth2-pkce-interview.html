@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OAuth 2.0 + PKCE — Front-End Interview Guide (RadiusDirectory)</title>
+<style>
+  :root {
+    --bg: #0E1117;
+    --panel: #161B24;
+    --panel-2: #1C222D;
+    --ink: #E7EBF0;
+    --ink-soft: #AEB6C2;
+    --muted: #6E7889;
+    --line: #262D39;
+    --accent: #6E8BFF;      /* auth / identity blue */
+    --go: #34D399;          /* verify / pass */
+    --go-tint: #10251E;
+    --danger: #F87171;      /* dead / insecure */
+    --danger-tint: #2A1618;
+    --warn: #FBBF24;
+    --warn-tint: #251E0C;
+    --code-str: #E5B07A;
+    --code-key: #7FD1C1;
+    --code-fn: #8CB4FF;
+    --code-dim: #5B6472;
+    --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--sans); line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: clamp(28px,5vw,60px) clamp(16px,4vw,40px) 90px; }
+
+  /* header */
+  .lock {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: linear-gradient(160deg, var(--accent), #4a63d6);
+    display: grid; place-items: center; font-size: 22px; margin-bottom: 20px;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 12px;
+  }
+  h1 {
+    font-size: clamp(28px,5.5vw,44px); line-height: 1.06; letter-spacing: -.02em;
+    font-weight: 780; margin: 0 0 14px; text-wrap: balance;
+  }
+  .lede { font-size: clamp(16px,2.2vw,18px); color: var(--ink-soft); max-width: 64ch; margin: 0 0 20px; }
+  .stack { display: flex; flex-wrap: wrap; gap: 7px; font-family: var(--mono); font-size: 12px; }
+  .stack span { background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 4px 11px; color: var(--ink-soft); }
+
+  /* table of contents */
+  nav.toc {
+    margin: 34px 0 8px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 14px; padding: 18px 22px;
+  }
+  nav.toc h2 { font-size: 12px; font-family: var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+  nav.toc ol { margin: 0; padding-left: 0; list-style: none; display: grid; gap: 8px; counter-reset: t; }
+  nav.toc li { counter-increment: t; }
+  nav.toc a { color: var(--ink-soft); text-decoration: none; display: flex; gap: 11px; align-items: baseline; }
+  nav.toc a:hover { color: var(--accent); }
+  nav.toc a::before { content: counter(t,decimal-leading-zero); font-family: var(--mono); font-size: 12px; color: var(--accent); }
+
+  /* sections */
+  section { margin-top: 52px; scroll-margin-top: 20px; }
+  .kicker { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h2.title { font-size: clamp(22px,3.5vw,29px); letter-spacing: -.015em; margin: 0 0 16px; font-weight: 740; text-wrap: balance; }
+  h3 { font-size: 18px; margin: 26px 0 10px; letter-spacing: -.01em; }
+  p { margin: 0 0 14px; color: var(--ink-soft); }
+  p strong, li strong { color: var(--ink); font-weight: 640; }
+
+  /* code */
+  pre {
+    margin: 0 0 16px; background: #0A0D12; border: 1px solid var(--line);
+    border-radius: 10px; padding: 15px 17px; overflow-x: auto;
+    font-family: var(--mono); font-size: 13px; line-height: 1.7; color: var(--ink);
+  }
+  pre .c { color: var(--code-dim); }
+  pre .k { color: var(--code-key); }
+  pre .s { color: var(--code-str); }
+  pre .f { color: var(--code-fn); }
+  pre .r { color: var(--danger); }
+  pre .g { color: var(--go); }
+  code.i { font-family: var(--mono); font-size: .87em; background: var(--panel-2); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; color: var(--ink); }
+
+  /* callouts */
+  .box { border-radius: 11px; padding: 15px 18px; margin: 0 0 16px; border: 1px solid var(--line); }
+  .box .lbl { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 6px; }
+  .box p:last-child { margin-bottom: 0; }
+  .box.dead { background: var(--danger-tint); border-color: #43272b; }
+  .box.dead .lbl { color: var(--danger); }
+  .box.now { background: var(--go-tint); border-color: #1c3a30; }
+  .box.now .lbl { color: var(--go); }
+  .box.say { background: #16203a; border-color: #24345c; }
+  .box.say .lbl { color: var(--accent); }
+  .box.say p { color: #cdd8f0; font-style: italic; }
+  .box.warn { background: var(--warn-tint); border-color: #40350f; }
+  .box.warn .lbl { color: var(--warn); }
+
+  /* role grid */
+  .roles { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 12px; margin: 0 0 16px; }
+  .role { background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 15px 16px; }
+  .role h4 { margin: 0 0 5px; font-size: 15px; }
+  .role .maps { font-family: var(--mono); font-size: 11.5px; color: var(--accent); margin: 0 0 6px; }
+  .role p { font-size: 13.5px; margin: 0; color: var(--muted); }
+
+  /* step flow */
+  .phase { display: flex; gap: 14px; margin: 0 0 14px; align-items: stretch; }
+  .phase .num {
+    flex: none; width: 34px; border-radius: 9px; display: grid; place-items: center;
+    font-family: var(--mono); font-weight: 700; font-size: 15px; color: #0A0D12;
+  }
+  .phase.p1 .num { background: var(--accent); }
+  .phase.p2 .num { background: var(--warn); }
+  .phase.p3 .num { background: var(--go); }
+  .phase .body { background: var(--panel); border: 1px solid var(--line); border-radius: 11px; padding: 15px 17px; flex: 1; min-width: 0; }
+  .phase .body h3 { margin: 0 0 7px; font-size: 16px; }
+  .phase .body p { margin: 0 0 8px; font-size: 14.5px; }
+  .phase .body p:last-child { margin-bottom: 0; }
+
+  /* tables */
+  .tbl-wrap { overflow-x: auto; margin: 0 0 16px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 13px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--muted); font-family: var(--mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
+  td { color: var(--ink-soft); }
+  td code { font-family: var(--mono); font-size: 12.5px; color: var(--code-key); }
+
+  /* Q&A */
+  .qa { border-left: 2px solid var(--line); padding-left: 18px; margin: 0 0 20px; }
+  .qa .q { color: var(--ink); font-weight: 640; margin: 0 0 6px; }
+  .qa .a { margin: 0; }
+
+  hr.div { border: none; border-top: 1px solid var(--line); margin: 44px 0 0; }
+  footer { margin-top: 30px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+  .accent { color: var(--accent); }
+  .g { color: var(--go); }
+  .r { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="lock">🔒</div>
+    <p class="eyebrow">Front-End Interview · Auth</p>
+    <h1>How Auth Actually Works in a SPA</h1>
+    <p class="lede">OAuth 2.0 Authorization Code Flow + PKCE — explained the way an interviewer probes it: the mental model, the exact wire steps with examples, why the old flow died, and how it maps to the NextAuth setup in RadiusDirectory.</p>
+    <div class="stack">
+      <span>OAuth 2.0</span><span>PKCE (RFC 7636)</span><span>OAuth 2.1</span>
+      <span>NextAuth v4</span><span>Google / Facebook</span><span>JWT</span>
+    </div>
+  </header>
+
+  <nav class="toc">
+    <h2>What this covers</h2>
+    <ol>
+      <li><a href="#model">The mental model — authorization vs authentication</a></li>
+      <li><a href="#roles">The four roles (and who plays them in RadiusDirectory)</a></li>
+      <li><a href="#dead">Why the Implicit Flow is dead</a></li>
+      <li><a href="#flow">The flow, step by step, with real values</a></li>
+      <li><a href="#tokens">The three tokens — access, id, refresh</a></li>
+      <li><a href="#stack">How NextAuth does this for you</a></li>
+      <li><a href="#storage">Where tokens live — the storage question</a></li>
+      <li><a href="#qa">Rapid-fire interview questions</a></li>
+    </ol>
+  </nav>
+
+  <!-- 1 MODEL -->
+  <section id="model">
+    <p class="kicker">Foundation</p>
+    <h2 class="title">First: authorization ≠ authentication</h2>
+    <p>The single most common interview trip-up. Say this crisply:</p>
+    <ul>
+      <li><strong>OAuth 2.0 = authorization</strong> — "let this app <em>do</em> things on my behalf" (read my Google profile, my calendar). It's about <strong>access</strong>.</li>
+      <li><strong>OpenID Connect (OIDC) = authentication</strong> — a thin layer <em>on top</em> of OAuth 2.0 that adds an <code class="i">id_token</code> proving <em>who</em> the user is. It's about <strong>identity</strong>.</li>
+    </ul>
+    <p>When you "Sign in with Google," you're using OAuth 2.0 as the transport and OIDC for the identity part. The <code class="i">id_token</code> is what tells your app "this is user X, email Y."</p>
+    <div class="box say">
+      <p class="lbl">Say this</p>
+      <p>"OAuth is delegated authorization; authentication is layered on via OpenID Connect's id_token. 'Login with Google' is really OAuth carrying an OIDC identity claim."</p>
+    </div>
+  </section>
+
+  <!-- 2 ROLES -->
+  <section id="roles">
+    <p class="kicker">Vocabulary</p>
+    <h2 class="title">The four roles</h2>
+    <p>Every OAuth question is easier once you name the players. Here's the spec term and who plays it in a "Sign in with Google" on RadiusDirectory:</p>
+    <div class="roles">
+      <div class="role">
+        <h4>Resource Owner</h4>
+        <p class="maps">→ the user</p>
+        <p>The person who owns the data and grants access. They approve the consent screen.</p>
+      </div>
+      <div class="role">
+        <h4>Client</h4>
+        <p class="maps">→ RadiusDirectory app</p>
+        <p>The app requesting access. Registered with Google, has a <code class="i">client_id</code>.</p>
+      </div>
+      <div class="role">
+        <h4>Authorization Server</h4>
+        <p class="maps">→ Google (accounts.google.com)</p>
+        <p>Authenticates the user, shows consent, issues the code and tokens.</p>
+      </div>
+      <div class="role">
+        <h4>Resource Server</h4>
+        <p class="maps">→ Google APIs (userinfo)</p>
+        <p>Holds the protected data; accepts the access_token to serve it.</p>
+      </div>
+    </div>
+    <p>A "public client" (a SPA or mobile app) <strong>cannot keep a secret</strong> — anyone can read its JS bundle. That single fact is why PKCE exists.</p>
+  </section>
+
+  <!-- 3 DEAD -->
+  <section id="dead">
+    <p class="kicker">Why this changed</p>
+    <h2 class="title">The Implicit Flow is dead</h2>
+    <p>Old SPAs used the <strong>Implicit Flow</strong>: the authorization server put the access token <em>directly in the URL fragment</em> after redirect.</p>
+    <div class="box dead">
+      <p class="lbl">✗ Implicit Flow (deprecated 2025)</p>
+      <p>Token arrives in the URL:</p>
+      <pre style="margin:8px 0 0"><span class="c">https://yourapp.com/callback#</span><span class="r">access_token=eyJhbGciOi...</span></pre>
+    </div>
+    <p>Why that's fatal:</p>
+    <ul>
+      <li><strong>Leaks via browser history</strong> — the full URL, token included, is saved.</li>
+      <li><strong>Leaks via <code class="i">Referer</code> header</strong> — any resource the page loads can see it.</li>
+      <li><strong>Leaks via server/proxy logs</strong> — URLs get logged everywhere.</li>
+      <li><strong>No way to verify the requester</strong> — a stolen code could be exchanged by anyone.</li>
+    </ul>
+    <p>OAuth 2.0 Security BCP (RFC 9700, Jan 2025) and <strong>OAuth 2.1</strong> drop Implicit entirely. The replacement for <em>all</em> clients: <strong>Authorization Code Flow + PKCE</strong>.</p>
+    <div class="box now">
+      <p class="lbl">✓ Authorization Code + PKCE (now)</p>
+      <p>Nothing sensitive rides in the URL. The token comes back in a <strong>POST response body</strong> over a back channel. The URL only ever carries a one-time, useless-on-its-own <code class="i">code</code>.</p>
+    </div>
+  </section>
+
+  <!-- 4 FLOW -->
+  <section id="flow">
+    <p class="kicker">The mechanism</p>
+    <h2 class="title">The flow, step by step</h2>
+    <p>Three phases. The whole trick: <strong>a one-way hash sent up front, and a secret kept back until the end.</strong></p>
+
+    <h3>Phase 1 — Prepare the proof (before any redirect)</h3>
+    <div class="phase p1">
+      <div class="num">1</div>
+      <div class="body">
+        <h3>Generate <code class="i">code_verifier</code></h3>
+        <p>The app invents a one-time random secret, 43–128 chars from <code class="i">[A-Z a-z 0-9 - . _ ~]</code>. It <strong>never leaves the app</strong>.</p>
+        <pre><span class="k">const</span> verifier = base64url(crypto.getRandomValues(<span class="k">new</span> Uint8Array(<span class="s">32</span>)));
+<span class="c">// e.g. "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"</span></pre>
+      </div>
+    </div>
+    <div class="phase p1">
+      <div class="num">2</div>
+      <div class="body">
+        <h3>Derive <code class="i">code_challenge</code></h3>
+        <p>A one-way SHA-256 fingerprint of the verifier. Safe to send in the open — you can't reverse a hash back to the secret.</p>
+        <pre><span class="g">code_challenge</span> = base64url( SHA256( <span class="g">code_verifier</span> ) )
+<span class="g">code_challenge_method</span> = <span class="s">S256</span>   <span class="c">// always S256, never "plain"</span></pre>
+      </div>
+    </div>
+
+    <h3>Phase 2 — Get the code (front channel / browser redirects)</h3>
+    <div class="phase p2">
+      <div class="num">3</div>
+      <div class="body">
+        <h3>Redirect to <code class="i">/authorize</code></h3>
+        <p>Send the user to the authorization server with the <strong>challenge</strong> (not the verifier), plus a <code class="i">state</code> value for CSRF protection.</p>
+        <pre>GET https://accounts.google.com/o/oauth2/v2/auth
+  ?response_type=<span class="s">code</span>
+  &client_id=<span class="s">YOUR_CLIENT_ID</span>
+  &redirect_uri=<span class="s">https://yourapp.com/callback</span>
+  &scope=<span class="s">openid email profile</span>
+  &<span class="g">code_challenge</span>=E9Melhoa2Ow...
+  &<span class="g">code_challenge_method</span>=S256
+  &<span class="k">state</span>=xyzABC123          <span class="c">// CSRF guard, checked on return</span></pre>
+      </div>
+    </div>
+    <div class="phase p2">
+      <div class="num">4</div>
+      <div class="body">
+        <h3>User authenticates &amp; consents</h3>
+        <p>Google logs the user in and shows the consent screen. It <strong>stores the code_challenge</strong> against the soon-to-be-issued code, to verify later.</p>
+      </div>
+    </div>
+    <div class="phase p2">
+      <div class="num">5</div>
+      <div class="body">
+        <h3>Redirect back with <code class="i">authorization_code</code></h3>
+        <p>A short-lived, one-time code lands in the URL. Yes — right there in the query string. Hold that thought.</p>
+        <pre><span class="c">https://yourapp.com/callback?</span>code=<span class="s">A1b2C3d4</span>&state=<span class="s">xyzABC123</span></pre>
+      </div>
+    </div>
+
+    <h3>Phase 3 — Exchange for the token (back channel / server-to-server POST)</h3>
+    <div class="phase p3">
+      <div class="num">6</div>
+      <div class="body">
+        <h3>POST to <code class="i">/token</code></h3>
+        <p>The app sends the <code class="i">code</code> <strong>plus the original code_verifier</strong> over a direct POST — not a browser redirect.</p>
+        <pre>POST https://oauth2.googleapis.com/token
+  grant_type=<span class="s">authorization_code</span>
+  code=<span class="s">A1b2C3d4</span>
+  redirect_uri=<span class="s">https://yourapp.com/callback</span>
+  client_id=<span class="s">YOUR_CLIENT_ID</span>
+  <span class="g">code_verifier</span>=<span class="s">dBjftJeZ4CVP-mB92K27...</span>   <span class="c">// the secret, first time it's sent</span></pre>
+      </div>
+    </div>
+    <div class="phase p3">
+      <div class="num">7</div>
+      <div class="body">
+        <h3>Server verifies the proof</h3>
+        <p>Google recomputes <code class="i">SHA256(code_verifier)</code> and compares it to the stored challenge from step 3.</p>
+        <pre><span class="k">if</span> ( SHA256(code_verifier) === stored_challenge )  <span class="g">// ✓ continue</span>
+<span class="k">else</span>                                              <span class="r">// ✗ error: invalid_grant</span></pre>
+        <p>An attacker who stole the code from the URL doesn't have the verifier — so the exchange fails. That's the whole point.</p>
+      </div>
+    </div>
+    <div class="phase p3">
+      <div class="num">8</div>
+      <div class="body">
+        <h3>Tokens returned in the body</h3>
+        <p>Never in a URL — in the JSON response body of the POST:</p>
+        <pre>{ <span class="s">"access_token"</span>: <span class="s">"..."</span>, <span class="s">"id_token"</span>: <span class="s">"..."</span>, <span class="s">"refresh_token"</span>: <span class="s">"..."</span>,
+  <span class="s">"expires_in"</span>: <span class="s">3600</span>, <span class="s">"token_type"</span>: <span class="s">"Bearer"</span> }</pre>
+      </div>
+    </div>
+
+    <div class="box warn">
+      <p class="lbl">Key insight — the one line to remember</p>
+      <p>The <code class="i">authorization_code</code> in the URL is <strong>one-time use and useless without the code_verifier</strong>, which never left the app. A one-way hash sent up front + a secret held back = the entire trick that replaced the implicit flow.</p>
+    </div>
+  </section>
+
+  <!-- 5 TOKENS -->
+  <section id="tokens">
+    <p class="kicker">The payload</p>
+    <h2 class="title">Three tokens, three jobs</h2>
+    <p>Interviewers love asking you to distinguish these. Don't conflate them:</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Token</th><th>Purpose</th><th>Format</th><th>Sent to</th><th>Lifetime</th></tr></thead>
+      <tbody>
+        <tr><td><code>access_token</code></td><td>Authorize API calls ("what you can do")</td><td>Opaque or JWT</td><td>Resource server, as <code>Authorization: Bearer</code></td><td>Short (mins–1h)</td></tr>
+        <tr><td><code>id_token</code></td><td>Prove identity ("who you are") — OIDC only</td><td>Always a JWT</td><td>Consumed by <em>your</em> app, not sent to APIs</td><td>Short</td></tr>
+        <tr><td><code>refresh_token</code></td><td>Get a new access_token without re-login</td><td>Opaque</td><td>Authorization server only</td><td>Long (days–∞)</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>A JWT is three base64url parts</h3>
+    <pre><span class="f">header</span>.<span class="k">payload</span>.<span class="s">signature</span>
+<span class="c">// header:  { "alg": "RS256", "typ": "JWT" }</span>
+<span class="c">// payload: { "sub": "1029...", "email": "u@x.com", "exp": 1736... }  ← claims</span>
+<span class="c">// signature: RS256(header.payload, provider_private_key)  ← you verify with the public key</span></pre>
+    <div class="box warn">
+      <p class="lbl">Gotcha interviewers plant</p>
+      <p>A JWT is <strong>signed, not encrypted</strong>. Anyone can base64-decode and read the payload — never put secrets in it. Trust comes from verifying the <em>signature</em>, not from the payload being hidden.</p>
+    </div>
+  </section>
+
+  <!-- 6 STACK -->
+  <section id="stack">
+    <p class="kicker">In RadiusDirectory</p>
+    <h2 class="title">How NextAuth does this for you</h2>
+    <p>You don't hand-roll PKCE — <strong>NextAuth v4 runs this whole flow</strong> for the Google and Facebook providers. What you configured:</p>
+    <pre><span class="c">// src/lib/auth.ts</span>
+providers: [
+  <span class="f">GoogleProvider</span>({
+    clientId: process.env.<span class="k">GOOGLE_CLIENT_ID</span>!,
+    clientSecret: process.env.<span class="k">GOOGLE_CLIENT_SECRET</span>!,
+  }),
+  <span class="f">FacebookProvider</span>({ <span class="c">/* ... */</span> }),
+  <span class="f">CredentialsProvider</span>({ <span class="c">/* email/phone + password — NOT OAuth */</span> }),
+]</pre>
+    <p>What NextAuth handles under the hood for the OAuth providers:</p>
+    <ul>
+      <li>Generates the <code class="i">code_verifier</code> / <code class="i">code_challenge</code> and the <code class="i">state</code> value.</li>
+      <li>Stores them in short-lived, <strong>httpOnly cookies</strong> during the redirect round-trip.</li>
+      <li>Does the back-channel <code class="i">/token</code> POST (the <code class="i">clientSecret</code> above authenticates your server as a confidential client).</li>
+      <li>Verifies the <code class="i">id_token</code> and hands you a normalized user in the <code class="i">jwt</code> / <code class="i">session</code> callbacks.</li>
+    </ul>
+    <div class="box warn">
+      <p class="lbl">Nuance worth stating in an interview</p>
+      <p>Because RadiusDirectory does the token exchange <strong>server-side in Next.js</strong> (it has a <code class="i">clientSecret</code>), it's technically a <em>confidential</em> client, so PKCE is defense-in-depth rather than strictly required. PKCE is <em>mandatory</em> for a pure browser SPA that can't hold a secret. Knowing which situation you're in is the senior-level answer.</p>
+    </div>
+    <h3>Your Credentials provider is a different beast</h3>
+    <p>The email/phone + password (and OTP) login is <strong>not OAuth at all</strong> — it's your own DB check, then NextAuth mints a session JWT (30-day expiry). Don't describe that path as OAuth; it's classic first-party credential auth. OAuth only governs the Google/Facebook buttons.</p>
+  </section>
+
+  <!-- 7 STORAGE -->
+  <section id="storage">
+    <p class="kicker">The follow-up they always ask</p>
+    <h2 class="title">Where do you store the token?</h2>
+    <p>Getting the token is half the interview; <em>storing</em> it safely is the other half.</p>
+    <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Location</th><th>XSS risk</th><th>CSRF risk</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td><code>localStorage</code></td><td class="r">High — any script reads it</td><td>None</td><td class="r">Avoid for tokens</td></tr>
+        <tr><td>JS memory (variable)</td><td>Lower — gone on reload</td><td>None</td><td>OK for access_token</td></tr>
+        <tr><td><code>httpOnly</code> cookie</td><td class="g">Safe — JS can't read it</td><td class="r">Needs SameSite / CSRF token</td><td class="g">Best for session / refresh</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p><strong>The consensus answer:</strong> keep the refresh/session token in an <code class="i">httpOnly</code>, <code class="i">Secure</code>, <code class="i">SameSite=Lax</code> cookie so XSS can't exfiltrate it — which is exactly what NextAuth does for your session. Never <code class="i">localStorage</code> for anything that grants access.</p>
+    <div class="box say">
+      <p class="lbl">Say this</p>
+      <p>"localStorage is readable by any injected script, so a single XSS steals the token. I keep session tokens in httpOnly SameSite cookies and pair that with CSRF defenses — which is what NextAuth gives us by default."</p>
+    </div>
+  </section>
+
+  <!-- 8 QA -->
+  <section id="qa">
+    <p class="kicker">Drill</p>
+    <h2 class="title">Rapid-fire interview questions</h2>
+
+    <div class="qa">
+      <p class="q">Q. Why not just skip the code and return the token directly?</p>
+      <p class="a">That <em>is</em> the dead implicit flow. Tokens in URLs leak via history, Referer, and logs. The code is a one-time throwaway that's worthless without the verifier, so a leaked URL isn't a breach.</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. What does PKCE actually protect against?</p>
+      <p class="a"><strong>Authorization code interception.</strong> On mobile/SPA a malicious app could grab the redirect code. Without the verifier it can't exchange it. PKCE binds the code to the client that started the flow.</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. What's the <code class="i">state</code> parameter for?</p>
+      <p class="a"><strong>CSRF protection</strong> on the redirect. You generate it before /authorize and verify the returned value matches — stops an attacker forcing their code onto your session. It's separate from PKCE; you want both.</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. S256 vs plain challenge method?</p>
+      <p class="a">Always <code class="i">S256</code> (SHA-256 hash). <code class="i">plain</code> sends the verifier as-is and defeats the purpose — only allowed for legacy clients that can't hash. An interviewer wants to hear "S256, never plain."</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. Access token expired mid-session — what happens?</p>
+      <p class="a">Use the <strong>refresh_token</strong> to silently get a new access_token from /token, no user re-login. Best practice is <strong>refresh token rotation</strong> — each refresh issues a new one and invalidates the old, so a stolen refresh token is detectable.</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. Is a JWT encrypted?</p>
+      <p class="a">No — signed. The payload is base64url, publicly readable. Security comes from signature verification, not secrecy. Don't store sensitive data in it.</p>
+    </div>
+    <div class="qa">
+      <p class="q">Q. OAuth vs OIDC in one sentence?</p>
+      <p class="a">OAuth 2.0 grants <em>access</em> (authorization); OIDC layers on top to prove <em>identity</em> (authentication) via the id_token. "Login with Google" uses both.</p>
+    </div>
+  </section>
+
+  <hr class="div">
+  <footer>
+    docs/series · OAuth 2.0 + PKCE interview guide · grounded in RadiusDirectory's NextAuth v4 setup (Google / Facebook / Credentials)
+  </footer>
+
+</div>
+</body>
+</html>
