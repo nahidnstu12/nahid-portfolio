@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>f-commerce-ai-automation — brainstorm</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --panel: #ffffff;
+      --panel-2: #f0f3f6;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #0969da;
+      --green: #1a7f37;
+      --yellow: #9a6700;
+      --red: #cf222e;
+      --purple: #8250df;
+      --code-bg: #f6f8fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+    }
+    header h1 { margin: 0 0 4px; font-size: 18px; }
+    header .meta { margin: 0; color: var(--muted); font-size: 13px; }
+    header a { color: var(--accent); font-size: 13px; }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(154,103,0,.13);
+      color: var(--yellow);
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    nav.toc {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 12px;
+    }
+    nav.toc a {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      text-decoration: none;
+    }
+    nav.toc a:hover { border-color: var(--accent); color: var(--text); }
+    main { max-width: 980px; margin: 0 auto; padding: 24px 20px 48px; }
+    h2 {
+      font-size: 17px;
+      margin: 32px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+    h3 { font-size: 15px; margin: 20px 0 8px; }
+    p, li { font-size: 15px; }
+    .muted { color: var(--muted); font-size: 14px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    .stat {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .stat .val { font-size: 22px; font-weight: 700; }
+    .stat .val.ok { color: var(--green); }
+    .stat .val.warn { color: var(--yellow); }
+    .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .callout {
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 16px 0;
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .callout.warn { border-left: 4px solid var(--yellow); }
+    .callout.ok { border-left: 4px solid var(--green); }
+    .callout.info { border-left: 4px solid var(--accent); }
+    .callout strong { display: block; margin-bottom: 6px; }
+    pre.flow {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 12px 0;
+      overflow: hidden;
+    }
+    .card-head {
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--muted);
+      background: var(--panel-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .card-body { padding: 14px 16px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    th { background: var(--panel-2); font-size: 12px; color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: rgba(240,243,246,.5); }
+    .sev-high { color: var(--red); font-weight: 600; }
+    .sev-med { color: var(--yellow); font-weight: 600; }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+    .notes {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px dashed var(--border);
+    }
+    .notes textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+    }
+    .notes button {
+      margin-top: 8px;
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .notes button.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .bn { font-family: "Noto Sans Bengali", "Segoe UI", sans-serif; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>f-commerce-ai-automation <span class="badge">Brainstorm</span></h1>
+    <p class="meta">Folder: <code>project-idea/f-commerce-ai-automation/</code> · Last saved: 2026-08-02</p>
+    <a href="../index.html">← All project ideas</a>
+    <a href="mvp-poc-plan.html">MVP / POC plan (step-by-step) →</a>
+    <a href="system-user-flows.html">User flows →</a>
+    <a href="setup-guide.html">Setup guide →</a>
+    <nav class="toc">
+      <a href="#vision">Vision</a>
+      <a href="#flows">Flows</a>
+      <a href="#client">Client steps</a>
+      <a href="#ai">AI &amp; KB</a>
+      <a href="#dashboard">Dashboard</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#feasibility">Feasibility</a>
+      <a href="#scratch">Scratch notes</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="vision">
+      <h2>Product vision (original brainstorm)</h2>
+      <p class="bn muted">SaaS যেখানে shop owner Facebook Page / WhatsApp connect করে — customer message Meta API webhook দিয়ে আপনার server-এ আসে, AI knowledge base দিয়ে reply দেয়; customer জানবে না backend AI।</p>
+      <p><strong>Core insight:</strong> You are not building Messenger or WhatsApp. You connect the merchant’s account to your SaaS via Meta’s official APIs; inbound webhooks → AI → Send API back.</p>
+      <div class="callout info">
+        <strong>One agent, many channels</strong>
+        Same AI agent can eventually serve website chat, Facebook Messenger, and WhatsApp — unified inbox + shared catalog/FAQ.
+      </div>
+    </section>
+
+    <section id="flows">
+      <h2>Facebook Messenger flow</h2>
+      <p>Example: client page <strong>ABC Fashion</strong> — Facebook Login → select Page → grant permissions.</p>
+      <pre class="flow">Customer
+    │
+Facebook Messenger
+    │
+Meta Graph API / Webhook
+    │
+Your SaaS Server
+    │
+AI Agent
+    │
+Knowledge Base / Products
+    │
+Reply
+    │
+Customer</pre>
+
+      <h2>WhatsApp flow</h2>
+      <p>Client connects <strong>WhatsApp Business Account</strong> (Cloud API).</p>
+      <pre class="flow">Customer
+    │
+WhatsApp
+    │
+WhatsApp Business API
+    │
+Your SaaS
+    │
+AI Agent
+    │
+Reply</pre>
+    </section>
+
+    <section id="client">
+      <h2>What the client does</h2>
+      <ol>
+        <li>Sign up on your website</li>
+        <li>Click <strong>Connect Facebook</strong> or <strong>Connect WhatsApp</strong></li>
+        <li>Meta login + allow permissions</li>
+        <li>Done — messages handled by AI (with human fallback)</li>
+      </ol>
+    </section>
+
+    <section id="ai">
+      <h2>How AI answers</h2>
+      <p>Preloaded knowledge: products, prices, delivery charge, FAQ, return policy.</p>
+      <div class="card">
+        <div class="card-head">Example</div>
+        <div class="card-body bn">
+          <p><strong>Customer:</strong> এই ড্রেসের দাম কত?</p>
+          <p><strong>AI:</strong> এই ড্রেসের দাম ১,২৯০ টাকা। বর্তমানে স্টকে রয়েছে।</p>
+        </div>
+      </div>
+
+      <h3>When AI does not know</h3>
+      <pre class="flow">Customer → AI cannot answer → Human agent
+(Dashboard notification; agent continues thread)</pre>
+    </section>
+
+    <section id="dashboard">
+      <h2>Merchant dashboard (target)</h2>
+      <ul>
+        <li>Messenger chats</li>
+        <li>WhatsApp chats</li>
+        <li>Website chats</li>
+        <li>Voice calls (future)</li>
+        <li>Orders &amp; leads</li>
+      </ul>
+    </section>
+
+    <section id="roadmap">
+      <h2>Development order (planned)</h2>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Feature</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Website AI chat</td><td>Fastest loop; no Meta review</td></tr>
+          <tr><td>2</td><td>Facebook Messenger</td><td>Core f-commerce wedge</td></tr>
+          <tr><td>3</td><td>WhatsApp Business</td><td>Templates + CS window</td></tr>
+          <tr><td>4</td><td>Human takeover</td><td>State machine, not just notify</td></tr>
+          <tr><td>5</td><td>CRM + orders</td><td>After inbox stable</td></tr>
+          <tr><td>6</td><td>AI voice</td><td>Later</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="feasibility">
+      <h2>Feasibility analysis</h2>
+      <p class="muted">From architecture review — adjust as you validate with Meta docs and pilot merchants.</p>
+
+      <div class="stats">
+        <div class="stat"><div class="val ok">8/10</div><div class="lbl">Technical feasibility</div></div>
+        <div class="stat"><div class="val warn">6/10</div><div class="lbl">First MVP commercial readiness</div></div>
+        <div class="stat"><div class="val">3</div><div class="lbl">Systems in first release</div></div>
+        <div class="stat"><div class="val warn">2</div><div class="lbl">Meta policy gates</div></div>
+      </div>
+
+      <div class="callout warn">
+        <strong>Key correction</strong>
+        “Connect and every message is auto-handled” is directionally right but incomplete. Messenger needs Live app, Page permissions, webhook subscription. WhatsApp has customer-service window + approved templates for much outbound. Product UI should explain this, not hide it.
+      </div>
+
+      <h3>Verdict</h3>
+      <p>Architecture is proven; MVP is buildable. Hard parts: channel onboarding, <em>product truth</em> (price/stock), operator workflow, policy-safe messaging — not raw LLM replies.</p>
+      <p><strong>Positioning:</strong> “AI sales inbox for Facebook commerce” — product question → verified price/stock → delivery/COD → lead/order handoff.</p>
+      <p><strong>Deterministic (never LLM-only):</strong> price, variants, stock, shipping, order total, COD/refund rules, human assignment.</p>
+
+      <h3>Recommended first MVP</h3>
+      <div class="card">
+        <div class="card-head">Messenger only · one vertical · one inbox</div>
+        <div class="card-body">
+          <ol>
+            <li>Connect Page + webhook</li>
+            <li>CSV/catalog sync; merchant confirms prices &amp; delivery rules</li>
+            <li>AI answers in Bangla/English</li>
+            <li>Collect variant, qty, phone, address</li>
+            <li>Low confidence → human inbox</li>
+          </ol>
+        </div>
+      </div>
+
+      <h3>Production message path</h3>
+      <pre class="flow">Meta Webhook → verify signature → idempotent event store
+→ queue (tenant + conversation) → channel adapter
+→ policy + conversation-state gate → tools + RAG → LLM
+→ outbound queue → Send API → audit trail</pre>
+
+      <h3>Channel comparison</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th>Messenger</th>
+            <th>WhatsApp Cloud</th>
+            <th>Implication</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Inbound message</td>
+            <td>Webhook</td>
+            <td>Webhook</td>
+            <td>Same normalized event model</td>
+          </tr>
+          <tr>
+            <td>Connect</td>
+            <td>FB Login + Page</td>
+            <td>Embedded Signup / WABA</td>
+            <td>Separate onboarding adapters</td>
+          </tr>
+          <tr>
+            <td>Reply rules</td>
+            <td>Platform policy</td>
+            <td>CS window + templates</td>
+            <td>WA needs template manager</td>
+          </tr>
+          <tr>
+            <td>MVP priority</td>
+            <td>First</td>
+            <td>Second</td>
+            <td>Pilot before WABA ops load</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Risks</h3>
+      <table>
+        <thead>
+          <tr><th>Risk</th><th>Severity</th><th>Why</th><th>Control</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Meta onboarding &amp; app review</td>
+            <td class="sev-high">High</td>
+            <td>Live mode, permissions, tenant mapping</td>
+            <td>2–3 pilot Pages first</td>
+          </tr>
+          <tr>
+            <td>WhatsApp templates / window</td>
+            <td class="sev-high">High</td>
+            <td>Outbound often needs approved templates</td>
+            <td>Template + opt-in in v1 for WA</td>
+          </tr>
+          <tr>
+            <td>Wrong price/stock</td>
+            <td class="sev-high">High</td>
+            <td>RAG goes stale</td>
+            <td>Product/inventory API tools</td>
+          </tr>
+          <tr>
+            <td>Human takeover race</td>
+            <td class="sev-med">Medium</td>
+            <td>Bot + human double reply</td>
+            <td>bot → pending_human → human states</td>
+          </tr>
+          <tr>
+            <td>Webhook dup / order</td>
+            <td class="sev-med">Medium</td>
+            <td>Retries, out-of-order</td>
+            <td>Idempotency + per-thread queue</td>
+          </tr>
+          <tr>
+            <td>Unit economics</td>
+            <td class="sev-med">Medium</td>
+            <td>LLM + WA + support</td>
+            <td>Meter tokens, messages, seats</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-2">
+        <div>
+          <h3>Human takeover state machine</h3>
+          <p><code>bot</code> → trigger → <code>pending_human</code> → claim → <code>human</code> → release/timeout → <code>bot</code>. Send gate reads state before every outbound message.</p>
+        </div>
+        <div>
+          <h3>Knowledge layers</h3>
+          <p>Catalog/policies = facts (tools). Docs/FAQ = RAG. Chat memory = context only. No exact product match → clarify or transfer, never invent price.</p>
+        </div>
+      </div>
+
+      <h3>Phased scope</h3>
+      <table>
+        <thead>
+          <tr><th>Phase</th><th>Ship</th><th>Exit criterion</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0 — Design partner</td>
+            <td>1 merchant, 1 Page, manual catalog, inbox</td>
+            <td>Map real Bangla sales intents</td>
+          </tr>
+          <tr>
+            <td>1 — Paid MVP</td>
+            <td>Messenger, AI+rules, takeover, audit, leads</td>
+            <td>≥80% on narrow intents; no bad facts</td>
+          </tr>
+          <tr>
+            <td>2 — Commerce</td>
+            <td>Inventory sync, delivery calc, order draft</td>
+            <td>AI collects orders; human confirms</td>
+          </tr>
+          <tr>
+            <td>3 — WhatsApp</td>
+            <td>Embedded Signup, templates, opt-in</td>
+            <td>Unit economics work</td>
+          </tr>
+          <tr>
+            <td>4 — Expand</td>
+            <td>Web widget, CRM, voice</td>
+            <td>After stable data model</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout ok">
+        <strong>Next decision</strong>
+        One vertical, one job: “Answer product/price/delivery in Messenger and create qualified leads.” Do not launch WA + CRM + voice + orders in v1 together.
+      </div>
+
+      <p class="muted">Verify before build: Meta Messenger Platform, Facebook Login/App Review, WhatsApp Cloud API (Embedded Signup, templates, pricing).</p>
+    </section>
+
+    <section class="notes" id="scratch">
+      <h2>Scratch notes (local)</h2>
+      <p class="muted">Saved in this browser only (<code>localStorage</code>). Edit the HTML file when you want permanent notes in git.</p>
+      <textarea id="scratch" placeholder="Open questions, pilot merchant names, pricing ideas…"></textarea>
+      <button type="button" class="primary" id="saveScratch">Save locally</button>
+      <button type="button" id="clearScratch">Clear</button>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var KEY = "f-commerce-ai-automation-scratch";
+      var ta = document.getElementById("scratch");
+      var saved = localStorage.getItem(KEY);
+      if (saved) ta.value = saved;
+      document.getElementById("saveScratch").onclick = function () {
+        localStorage.setItem(KEY, ta.value);
+      };
+      document.getElementById("clearScratch").onclick = function () {
+        ta.value = "";
+        localStorage.removeItem(KEY);
+      };
+    })();
+  </script>
+</body>
+</html>

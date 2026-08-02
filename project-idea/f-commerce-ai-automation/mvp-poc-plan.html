@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messenger MVP / POC — step-by-step plan</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --panel: #fff;
+      --panel-2: #f0f3f6;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #0969da;
+      --green: #1a7f37;
+      --yellow: #9a6700;
+      --purple: #8250df;
+      --code-bg: #f6f8fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+    }
+    header h1 { margin: 0 0 4px; font-size: 18px; }
+    header p { margin: 0; color: var(--muted); font-size: 13px; }
+    header a { color: var(--accent); font-size: 13px; margin-right: 12px; }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(9,105,218,.12);
+      color: var(--accent);
+      margin-left: 8px;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 24px 20px 56px; }
+    h2 { font-size: 17px; margin: 28px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 15px; margin: 18px 0 8px; }
+    ul, ol { font-size: 15px; }
+    li { margin-bottom: 6px; }
+    .scope {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .scope ul { margin: 8px 0 0; padding-left: 20px; }
+    .not { color: var(--muted); font-size: 14px; margin-top: 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--panel-2); font-size: 12px; color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+    .phase {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin: 16px 0;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    .phase-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 10px;
+      padding: 12px 16px;
+      background: var(--panel-2);
+      border-bottom: 1px solid var(--border);
+    }
+    .phase-num {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--accent);
+      min-width: 72px;
+    }
+    .phase-title { font-weight: 600; flex: 1; }
+    .phase-when { font-size: 12px; color: var(--muted); }
+    .phase-body { padding: 14px 16px; }
+    .checklist { list-style: none; padding: 0; margin: 0; }
+    .checklist li {
+      padding: 8px 0 8px 28px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+    }
+    .done-crit {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: rgba(26,127,55,.08);
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .done-crit strong { color: var(--green); }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 12px;
+      overflow-x: auto;
+    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+    .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .pill {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Messenger MVP / POC plan <span class="badge">Implementation</span></h1>
+    <p>Scope: Messenger only · one vertical (e.g. fashion) · one inbox per tenant</p>
+    <a href="index.html">← Brainstorm</a>
+    <a href="system-user-flows.html">User flows →</a>
+    <a href="setup-guide.html">Setup guide →</a>
+    <a href="../index.html">All ideas</a>
+  </header>
+
+  <main>
+    <section>
+      <h2>POC outcome (what “done” looks like)</h2>
+      <div class="scope">
+        <p><strong>One pilot merchant</strong> connects their FB Page; customers DM on Messenger; AI answers product/price/delivery in Bangla or English using <strong>confirmed catalog</strong>; collects variant, qty, phone, address into a <strong>lead</strong>; uncertain threads go to <strong>human inbox</strong> without double replies.</p>
+        <ul>
+          <li>Connect Page + webhook</li>
+          <li>CSV / paste-link import → merchant confirms prices &amp; delivery rules</li>
+          <li>AI + tools (not raw LLM for price/stock)</li>
+          <li>Lead capture + human takeover</li>
+        </ul>
+        <p class="not"><strong>Out of POC:</strong> WhatsApp, website widget, payments, auto-orders, CRM, multi-Page, billing (optional stub only).</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Chosen stack (POC)</h2>
+      <table>
+        <thead>
+          <tr><th>Layer</th><th>Choice</th><th>Role in this POC</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>App</strong></td>
+            <td>Next.js (App Router) + TypeScript</td>
+            <td>Merchant dashboard, API routes (<code>/api/webhooks/meta</code>), server actions for CRUD</td>
+          </tr>
+          <tr>
+            <td><strong>UI</strong></td>
+            <td>Ant Design 5</td>
+            <td>Inbox, catalog tables, forms, modals — dense admin layout</td>
+          </tr>
+          <tr>
+            <td><strong>Auth</strong></td>
+            <td>Better Auth</td>
+            <td>Sign up / login; session; map user → tenant (workspace)</td>
+          </tr>
+          <tr>
+            <td><strong>Database</strong></td>
+            <td>PostgreSQL + Prisma</td>
+            <td>Schema, migrations, typed queries; <code>tenant_id</code> on all tenant data</td>
+          </tr>
+          <tr>
+            <td><strong>Queue</strong></td>
+            <td>Redis + BullMQ</td>
+            <td>Webhook ACK fast; jobs: run agent, send Messenger reply, retries</td>
+          </tr>
+          <tr>
+            <td><strong>Worker</strong></td>
+            <td>Node process (same repo, e.g. <code>apps/worker</code> or <code>worker/index.ts</code>)</td>
+            <td>BullMQ consumer; shares Prisma + agent/tools with Next app</td>
+          </tr>
+          <tr>
+            <td><strong>LLM</strong></td>
+            <td>DeepSeek or Kimi (OpenAI-compatible API)</td>
+            <td>Tool-calling agent; Bangla/English replies — pick one provider for POC, abstract behind a thin client</td>
+          </tr>
+          <tr>
+            <td><strong>Channels</strong></td>
+            <td>Meta Graph API (Messenger)</td>
+            <td>OAuth Page token, webhooks, Send API — no extra framework</td>
+          </tr>
+          <tr>
+            <td><strong>Hosting</strong></td>
+            <td>Hetzner</td>
+            <td>VPS or Cloud: Next (Node), worker, Redis, Postgres (managed PG on Hetzner or co-located on VPS for POC)</td>
+          </tr>
+        </tbody>
+      </table>
+      <pre>Suggested deploy (POC)
+  hetzner VPS / docker-compose
+    ├── next (reverse proxy: Caddy or nginx + TLS)
+    ├── worker (bullmq)
+    ├── redis
+    └── postgres
+
+Public URL → Meta webhook + Facebook OAuth redirect URIs must match.</pre>
+      <p class="not">Lock one LLM (DeepSeek <em>or</em> Kimi) until Phase 6 pilot; swap via env without rewriting tools.</p>
+    </section>
+
+    <section>
+      <h2>Minimal SaaS surface (merchant + you)</h2>
+      <table>
+        <thead>
+          <tr><th>Area</th><th>Minimal features</th><th>Why required</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Auth &amp; tenant</strong></td>
+            <td>Better Auth: sign up / login; one workspace = one shop; 1–2 staff users for POC</td>
+            <td>Multi-tenant isolation; Page token scoped to tenant</td>
+          </tr>
+          <tr>
+            <td><strong>Connect Facebook</strong></td>
+            <td>FB Login → pick Page → store Page ID + long-lived Page access token; show connection status</td>
+            <td>Webhook + Send API need Page token</td>
+          </tr>
+          <tr>
+            <td><strong>Channel settings</strong></td>
+            <td>Webhook health (last event); toggle AI on/off for Page; test “send hello” (dev)</td>
+            <td>Debug Meta integration without guessing</td>
+          </tr>
+          <tr>
+            <td><strong>Catalog</strong></td>
+            <td>CSV upload; optional paste post URL → draft; edit product/variant/price/stock; status <code>draft | confirmed</code>; only confirmed visible to AI tools</td>
+            <td>Commercial trust — no unconfirmed prices in replies</td>
+          </tr>
+          <tr>
+            <td><strong>Shop rules</strong></td>
+            <td>Delivery zones/fees (simple table or flat fee), COD yes/no, return blurb (text), business hours (optional)</td>
+            <td>Deterministic answers for “delivery koto”</td>
+          </tr>
+          <tr>
+            <td><strong>Inbox</strong></td>
+            <td>Thread list (Messenger); message timeline; mode badge: bot / needs human / human; “Take over” / “Release to bot”</td>
+            <td>Human path + no race with AI</td>
+          </tr>
+          <tr>
+            <td><strong>Leads</strong></td>
+            <td>List of captured intents: product, variant, qty, phone, address, thread link; status new / contacted</td>
+            <td>POC value proof for merchant</td>
+          </tr>
+          <tr>
+            <td><strong>Audit (light)</strong></td>
+            <td>Per message: inbound raw id, tool calls, outbound text, actor (bot/human)</td>
+            <td>Fix “AI said wrong thing” disputes</td>
+          </tr>
+          <tr>
+            <td><strong>Admin (you)</strong></td>
+            <td>Internal: list tenants, impersonate inbox, see webhook errors (POC can be env + logs)</td>
+            <td>Support pilot without code deploys</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Backend modules (build once)</h2>
+      <div class="pill-row">
+        <span class="pill">Next.js API + Ant Design UI</span>
+        <span class="pill">Prisma + Postgres + tenant_id</span>
+        <span class="pill">Redis + BullMQ</span>
+        <span class="pill">Webhook ingress</span>
+        <span class="pill">Conversation state machine</span>
+        <span class="pill">DeepSeek / Kimi + tools</span>
+        <span class="pill">Meta Send adapter</span>
+        <span class="pill">Hetzner deploy</span>
+      </div>
+      <pre>Meta POST /webhook → verify → idempotency (message mid)
+  → enqueue(conversation_id)
+Worker: load thread + mode (bot|pending_human|human)
+  → if human: notify inbox only, no auto reply
+  → if bot: run agent (tools) → send reply OR set pending_human
+Outbound: gate on mode again before Send API</pre>
+    </section>
+
+    <section>
+      <h2>Implementation phases (POC → first MVP)</h2>
+      <p class="not" style="margin-top:0">Order is strict: later phases assume earlier exit criteria. Estimates assume 1–2 devs; adjust weeks to your pace.</p>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 1</span>
+          <span class="phase-title">SaaS shell + data model</span>
+          <span class="phase-when">~1 week</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Monorepo or single repo: Next.js + Ant Design shell; Prisma schema (tenants, users, pages, products, variants, shop_rules, conversations, messages, leads)</li>
+            <li>Better Auth wired to Prisma user/session tables; tenant membership on signup</li>
+            <li>Local/docker: Postgres + Redis; BullMQ worker skeleton (no-op job)</li>
+            <li>Dashboard routes: Catalog · Inbox · Settings · Connect (placeholder pages)</li>
+            <li>Seed one fake tenant for local dev</li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> Merchant can log in and CRUD a product manually (no Meta yet).</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 2</span>
+          <span class="phase-title">Catalog + shop rules (confirmed-only)</span>
+          <span class="phase-when">~1 week</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>CSV import template (name, price, sizes, stock, sku optional)</li>
+            <li>Product editor + “Confirm catalog item” bulk action</li>
+            <li>Shop rules form: flat delivery fee, COD, free-text policies</li>
+            <li>Optional: paste FB post URL → draft row (Graph API with Page token in Phase 3; manual paste text OK for POC start)</li>
+            <li>Tool layer stubs: <code>search_products</code>, <code>get_product</code>, <code>get_delivery_quote</code> (reads DB only)</li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> Tools return correct BDT price/stock for confirmed products only; drafts invisible to agent.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 3</span>
+          <span class="phase-title">Meta Messenger — receive only</span>
+          <span class="phase-when">~1 week</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Meta app (dev → later Live): Facebook Login, <code>pages_messaging</code>, <code>pages_manage_metadata</code>, <code>pages_show_list</code> (validate current permission names in Meta docs)</li>
+            <li>Connect flow: OAuth → select Page → save token encrypted</li>
+            <li>Subscribe Page to app + register webhook URL; verify token challenge</li>
+            <li>Parse inbound messages → store in <code>messages</code>; show in Inbox UI (no AI yet)</li>
+            <li>Idempotency on <code>message.mid</code></li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> Real customer message appears in dashboard within seconds; webhook retries don’t duplicate rows.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 4</span>
+          <span class="phase-title">Send path + conversation state</span>
+          <span class="phase-when">~3–5 days</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Send API from dashboard (human types reply) — proves token + threading</li>
+            <li>Per-conversation <code>mode</code>: bot | pending_human | human; assignee optional</li>
+            <li>“Take over” / “Release to bot” in UI updates mode</li>
+            <li>Worker checks mode immediately before any automated send</li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> Human can reply from inbox; mode prevents bot send while human active.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 5</span>
+          <span class="phase-title">AI agent (Bangla/English) + lead capture</span>
+          <span class="phase-when">~1–2 weeks</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Agent via DeepSeek or Kimi (OpenAI-compatible): tool-calling loop; system prompt — fashion vertical, never invent price</li>
+            <li>Agent loop: classify intent → tool calls → reply; max turns per inbound message</li>
+            <li>Slot collection: variant, qty, phone, address → write/update <code>leads</code> row linked to conversation</li>
+            <li>Confidence rules: no product match, price question with empty catalog, angry/opt-out keywords → <code>pending_human</code> + notify inbox</li>
+            <li>Log tool inputs/outputs on message for audit</li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> On test Page, 10 scripted DMs (price, stock, delivery, order flow) pass without wrong prices; lead row complete when user gives address.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 6</span>
+          <span class="phase-title">POC pilot (design partner)</span>
+          <span class="phase-when">~2 weeks parallel</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>One fashion Page owner; you onboard catalog together (CSV + confirm)</li>
+            <li>AI on limited hours or “supervised” (you watch inbox daily)</li>
+            <li>Track: auto-resolved vs human; lead count; factual errors (must be zero on price/stock)</li>
+            <li>Meta app Live + app review if pilot uses production Page (start dev/test Page if review slow)</li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> Merchant says inbox saves time; you have intent list + error log; ready to add billing.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 7</span>
+          <span class="phase-title">First paid MVP (thin layer)</span>
+          <span class="phase-when">after POC exit</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>Stripe/bKash manual invoicing OK initially; or simple plan flag on tenant</li>
+            <li>Onboarding checklist UI (connect → import → confirm → enable AI)</li>
+            <li>Rate limits + AI kill switch per tenant</li>
+            <li>Basic analytics: messages/day, leads/week, human takeover rate</li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> Second merchant can self-serve connect + catalog with &lt;30 min your support.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>AI tools (POC minimum)</h2>
+      <table>
+        <thead>
+          <tr><th>Tool</th><th>Input</th><th>Output</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>search_products</code></td><td>query string</td><td>Top N confirmed products (id, name, price, sizes in stock)</td></tr>
+          <tr><td><code>get_product</code></td><td>product_id</td><td>Full variant/stock detail</td></tr>
+          <tr><td><code>get_shop_policies</code></td><td>—</td><td>Delivery fee, COD, return text from shop_rules</td></tr>
+          <tr><td><code>upsert_lead</code></td><td>conversation_id, fields…</td><td>Lead id; partial updates OK</td></tr>
+          <tr><td><code>request_human</code></td><td>reason</td><td>Sets pending_human; no customer-facing lie</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Week-by-week sketch (solo dev)</h2>
+      <table>
+        <thead>
+          <tr><th>Week</th><th>Focus</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Phase 1 + 2 (shell, catalog, tools tested via script/Postman)</td></tr>
+          <tr><td>2</td><td>Phase 3 + 4 (webhook, inbox, human send, state machine)</td></tr>
+          <tr><td>3</td><td>Phase 5 (agent + leads + handoff rules)</td></tr>
+          <tr><td>4–5</td><td>Phase 6 pilot + fixes; Meta Live if needed</td></tr>
+          <tr><td>6+</td><td>Phase 7 polish + second tenant</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Risks to watch during POC</h2>
+      <ul>
+        <li><strong>App review delay</strong> — use test Page + test users until Live.</li>
+        <li><strong>Empty catalog</strong> — block “Enable AI” until ≥1 confirmed product + delivery rule saved.</li>
+        <li><strong>Double reply</strong> — outbound gate on conversation mode + single worker per conversation id.</li>
+        <li><strong>Bangla numbers</strong> — normalize ১২৯০ / 1290 in tool layer before compare.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

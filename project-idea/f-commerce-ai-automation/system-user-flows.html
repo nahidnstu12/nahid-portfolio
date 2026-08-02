@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System &amp; user flows — Messenger POC</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --panel: #fff;
+      --panel-2: #f0f3f6;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #0969da;
+      --green: #1a7f37;
+      --yellow: #9a6700;
+      --purple: #8250df;
+      --code-bg: #f6f8fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+    }
+    header h1 { margin: 0 0 4px; font-size: 18px; }
+    header p { margin: 0; color: var(--muted); font-size: 13px; }
+    header a { color: var(--accent); font-size: 13px; margin-right: 12px; }
+    nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    nav.toc a {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      text-decoration: none;
+    }
+    nav.toc a:hover { border-color: var(--accent); color: var(--text); }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(130,80,223,.12);
+      color: var(--purple);
+      margin-left: 8px;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 24px 20px 56px; }
+    h2 { font-size: 17px; margin: 28px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 15px; margin: 18px 0 8px; }
+    p, li { font-size: 15px; }
+    .muted { color: var(--muted); font-size: 14px; }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--panel-2); font-size: 12px; color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+    .flow-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 12px 0;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--panel-2);
+      border: 2px solid var(--accent);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .step-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .step-desc { font-size: 14px; color: var(--muted); }
+    .actor {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    .a-merchant { background: rgba(9,105,218,.12); color: var(--accent); }
+    .a-customer { background: rgba(130,80,223,.12); color: var(--purple); }
+    .a-system { background: rgba(26,127,55,.1); color: var(--green); }
+    .a-meta { background: rgba(154,103,0,.12); color: var(--yellow); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+    .state {
+      font-family: ui-monospace, monospace;
+      font-size: 13px;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .callout {
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-left: 4px solid var(--accent);
+      font-size: 14px;
+    }
+    .sitemap {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .screen {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      background: var(--panel);
+      font-size: 13px;
+    }
+    .screen strong { display: block; margin-bottom: 6px; }
+    .screen ul { margin: 0; padding-left: 18px; font-size: 12px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>System &amp; user flows <span class="badge">How it works</span></h1>
+    <p>Messenger POC · merchant uses SaaS · customer stays on Facebook</p>
+    <a href="mvp-poc-plan.html">POC plan</a>
+    <a href="setup-guide.html">Setup guide</a>
+    <a href="index.html">Brainstorm</a>
+    <a href="../index.html">All ideas</a>
+    <nav class="toc">
+      <a href="#actors">Actors</a>
+      <a href="#big-picture">Big picture</a>
+      <a href="#merchant-onboard">Merchant onboarding</a>
+      <a href="#catalog">Catalog flow</a>
+      <a href="#customer">Customer message</a>
+      <a href="#bot-vs-human">Bot vs human</a>
+      <a href="#states">Conversation states</a>
+      <a href="#screens">App screens</a>
+      <a href="#sequence">One message (sequence)</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="actors">
+      <h2>Actors</h2>
+      <table>
+        <thead>
+          <tr><th>Who</th><th>Where</th><th>Goal</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="actor a-merchant">Merchant</span> Shop owner</td>
+            <td>Your SaaS (Next + Ant Design)</td>
+            <td>Connect Page, confirm catalog, watch inbox &amp; leads, take over when needed</td>
+          </tr>
+          <tr>
+            <td><span class="actor a-merchant">Staff</span> (optional)</td>
+            <td>Same dashboard</td>
+            <td>Reply in human mode, update lead status</td>
+          </tr>
+          <tr>
+            <td><span class="actor a-customer">Customer</span></td>
+            <td>Facebook Messenger only</td>
+            <td>Ask price, size, delivery; place interest / order info</td>
+          </tr>
+          <tr>
+            <td><span class="actor a-meta">Meta</span></td>
+            <td>Graph API + webhooks</td>
+            <td>Deliver inbound messages; send outbound on your behalf</td>
+          </tr>
+          <tr>
+            <td><span class="actor a-system">Your system</span></td>
+            <td>Hetzner: Next, worker, Redis, Postgres</td>
+            <td>Store truth, queue work, run AI + tools, enforce conversation mode</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="big-picture">
+      <h2>Big picture</h2>
+      <pre>┌─────────────┐     Messenger      ┌──────────┐     webhook      ┌─────────────┐
+│  Customer   │ ◄────────────────► │   Meta   │ ───────────────► │  Next.js    │
+│  (FB app)   │                    │          │ ◄─────────────── │  webhook    │
+└─────────────┘                    └──────────┘    Send API       └──────┬──────┘
+                                                                         │
+       ┌─────────────┐  HTTPS dashboard                                  │ enqueue
+       │  Merchant   │ ◄─────────────────────────────────────────────────┤
+       │  (browser)  │         inbox · catalog · settings                ▼
+       └─────────────┘                                          ┌───────────────┐
+                                                                 │ Redis/BullMQ  │
+                                                                 └───────┬───────┘
+                                                                         │
+                                                                         ▼
+                                                                 ┌───────────────┐
+                                                                 │ Worker        │
+                                                                 │ AI + tools    │
+                                                                 │ (DeepSeek/    │
+                                                                 │  Kimi)        │
+                                                                 └───────┬───────┘
+                                                                         │
+                                                                         ▼
+                                                                 ┌───────────────┐
+                                                                 │ Postgres      │
+                                                                 │ (Prisma)      │
+                                                                 └───────────────┘</pre>
+      <div class="callout">
+        Customer never logs into your app. Merchant never uses Messenger for support if they choose — they use <strong>Inbox</strong> in your SaaS; replies go out via Meta Send API.
+      </div>
+    </section>
+
+    <section id="merchant-onboard">
+      <h2>Merchant onboarding flow</h2>
+      <p class="muted">First-time setup until AI is allowed to reply.</p>
+      <div class="flow-box">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div>
+              <div class="step-title"><span class="actor a-merchant">Merchant</span> Sign up / log in</div>
+              <div class="step-desc">Better Auth creates user + workspace (tenant). Empty dashboard.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div>
+              <div class="step-title">Connect Facebook</div>
+              <div class="step-desc">OAuth → select Page → store encrypted Page token + Page ID. Subscribe webhooks. Settings show “Connected” + last webhook time.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div>
+              <div class="step-title">Import catalog</div>
+              <div class="step-desc">CSV upload and/or paste post link → draft products. Merchant edits price, variants, stock.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">4</div>
+            <div>
+              <div class="step-title">Confirm products</div>
+              <div class="step-desc">Status <span class="state">draft</span> → <span class="state">confirmed</span>. Only confirmed rows are visible to AI tools.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">5</div>
+            <div>
+              <div class="step-title">Shop rules</div>
+              <div class="step-desc">Delivery fee, COD on/off, return/delivery text. Saved to <code>shop_rules</code>.</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">6</div>
+            <div>
+              <div class="step-title">Enable AI</div>
+              <div class="step-desc">Toggle blocked until ≥1 confirmed product + delivery rule exists. New inbound threads default to <span class="state">bot</span> mode.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <pre>Sign up → Connect Page → Catalog (confirm) → Shop rules → Enable AI → Live</pre>
+    </section>
+
+    <section id="catalog">
+      <h2>Catalog &amp; “paste link” flow</h2>
+      <div class="grid-2">
+        <div class="flow-box">
+          <h3>CSV path</h3>
+          <ol>
+            <li>Upload CSV</li>
+            <li>Preview rows in table</li>
+            <li>Fix errors → save as draft</li>
+            <li>Bulk “Confirm selected”</li>
+          </ol>
+        </div>
+        <div class="flow-box">
+          <h3>Post link path (optional POC)</h3>
+          <ol>
+            <li>Paste FB post URL</li>
+            <li>System fetches caption/image (Page token)</li>
+            <li>LLM maps to draft fields</li>
+            <li>Merchant edits → Confirm</li>
+          </ol>
+        </div>
+      </div>
+      <p class="muted">AI agent path: customer asks “dress er dam?” → tool <code>search_products</code> → only <strong>confirmed</strong> matches → reply with DB price, not guessed text.</p>
+    </section>
+
+    <section id="customer">
+      <h2>Customer message flow (happy path)</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">A</div>
+          <div>
+            <div class="step-title"><span class="actor a-customer">Customer</span> Sends DM on Page Messenger</div>
+            <div class="step-desc">e.g. “M size ache? delivery koto?”</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">B</div>
+          <div>
+            <div class="step-title"><span class="actor a-meta">Meta</span> POST webhook to your server</div>
+            <div class="step-desc">Next verifies signature, dedupes <code>mid</code>, saves message, enqueues job.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">C</div>
+          <div>
+            <div class="step-title"><span class="actor a-system">Worker</span> Loads conversation</div>
+            <div class="step-desc">If mode is <span class="state">human</span> → skip AI, notify inbox only. If <span class="state">bot</span> → continue.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">D</div>
+          <div>
+            <div class="step-title">Agent + tools</div>
+            <div class="step-desc"><code>search_products</code>, <code>get_shop_policies</code>, <code>upsert_lead</code> as needed. Compose BN/EN reply.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">E</div>
+          <div>
+            <div class="step-title">Send gate</div>
+            <div class="step-desc">Re-read mode; if still <span class="state">bot</span>, call Send API. Store outbound + audit.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">F</div>
+          <div>
+            <div class="step-title"><span class="actor a-customer">Customer</span> Sees reply in Messenger</div>
+            <div class="step-desc">Looks like the Page replied — may be AI or human; same channel either way.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="bot-vs-human">
+      <h2>When AI stops — human flow</h2>
+      <table>
+        <thead>
+          <tr><th>Trigger</th><th>System</th><th>Merchant</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>No product match / empty catalog question</td>
+            <td><code>request_human</code> → mode <span class="state">pending_human</span></td>
+            <td>Inbox badge “Needs human”; optional auto-reply “Someone will reply soon”</td>
+          </tr>
+          <tr>
+            <td>Customer angry, refund dispute, custom request</td>
+            <td>Same or rule-based handoff</td>
+            <td>Staff clicks <strong>Take over</strong> → <span class="state">human</span></td>
+          </tr>
+          <tr>
+            <td>Staff replying</td>
+            <td>Worker ignores auto-reply while <span class="state">human</span></td>
+            <td>Type in Inbox → Send API as Page</td>
+          </tr>
+          <tr>
+            <td>Issue resolved</td>
+            <td>—</td>
+            <td><strong>Release to bot</strong> → <span class="state">bot</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="states">
+      <h2>Conversation state machine</h2>
+      <pre>                    ┌──────────────────────────────────────┐
+                    │              bot (default)              │
+                    │  AI may auto-reply on new inbound       │
+                    └───────────────┬──────────────────────────┘
+                                    │
+              low confidence / request_human / merchant "pause AI"
+                                    ▼
+                    ┌──────────────────────────────────────┐
+                    │           pending_human               │
+                    │  No AI reply (or one holding message)   │
+                    │  Inbox notified                       │
+                    └───────────────┬──────────────────────────┘
+                                    │ staff "Take over"
+                                    ▼
+                    ┌──────────────────────────────────────┐
+                    │               human                   │
+                    │  Only staff sends via dashboard       │
+                    └───────────────┬──────────────────────────┘
+                                    │ "Release to bot"
+                                    └──────────────────► bot</pre>
+      <p class="muted">Every outbound job checks mode <strong>twice</strong>: before agent run and before Send API — prevents double reply after takeover.</p>
+    </section>
+
+    <section id="screens">
+      <h2>SaaS screens &amp; what happens there</h2>
+      <div class="sitemap">
+        <div class="screen">
+          <strong>Connect</strong>
+          <ul>
+            <li>FB OAuth, Page picker</li>
+            <li>Connection + webhook status</li>
+          </ul>
+        </div>
+        <div class="screen">
+          <strong>Catalog</strong>
+          <ul>
+            <li>CSV / drafts / confirm</li>
+            <li>Variants, price, stock</li>
+          </ul>
+        </div>
+        <div class="screen">
+          <strong>Shop rules</strong>
+          <ul>
+            <li>Delivery, COD, policies</li>
+          </ul>
+        </div>
+        <div class="screen">
+          <strong>Inbox</strong>
+          <ul>
+            <li>Thread list + timeline</li>
+            <li>Mode badge, takeover, reply</li>
+          </ul>
+        </div>
+        <div class="screen">
+          <strong>Leads</strong>
+          <ul>
+            <li>Captured order intent</li>
+            <li>Link to thread</li>
+          </ul>
+        </div>
+        <div class="screen">
+          <strong>Settings</strong>
+          <ul>
+            <li>AI on/off</li>
+            <li>Workspace / staff (later)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="sequence">
+      <h2>One inbound message (sequence)</h2>
+      <pre>Customer    Meta       Next(webhook)    Redis       Worker       Postgres     LLM        Meta(send)
+   │          │              │              │            │             │          │            │
+   │── DM ───►│              │              │            │             │          │            │
+   │          │── POST ─────►│              │            │             │          │            │
+   │          │              │── verify ───►│            │             │          │            │
+   │          │              │── insert msg ───────────────────────────►│          │            │
+   │          │◄── 200 OK ───│              │            │             │          │            │
+   │          │              │── add job ──►│            │             │          │            │
+   │          │              │              │── pull ───►│             │          │            │
+   │          │              │              │            │── load conv ─►│          │            │
+   │          │              │              │            │── tools ────►│          │            │
+   │          │              │              │            │── complete ────────────►│            │
+   │          │              │              │            │◄─ text ─────────────────│            │
+   │          │              │              │            │── check mode bot        │            │
+   │          │              │              │            │── send ──────────────────────────────►│
+   │◄── reply ───────────────────────────────────────────────────────────────────────────────────│</pre>
+
+      <h3>Lead capture sub-flow (same conversation)</h3>
+      <pre>Customer gives phone + address
+  → agent calls upsert_lead(conversation_id, …)
+  → Leads screen shows new row
+  → Merchant marks contacted / fulfills order offline (POC)</pre>
+    </section>
+
+    <section>
+      <h2>Data tied together</h2>
+      <table>
+        <thead>
+          <tr><th>Entity</th><th>Links to</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Tenant (workspace)</td><td>Users, Page token, all catalog &amp; threads</td></tr>
+          <tr><td>Page connection</td><td>One FB Page per tenant (POC)</td></tr>
+          <tr><td>Conversation</td><td>Meta sender PSID + Page ID; has <code>mode</code></td></tr>
+          <tr><td>Message</td><td>Conversation; direction in/out; actor bot/human</td></tr>
+          <tr><td>Lead</td><td>Conversation; product fields + contact</td></tr>
+          <tr><td>Product</td><td>Tenant; status draft/confirmed</td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+</html>

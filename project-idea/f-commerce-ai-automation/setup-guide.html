@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup guide — keys, Meta, Groq, Hetzner</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --panel: #fff;
+      --panel-2: #f0f3f6;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #0969da;
+      --green: #1a7f37;
+      --yellow: #9a6700;
+      --code-bg: #f6f8fa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+    }
+    header h1 { margin: 0 0 4px; font-size: 18px; }
+    header p { margin: 0; color: var(--muted); font-size: 13px; }
+    header a { color: var(--accent); font-size: 13px; margin-right: 12px; }
+    nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    nav.toc a {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      text-decoration: none;
+    }
+    nav.toc a:hover { border-color: var(--accent); color: var(--text); }
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: rgba(26,127,55,.12);
+      color: var(--green);
+      margin-left: 8px;
+    }
+    main { max-width: 980px; margin: 0 auto; padding: 24px 20px 56px; }
+    h2 { font-size: 17px; margin: 28px 0 10px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 15px; margin: 18px 0 8px; }
+    p, li { font-size: 15px; }
+    .muted { color: var(--muted); font-size: 14px; }
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { background: var(--panel-2); font-size: 12px; color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+    .callout {
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      font-size: 14px;
+    }
+    .callout.ok { border-left: 4px solid var(--green); }
+    .callout.warn { border-left: 4px solid var(--yellow); }
+    .callout strong { display: block; margin-bottom: 6px; }
+    .checklist { list-style: none; padding: 0; margin: 0; }
+    .checklist li {
+      padding: 8px 0 8px 28px;
+      position: relative;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+    }
+    a.ext { color: var(--accent); }
+    code { font-size: 13px; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Setup guide <span class="badge">Keys &amp; infra</span></h1>
+    <p>Messenger POC · Groq LLM · Hetzner · what to collect before Phase 3</p>
+    <a href="mvp-poc-plan.html">POC plan</a>
+    <a href="system-user-flows.html">User flows</a>
+    <a href="index.html">Brainstorm</a>
+    <a href="../index.html">All ideas</a>
+    <nav class="toc">
+      <a href="#costs">Costs</a>
+      <a href="#env">Env vars</a>
+      <a href="#groq">Groq</a>
+      <a href="#meta-app">Meta app</a>
+      <a href="#webhook">Webhook</a>
+      <a href="#oauth">Connect Facebook</a>
+      <a href="#merchant-data">Per merchant</a>
+      <a href="#hetzner">Hetzner</a>
+      <a href="#verify">Go-live checklist</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="costs">
+      <h2>Pricing snapshot (POC)</h2>
+      <table>
+        <thead>
+          <tr><th>Service</th><th>POC cost</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Meta Messenger Platform</strong></td>
+            <td><strong>$0</strong> platform fee</td>
+            <td>No per-message charge for Page Messenger API. Rate limits apply. Official: <a class="ext" href="https://developers.facebook.com/docs/messenger-platform/overview/">Messenger overview</a></td>
+          </tr>
+          <tr>
+            <td><strong>Groq API</strong></td>
+            <td><strong>$0</strong> free tier (limits)</td>
+            <td>No card for signup; RPM/RPD caps per model. Check <a class="ext" href="https://console.groq.com/docs/rate-limits">Groq rate limits</a></td>
+          </tr>
+          <tr>
+            <td><strong>Hetzner VPS</strong></td>
+            <td>~€4–10/mo</td>
+            <td>Next + worker + Redis + Postgres (or managed DB extra)</td>
+          </tr>
+          <tr>
+            <td><strong>Domain + TLS</strong></td>
+            <td>~$10–15/yr</td>
+            <td>Required for public webhook + OAuth redirect</td>
+          </tr>
+          <tr>
+            <td><strong>WhatsApp Cloud API</strong></td>
+            <td>Paid (later)</td>
+            <td>Not in this POC — different billing model</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout ok">
+        <strong>TLDR</strong>
+        Budget Meta at $0 for Messenger; real spend = Hetzner + domain + (later) Groq paid if you exceed free tier.
+      </div>
+    </section>
+
+    <section id="env">
+      <h2>Environment variables (your server)</h2>
+      <p class="muted">Never commit secrets. Use <code>.env</code> locally and Hetzner env / secrets file in prod.</p>
+      <pre># App
+NODE_ENV=production
+PUBLIC_APP_URL=https://yourdomain.com
+
+# Database
+DATABASE_URL=postgresql://...
+
+# Redis / queue
+REDIS_URL=redis://...
+
+# Auth (Better Auth — names may match your config)
+BETTER_AUTH_SECRET=&lt;random 32+ bytes&gt;
+BETTER_AUTH_URL=https://yourdomain.com
+
+# Encrypt Page tokens at rest
+TOKEN_ENCRYPTION_KEY=&lt;32-byte key&gt;
+
+# Meta (platform — one app for all tenants)
+META_APP_ID=
+META_APP_SECRET=
+META_WEBHOOK_VERIFY_TOKEN=&lt;you invent this string&gt;
+
+# LLM (POC: Groq only)
+GROQ_API_KEY=
+
+# Optional later
+# DEEPSEEK_API_KEY=
+# MOONSHOT_API_KEY=</pre>
+      <p class="muted">Merchant Page tokens go in <strong>Postgres encrypted</strong>, not in env — one row per connected Page.</p>
+    </section>
+
+    <section id="groq">
+      <h2>Groq setup (initial LLM)</h2>
+      <ol>
+        <li>Sign up at <a class="ext" href="https://console.groq.com">console.groq.com</a> → create API key.</li>
+        <li>Pick a model with <strong>tool / JSON reliability</strong> for your agent (test Bengali + <code>search_products</code> calls).</li>
+        <li>Set <code>GROQ_API_KEY</code> on worker (and Next if agent runs there).</li>
+        <li>Monitor usage on Groq dashboard; upgrade only when free RPD/RPM blocks pilots.</li>
+      </ol>
+      <div class="callout warn">
+        <strong>Later</strong>
+        Swap provider via a thin LLM client (DeepSeek/Kimi) without changing Meta or catalog code.
+      </div>
+    </section>
+
+    <section id="meta-app">
+      <h2>Meta app (you create once)</h2>
+      <p>Create app at <a class="ext" href="https://developers.facebook.com/apps/">developers.facebook.com/apps</a>.</p>
+      <table>
+        <thead>
+          <tr><th>Collect / configure</th><th>Where</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>App ID</strong></td>
+            <td>App dashboard</td>
+            <td>OAuth + config</td>
+          </tr>
+          <tr>
+            <td><strong>App Secret</strong></td>
+            <td>Settings → Basic</td>
+            <td>Webhook signature, server-side token exchange</td>
+          </tr>
+          <tr>
+            <td><strong>Webhook verify token</strong></td>
+            <td>You choose random string</td>
+            <td>Meta subscription handshake; must match env</td>
+          </tr>
+          <tr>
+            <td><strong>Facebook Login for Business</strong></td>
+            <td>Add product</td>
+            <td>Merchant connects Page</td>
+          </tr>
+          <tr>
+            <td><strong>Messenger</strong></td>
+            <td>Add product</td>
+            <td>Webhooks + Send API</td>
+          </tr>
+          <tr>
+            <td><strong>Permissions</strong></td>
+            <td>App Review when going Live</td>
+            <td>Typical: <code>pages_messaging</code>, <code>pages_manage_metadata</code>, <code>pages_show_list</code> — verify current names in Meta docs</td>
+          </tr>
+          <tr>
+            <td><strong>App mode</strong></td>
+            <td>Dev → Live</td>
+            <td>Dev: test Pages/users only. Live + review for real merchants.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="muted">Docs: <a class="ext" href="https://developers.facebook.com/docs/messenger-platform/getting-started">Getting started</a>, <a class="ext" href="https://developers.facebook.com/docs/graph-api/overview/rate-limiting/">Rate limits</a>.</p>
+    </section>
+
+    <section id="webhook">
+      <h2>Webhook configuration</h2>
+      <ol>
+        <li>Public HTTPS URL, e.g. <code>https://yourdomain.com/api/webhooks/meta</code></li>
+        <li>In Meta app → Messenger → Webhooks: paste URL + verify token → subscribe your <strong>test Page</strong></li>
+        <li>Subscribe fields (minimal POC): <code>messages</code>, optionally <code>messaging_postbacks</code></li>
+        <li>Implement GET handler: echo <code>hub.challenge</code> when verify token matches</li>
+        <li>Implement POST: validate <code>X-Hub-Signature-256</code> with App Secret → enqueue job → return <strong>200 quickly</strong></li>
+      </ol>
+      <pre>POST https://graph.facebook.com/v21.0/{PAGE-ID}/messages
+  ?access_token={PAGE_ACCESS_TOKEN}
+Body: recipient { id: PSID }, message { text: "..." }</pre>
+      <p class="muted">Use current Graph API version from Meta docs. Standard replies: customer must message first; <strong>24-hour messaging window</strong> after their last message.</p>
+    </section>
+
+    <section id="oauth">
+      <h2>Connect Facebook (merchant flow — no keys from them)</h2>
+      <ol>
+        <li>Redirect to Facebook Login with your App ID + requested scopes</li>
+        <li>Merchant selects Page and clicks Allow</li>
+        <li>Exchange code server-side → short-lived user token → long-lived → <strong>Page access token</strong></li>
+        <li>Store <code>page_id</code> + encrypted <code>page_access_token</code> on tenant row</li>
+        <li>Subscribe that Page to your app webhooks (Graph call with Page token)</li>
+      </ol>
+      <p><strong>Valid OAuth Redirect URIs</strong> in Meta app must include e.g. <code>https://yourdomain.com/api/connect/facebook/callback</code> (match your Better Auth / custom route).</p>
+    </section>
+
+    <section id="merchant-data">
+      <h2>What merchants provide vs what you store</h2>
+      <table>
+        <thead>
+          <tr><th>Merchant does</th><th>You store</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Facebook login + pick Page</td>
+            <td>Page ID, encrypted Page token, Page name</td>
+          </tr>
+          <tr>
+            <td>Upload CSV / confirm catalog</td>
+            <td>Products, variants, prices, stock</td>
+          </tr>
+          <tr>
+            <td>Set delivery / COD rules</td>
+            <td><code>shop_rules</code> row</td>
+          </tr>
+          <tr>
+            <td>Does <em>not</em> paste App Secret</td>
+            <td>All Meta app secrets stay in your env only</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="hetzner">
+      <h2>Hetzner deploy (minimal POC)</h2>
+      <pre>docker-compose (example services)
+  caddy or nginx   → TLS, proxy to Next :3000
+  next             → dashboard + webhook route
+  worker           → BullMQ consumer + Groq + Send API
+  redis
+  postgres</pre>
+      <ul>
+        <li>Point domain A/AAAA record to VPS</li>
+        <li>Same <code>PUBLIC_APP_URL</code> in Meta OAuth + webhook config</li>
+        <li>Run Prisma migrations on deploy</li>
+        <li>Worker must stay up — if worker down, messages store but AI won’t reply</li>
+      </ul>
+    </section>
+
+    <section id="verify">
+      <h2>Go-live checklist (before pilot merchant)</h2>
+      <ul class="checklist">
+        <li><code>PUBLIC_APP_URL</code> HTTPS works; Meta webhook shows green / receives test event</li>
+        <li>Webhook signature verification enabled (reject bad POSTs)</li>
+        <li>Test Page connected; inbound DM appears in Inbox</li>
+        <li>Human can send reply from dashboard → customer sees it in Messenger</li>
+        <li>≥1 confirmed product + shop rules → AI toggle enabled</li>
+        <li>Groq key on worker; test tool call returns real price from DB</li>
+        <li>Page tokens encrypted; App Secret not in client bundle</li>
+        <li>Meta app <strong>Live</strong> + permissions approved (or pilot stays on test Page in Dev mode)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Official links</h2>
+      <ul>
+        <li><a class="ext" href="https://developers.facebook.com/docs/messenger-platform/overview/">Messenger Platform overview</a></li>
+        <li><a class="ext" href="https://developers.facebook.com/docs/messenger-platform/webhooks">Webhooks</a></li>
+        <li><a class="ext" href="https://developers.facebook.com/docs/graph-api/overview/rate-limiting/">Graph API rate limits</a></li>
+        <li><a class="ext" href="https://console.groq.com/docs/rate-limits">Groq rate limits</a></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>

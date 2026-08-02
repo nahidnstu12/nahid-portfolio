@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project ideas — brainstorm</title>
+  <style>
+    :root {
+      --bg: #f6f8fa;
+      --panel: #fff;
+      --border: #d0d7de;
+      --text: #1f2328;
+      --muted: #656d76;
+      --accent: #0969da;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    main { max-width: 720px; margin: 0 auto; padding: 32px 20px; }
+    h1 { font-size: 22px; margin: 0 0 8px; }
+    p { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { margin-bottom: 10px; }
+    a {
+      display: block;
+      padding: 14px 16px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a:hover { border-color: var(--accent); }
+    a span { display: block; font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>project-idea</h1>
+    <p>Brainstorm notes live as standalone HTML per idea. Add a folder + index.html for each new concept.</p>
+    <ul>
+      <li>
+        <a href="f-commerce-ai-automation/index.html">
+          f-commerce-ai-automation
+          <span>Multi-channel AI sales inbox — Messenger, WhatsApp, website chat (MVP planning + feasibility)</span>
+        </a>
+      </li>
+      <li>
+        <a href="f-commerce-ai-automation/mvp-poc-plan.html">
+          mvp-poc-plan (Messenger POC)
+          <span>Step-by-step phases 1–7, minimal SaaS features, tools, week sketch</span>
+        </a>
+      </li>
+      <li>
+        <a href="f-commerce-ai-automation/system-user-flows.html">
+          system-user-flows
+          <span>Actors, onboarding, message path, bot/human states, screens, sequence diagram</span>
+        </a>
+      </li>
+      <li>
+        <a href="f-commerce-ai-automation/setup-guide.html">
+          setup-guide
+          <span>Env vars, Groq, Meta app/webhook/OAuth, Hetzner, costs, go-live checklist</span>
+        </a>
+      </li>
+    </ul>
+  </main>
+</body>
+</html>
