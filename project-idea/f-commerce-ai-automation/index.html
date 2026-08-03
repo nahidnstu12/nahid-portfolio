@@ -198,8 +198,10 @@
     <nav class="toc">
       <a href="#vision">Vision</a>
       <a href="#flows">Flows</a>
+      <a href="#comment">Comment → DM</a>
       <a href="#client">Client steps</a>
       <a href="#ai">AI &amp; KB</a>
+      <a href="#bd">BD reality</a>
       <a href="#dashboard">Dashboard</a>
       <a href="#roadmap">Roadmap</a>
       <a href="#feasibility">Feasibility</a>
@@ -215,6 +217,10 @@
       <div class="callout info">
         <strong>One agent, many channels</strong>
         Same AI agent can eventually serve website chat, Facebook Messenger, and WhatsApp — unified inbox + shared catalog/FAQ.
+      </div>
+      <div class="callout ok">
+        <strong>Scope right now: POC, Bangladesh only, one Page</strong>
+        Not competing with anyone yet — no feature parity target, no multi-channel, no billing. One pilot merchant, one Facebook Page, Messenger + comment replies, Bangla/Banglish. Build the <em>pipeline</em> (webhook → queue → agent → tools → send → audit) correctly; everything else is swappable later.
       </div>
     </section>
 
@@ -252,6 +258,27 @@ AI Agent
 Reply</pre>
     </section>
 
+    <section id="comment">
+      <h2>Comment → DM (the real f-commerce funnel)</h2>
+      <p>In Bangladesh most buying intent does <strong>not</strong> start as a DM. It starts as a comment under a boosted post — <em>"price?"</em>, <em>"dam koto"</em>, <em>"inbox korun"</em>. The merchant then manually inboxes each commenter. That manual step is the highest-volume, most repetitive work in an f-commerce Page, and it is the strongest single reason a merchant would install this.</p>
+      <pre class="flow">Customer comments on Page post
+    │
+Meta webhook (Page `feed` field)
+    │
+Your SaaS  ──► optional public reply ("inbox e reply dilam")
+    │
+Private Reply API → opens Messenger thread
+    │
+AI Agent (same agent, same tools, same state machine)
+    │
+Normal DM conversation + lead capture</pre>
+      <div class="callout warn">
+        <strong>Rules to respect</strong>
+        Private reply is allowed <strong>once per comment</strong> and only within a limited window after the comment (Meta documents the current limit — verify before build). It needs comment-read/engagement permissions in addition to <code>pages_messaging</code>. Once the private reply lands, the thread follows the ordinary 24-hour messaging window.
+      </div>
+      <p class="muted">Implementation note: a comment event and a DM event should converge on the <strong>same</strong> conversation record and the same <code>mode</code> state machine. Comment → DM is an <em>entry point</em>, not a second pipeline.</p>
+    </section>
+
     <section id="client">
       <h2>What the client does</h2>
       <ol>
@@ -278,6 +305,57 @@ Reply</pre>
 (Dashboard notification; agent continues thread)</pre>
     </section>
 
+    <section id="bd">
+      <h2>BD market reality (what customers actually send)</h2>
+      <p>The plan originally assumed "Bangla or English text". Real Page inboxes are messier. This table is the input model the agent must be built against.</p>
+      <table>
+        <thead>
+          <tr><th>Input type</th><th>How common</th><th>POC handling</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Banglish</strong> — romanized Bangla (<code>dam koto</code>, <code>eta ache</code>, <code>delivery charge koto</code>)</td>
+            <td class="sev-high">Majority of messages</td>
+            <td><strong>Must work.</strong> This is the primary language target, not a variant of Bangla.</td>
+          </tr>
+          <tr>
+            <td>Bangla script</td>
+            <td>Common</td>
+            <td>Must work. Normalize Bangla numerals before any tool compare.</td>
+          </tr>
+          <tr>
+            <td>English</td>
+            <td>Minority</td>
+            <td>Works free.</td>
+          </tr>
+          <tr>
+            <td>Mixed in one message (<code>ei dress ta M size ache?</code>)</td>
+            <td class="sev-high">Very common</td>
+            <td>Must work — do not language-detect and branch; one prompt handles all.</td>
+          </tr>
+          <tr>
+            <td><strong>Photo</strong> — screenshot of a post, or a product image forwarded with "eta?"</td>
+            <td class="sev-med">Frequent</td>
+            <td><strong>Out of POC.</strong> Detect attachment → <code>pending_human</code> immediately. Do not let the agent guess.</td>
+          </tr>
+          <tr>
+            <td><strong>Voice note</strong></td>
+            <td class="sev-med">Frequent</td>
+            <td><strong>Out of POC.</strong> Same: attachment → <code>pending_human</code>.</td>
+          </tr>
+          <tr>
+            <td>Sticker / emoji / single "hi"</td>
+            <td>Common</td>
+            <td>Short greeting reply; don't call tools.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="callout warn">
+        <strong>Do not benchmark the model on invented messages</strong>
+        Before locking the agent prompt, pull ~200 real messages from the pilot merchant's existing Page inbox and score two things only: (1) did it pick the right tool, (2) is the Bangla/Banglish reply natural. Scripted test DMs will pass and real traffic will fail.
+      </div>
+    </section>
+
     <section id="dashboard">
       <h2>Merchant dashboard (target)</h2>
       <ul>
@@ -296,12 +374,14 @@ Reply</pre>
           <tr><th>#</th><th>Feature</th><th>Notes</th></tr>
         </thead>
         <tbody>
-          <tr><td>1</td><td>Website AI chat</td><td>Fastest loop; no Meta review</td></tr>
-          <tr><td>2</td><td>Facebook Messenger</td><td>Core f-commerce wedge</td></tr>
-          <tr><td>3</td><td>WhatsApp Business</td><td>Templates + CS window</td></tr>
-          <tr><td>4</td><td>Human takeover</td><td>State machine, not just notify</td></tr>
-          <tr><td>5</td><td>CRM + orders</td><td>After inbox stable</td></tr>
-          <tr><td>6</td><td>AI voice</td><td>Later</td></tr>
+          <tr><td>1</td><td>Facebook Messenger (DM)</td><td>Core f-commerce wedge — start here, not with website chat</td></tr>
+          <tr><td>2</td><td>Human takeover</td><td>State machine, not just notify. Must exist before AI replies to anyone real</td></tr>
+          <tr><td>3</td><td>Comment → DM</td><td>Where BD buying intent actually starts; same agent, new entry point</td></tr>
+          <tr><td>4</td><td>Images / voice notes</td><td>Post-POC. Until then: attachment → human</td></tr>
+          <tr><td>5</td><td>Website AI chat</td><td>Easy once the agent + tools exist; no Meta review</td></tr>
+          <tr><td>6</td><td>WhatsApp Business</td><td>Templates + CS window; separate ops load</td></tr>
+          <tr><td>7</td><td>CRM + orders</td><td>After inbox stable</td></tr>
+          <tr><td>8</td><td>AI voice calls</td><td>Later</td></tr>
         </tbody>
       </table>
     </section>
@@ -319,33 +399,37 @@ Reply</pre>
 
       <div class="callout warn">
         <strong>Key correction</strong>
-        “Connect and every message is auto-handled” is directionally right but incomplete. Messenger needs Live app, Page permissions, webhook subscription. WhatsApp has customer-service window + approved templates for much outbound. Product UI should explain this, not hide it.
+        “Connect and every message is auto-handled” is directionally right but incomplete. Messenger needs a Live app, Business Verification, Page permissions and webhook subscription; the merchant's own use of the native FB inbox must be detected via <code>message_echoes</code>; comment replies are a separate permission and a separate API with its own once-per-comment limit. Product UI should explain this, not hide it.
       </div>
 
       <h3>Verdict</h3>
       <p>Architecture is proven; MVP is buildable. Hard parts: channel onboarding, <em>product truth</em> (price/stock), operator workflow, policy-safe messaging — not raw LLM replies.</p>
-      <p><strong>Positioning:</strong> “AI sales inbox for Facebook commerce” — product question → verified price/stock → delivery/COD → lead/order handoff.</p>
+      <p><strong>Positioning (POC):</strong> “AI sales inbox for Bangladeshi Facebook shops” — comment or DM in Banglish → verified price/stock → delivery/COD → lead handoff. Local language and local commerce rules are the whole point; nothing else is being claimed at this stage.</p>
       <p><strong>Deterministic (never LLM-only):</strong> price, variants, stock, shipping, order total, COD/refund rules, human assignment.</p>
 
       <h3>Recommended first MVP</h3>
       <div class="card">
-        <div class="card-head">Messenger only · one vertical · one inbox</div>
+        <div class="card-head">One Page · one vertical · one inbox · Bangladesh</div>
         <div class="card-body">
           <ol>
-            <li>Connect Page + webhook</li>
-            <li>CSV/catalog sync; merchant confirms prices &amp; delivery rules</li>
-            <li>AI answers in Bangla/English</li>
-            <li>Collect variant, qty, phone, address</li>
-            <li>Low confidence → human inbox</li>
+            <li>Connect Page + webhook (<code>messages</code>, <code>message_echoes</code>, <code>feed</code>)</li>
+            <li>CSV / paste-post catalog; merchant confirms prices &amp; delivery rules</li>
+            <li>AI answers in Banglish / Bangla / English — text only</li>
+            <li>Comment on a post → private reply → same AI thread</li>
+            <li>Collect variant, qty, phone, address into a lead</li>
+            <li>Low confidence, or any image/voice attachment → human inbox</li>
           </ol>
         </div>
       </div>
 
       <h3>Production message path</h3>
-      <pre class="flow">Meta Webhook → verify signature → idempotent event store
-→ queue (tenant + conversation) → channel adapter
-→ policy + conversation-state gate → tools + RAG → LLM
-→ outbound queue → Send API → audit trail</pre>
+      <pre class="flow">Meta Webhook (messages | message_echoes | feed)
+→ verify signature → idempotent event store (mid / comment_id)
+→ resolve/create conversation → queue (per conversation, serialized)
+→ echo?  → mark human takeover, stop
+→ comment? → private reply, then normal thread
+→ conversation-state gate → tools (catalog/rules) → LLM
+→ re-check state → Send API → audit trail</pre>
 
       <h3>Channel comparison</h3>
       <table>
@@ -392,16 +476,22 @@ Reply</pre>
         </thead>
         <tbody>
           <tr>
-            <td>Meta onboarding &amp; app review</td>
+            <td>Meta app review &amp; Business Verification</td>
             <td class="sev-high">High</td>
-            <td>Live mode, permissions, tenant mapping</td>
-            <td>2–3 pilot Pages first</td>
+            <td>Advanced Access needs a verified business (trade licence, verified domain, privacy policy URL, data-deletion callback, demo video). Weeks, and it is a paperwork problem, not a code problem.</td>
+            <td><strong>Start verification on day 1</strong>, in parallel with Phase 1. Build on a test Page in Dev mode meanwhile.</td>
           </tr>
           <tr>
-            <td>WhatsApp templates / window</td>
+            <td>Merchant replies from Facebook's own Page Inbox</td>
             <td class="sev-high">High</td>
-            <td>Outbound often needs approved templates</td>
-            <td>Template + opt-in in v1 for WA</td>
+            <td>Merchants will keep using the native FB inbox. Without <code>message_echoes</code> the bot replies on top of a human — the single most embarrassing production failure.</td>
+            <td>Subscribe <code>message_echoes</code>; a merchant-sent echo forces <code>pending_human</code>.</td>
+          </tr>
+          <tr>
+            <td>Banglish comprehension</td>
+            <td class="sev-high">High</td>
+            <td>Most messages are romanized Bangla. Cheap open models are weakest exactly here, and it is the quality dimension the product rests on.</td>
+            <td>Score candidates on ~200 real inbox messages before locking the prompt. Keep the LLM behind a thin client so the model is swappable.</td>
           </tr>
           <tr>
             <td>Wrong price/stock</td>
@@ -416,16 +506,16 @@ Reply</pre>
             <td>bot → pending_human → human states</td>
           </tr>
           <tr>
-            <td>Webhook dup / order</td>
+            <td>Webhook dup / out-of-order</td>
             <td class="sev-med">Medium</td>
-            <td>Retries, out-of-order</td>
-            <td>Idempotency + per-thread queue</td>
+            <td>Meta retries; two fast messages can process concurrently</td>
+            <td>Idempotency on <code>mid</code> + a Redis lock keyed on <code>conversation_id</code> around the agent job. Note: BullMQ's per-key concurrency (Groups) is a paid BullMQ Pro feature — plain BullMQ will not serialize per conversation for you.</td>
           </tr>
           <tr>
-            <td>Unit economics</td>
+            <td>Merchant has no catalog</td>
             <td class="sev-med">Medium</td>
-            <td>LLM + WA + support</td>
-            <td>Meter tokens, messages, seats</td>
+            <td>Most BD f-commerce sellers keep stock in their head or in post captions. "Upload a CSV, then confirm every row" is where onboarding stalls.</td>
+            <td>Make paste-post-link the primary import path. Allow a zero-catalog mode: AI answers delivery / COD / hours / qualification only, escalates every price question.</td>
           </tr>
         </tbody>
       </table>
@@ -448,39 +538,39 @@ Reply</pre>
         </thead>
         <tbody>
           <tr>
-            <td>0 — Design partner</td>
-            <td>1 merchant, 1 Page, manual catalog, inbox</td>
-            <td>Map real Bangla sales intents</td>
+            <td><strong>0 — POC (now)</strong></td>
+            <td>1 merchant, 1 Page, Messenger DM + comment→DM, catalog, tools, takeover, leads. Groq as the LLM.</td>
+            <td>Pipeline runs end-to-end on a real Page; zero wrong prices; real Banglish intent list collected</td>
           </tr>
           <tr>
-            <td>1 — Paid MVP</td>
-            <td>Messenger, AI+rules, takeover, audit, leads</td>
-            <td>≥80% on narrow intents; no bad facts</td>
+            <td>1 — Harden</td>
+            <td>Better model (evaluated on real messages), attachment handling, audit UI, kill switch</td>
+            <td>≥80% on the narrow intents seen in Phase 0; no bad facts</td>
           </tr>
           <tr>
-            <td>2 — Commerce</td>
-            <td>Inventory sync, delivery calc, order draft</td>
+            <td>2 — Second merchant</td>
+            <td>Self-serve onboarding, multi-Page, basic analytics</td>
+            <td>New merchant live with &lt;30 min of your help</td>
+          </tr>
+          <tr>
+            <td>3 — Commerce</td>
+            <td>Delivery calc, order draft, courier/COD confirmation</td>
             <td>AI collects orders; human confirms</td>
           </tr>
           <tr>
-            <td>3 — WhatsApp</td>
-            <td>Embedded Signup, templates, opt-in</td>
-            <td>Unit economics work</td>
-          </tr>
-          <tr>
             <td>4 — Expand</td>
-            <td>Web widget, CRM, voice</td>
-            <td>After stable data model</td>
+            <td>Web widget, WhatsApp, CRM, voice</td>
+            <td>After the data model is stable</td>
           </tr>
         </tbody>
       </table>
 
       <div class="callout ok">
         <strong>Next decision</strong>
-        One vertical, one job: “Answer product/price/delivery in Messenger and create qualified leads.” Do not launch WA + CRM + voice + orders in v1 together.
+        One Page, one vertical, one job: “Answer product / price / delivery in Banglish on Messenger and comments, and create qualified leads.” Nothing else ships in the POC. The goal of this build is a <strong>correct pipeline</strong>, not a competitive feature set — model, channels and UI all swap in later without touching it.
       </div>
 
-      <p class="muted">Verify before build: Meta Messenger Platform, Facebook Login/App Review, WhatsApp Cloud API (Embedded Signup, templates, pricing).</p>
+      <p class="muted">Verify before build: Meta Messenger Platform, Facebook Login for Business / App Review + Business Verification, Page <code>feed</code> webhook + Private Reply limits, <code>message_echoes</code>.</p>
     </section>
 
     <section class="notes" id="scratch">

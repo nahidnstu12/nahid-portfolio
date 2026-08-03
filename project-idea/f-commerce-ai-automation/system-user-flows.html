@@ -182,6 +182,7 @@
       <a href="#merchant-onboard">Merchant onboarding</a>
       <a href="#catalog">Catalog flow</a>
       <a href="#customer">Customer message</a>
+      <a href="#comment-flow">Comment → DM</a>
       <a href="#bot-vs-human">Bot vs human</a>
       <a href="#states">Conversation states</a>
       <a href="#screens">App screens</a>
@@ -209,8 +210,8 @@
           </tr>
           <tr>
             <td><span class="actor a-customer">Customer</span></td>
-            <td>Facebook Messenger only</td>
-            <td>Ask price, size, delivery; place interest / order info</td>
+            <td>Facebook Messenger, <strong>or a comment under a Page post</strong></td>
+            <td>Ask price, size, delivery — usually in Banglish; place interest / order info</td>
           </tr>
           <tr>
             <td><span class="actor a-meta">Meta</span></td>
@@ -244,8 +245,8 @@
                                                                  ┌───────────────┐
                                                                  │ Worker        │
                                                                  │ AI + tools    │
-                                                                 │ (DeepSeek/    │
-                                                                 │  Kimi)        │
+                                                                 │ (Groq —       │
+                                                                 │  swappable)   │
                                                                  └───────┬───────┘
                                                                          │
                                                                          ▼
@@ -356,14 +357,21 @@
           <div class="step-num">C</div>
           <div>
             <div class="step-title"><span class="actor a-system">Worker</span> Loads conversation</div>
-            <div class="step-desc">If mode is <span class="state">human</span> → skip AI, notify inbox only. If <span class="state">bot</span> → continue.</div>
+            <div class="step-desc">Takes a Redis lock on <code>conversation_id</code> (one job at a time per thread). If mode is <span class="state">human</span> or <span class="state">pending_human</span> → skip AI, notify inbox only. If <span class="state">bot</span> → continue.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">C2</div>
+          <div>
+            <div class="step-title">Attachment gate (POC)</div>
+            <div class="step-desc">Message has an image, voice note or file? → <span class="state">pending_human</span>, notify inbox, stop. The POC agent is text-only and must not guess at a photo.</div>
           </div>
         </div>
         <div class="step">
           <div class="step-num">D</div>
           <div>
             <div class="step-title">Agent + tools</div>
-            <div class="step-desc"><code>search_products</code>, <code>get_shop_policies</code>, <code>upsert_lead</code> as needed. Compose BN/EN reply.</div>
+            <div class="step-desc"><code>search_products</code>, <code>get_shop_policies</code>, <code>upsert_lead</code> as needed. Reply in the same style the customer used — Banglish in, Banglish out.</div>
           </div>
         </div>
         <div class="step">
@@ -383,6 +391,69 @@
       </div>
     </section>
 
+    <section id="comment-flow">
+      <h2>Comment → DM flow</h2>
+      <p class="muted">The other entry point, and in BD usually the bigger one. It converges on the <strong>same</strong> conversation record and the same state machine — it is not a second pipeline.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-title"><span class="actor a-customer">Customer</span> Comments on a Page post</div>
+            <div class="step-desc">e.g. “dam koto?” under a boosted product post.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-title"><span class="actor a-meta">Meta</span> POST webhook — <code>feed</code> field</div>
+            <div class="step-desc">Filter: comment-add on our own post only. Ignore comments by the Page itself, replies to our own comment, edits and deletes. Dedupe on <code>comment_id</code> — Meta retries.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-title"><span class="actor a-system">Worker</span> Optional public reply</div>
+            <div class="step-desc">Short fixed text the merchant can edit (e.g. “Inbox check korun”). Off by default if the merchant prefers.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-title">Private Reply API</div>
+            <div class="step-desc">Opens a Messenger thread with that commenter. <strong>Once per comment</strong>, inside Meta's allowed window. After it lands, the ordinary 24-hour messaging window governs.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div>
+            <div class="step-title">Converge on one conversation</div>
+            <div class="step-desc">Look up or create the conversation for that PSID + Page. Record <code>source: comment</code> and the post/product context so the agent knows what was being asked about.</div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">6</div>
+          <div>
+            <div class="step-title">Normal thread from here</div>
+            <div class="step-desc">Same agent, same tools, same <span class="state">bot</span> / <span class="state">pending_human</span> / <span class="state">human</span> states, same lead capture.</div>
+          </div>
+        </div>
+      </div>
+      <pre>Comment ──► feed webhook ──► dedupe(comment_id)
+                                   │
+                     ┌─────────────┴─────────────┐
+                     ▼                           ▼
+             public reply (opt)          private_replies API
+                                                 │
+                                                 ▼
+                                   conversation (source=comment)
+                                                 │
+                                                 ▼
+                                     same agent + state machine</pre>
+      <div class="callout">
+        Merchant kill switch lives in <strong>Channel settings</strong>: comment auto-reply on/off, independent of the DM AI toggle.
+      </div>
+    </section>
+
     <section id="bot-vs-human">
       <h2>When AI stops — human flow</h2>
       <table>
@@ -394,6 +465,16 @@
             <td>No product match / empty catalog question</td>
             <td><code>request_human</code> → mode <span class="state">pending_human</span></td>
             <td>Inbox badge “Needs human”; optional auto-reply “Someone will reply soon”</td>
+          </tr>
+          <tr>
+            <td>Customer sends an image or voice note</td>
+            <td>Attachment gate → <span class="state">pending_human</span> before the agent runs</td>
+            <td>Inbox badge “Needs human”; POC agent is text-only</td>
+          </tr>
+          <tr>
+            <td><strong>Merchant replies from Facebook's own Page inbox</strong></td>
+            <td><code>message_echoes</code> event that we did not send → mode <span class="state">human</span> automatically</td>
+            <td>Nothing to click — the thread is simply theirs now until “Release to bot”</td>
           </tr>
           <tr>
             <td>Customer angry, refund dispute, custom request</td>
@@ -421,7 +502,8 @@
                     │  AI may auto-reply on new inbound       │
                     └───────────────┬──────────────────────────┘
                                     │
-              low confidence / request_human / merchant "pause AI"
+   low confidence / request_human / attachment / merchant "pause AI"
+                     / merchant replied from FB Page inbox (echo)
                                     ▼
                     ┌──────────────────────────────────────┐
                     │           pending_human               │
@@ -436,7 +518,7 @@
                     └───────────────┬──────────────────────────┘
                                     │ "Release to bot"
                                     └──────────────────► bot</pre>
-      <p class="muted">Every outbound job checks mode <strong>twice</strong>: before agent run and before Send API — prevents double reply after takeover.</p>
+      <p class="muted">Every outbound job checks mode <strong>twice</strong>: before the agent run and immediately before Send API — prevents a double reply after takeover. The mode check alone is not enough: also hold a <strong>Redis lock on <code>conversation_id</code></strong> so two messages arriving together cannot run two agents on the same thread. Plain BullMQ has no per-key serialization (that is BullMQ Pro “Groups”).</p>
     </section>
 
     <section id="screens">
@@ -479,7 +561,9 @@
         <div class="screen">
           <strong>Settings</strong>
           <ul>
-            <li>AI on/off</li>
+            <li>AI on/off (DM)</li>
+            <li>Comment auto-reply on/off</li>
+            <li>Public reply text</li>
             <li>Workspace / staff (later)</li>
           </ul>
         </div>
@@ -521,8 +605,9 @@
         <tbody>
           <tr><td>Tenant (workspace)</td><td>Users, Page token, all catalog &amp; threads</td></tr>
           <tr><td>Page connection</td><td>One FB Page per tenant (POC)</td></tr>
-          <tr><td>Conversation</td><td>Meta sender PSID + Page ID; has <code>mode</code></td></tr>
-          <tr><td>Message</td><td>Conversation; direction in/out; actor bot/human</td></tr>
+          <tr><td>Conversation</td><td>Meta sender PSID + Page ID; has <code>mode</code> and <code>source</code> (dm | comment)</td></tr>
+          <tr><td>Message</td><td>Conversation; direction in/out; actor bot/human/merchant-external; <code>has_attachment</code> flag; our own <code>message_id</code> for echo matching</td></tr>
+          <tr><td>Comment event</td><td>Post ID + <code>comment_id</code> (unique — dedupe key); resolved conversation; whether a private reply was already sent</td></tr>
           <tr><td>Lead</td><td>Conversation; product fields + contact</td></tr>
           <tr><td>Product</td><td>Tenant; status draft/confirmed</td></tr>
         </tbody>

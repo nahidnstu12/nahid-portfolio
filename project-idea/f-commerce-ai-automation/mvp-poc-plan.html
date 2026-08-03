@@ -148,7 +148,7 @@
 <body>
   <header>
     <h1>Messenger MVP / POC plan <span class="badge">Implementation</span></h1>
-    <p>Scope: Messenger only · one vertical (e.g. fashion) · one inbox per tenant</p>
+    <p>Scope: Bangladesh · one Page · Messenger DM + comment→DM · one vertical (e.g. fashion) · one inbox per tenant</p>
     <a href="index.html">← Brainstorm</a>
     <a href="system-user-flows.html">User flows →</a>
     <a href="setup-guide.html">Setup guide →</a>
@@ -159,14 +159,16 @@
     <section>
       <h2>POC outcome (what “done” looks like)</h2>
       <div class="scope">
-        <p><strong>One pilot merchant</strong> connects their FB Page; customers DM on Messenger; AI answers product/price/delivery in Bangla or English using <strong>confirmed catalog</strong>; collects variant, qty, phone, address into a <strong>lead</strong>; uncertain threads go to <strong>human inbox</strong> without double replies.</p>
+        <p><strong>One pilot merchant</strong> connects their FB Page; customers DM on Messenger <em>or comment on a post</em>; AI answers product/price/delivery in <strong>Banglish / Bangla / English</strong> using the <strong>confirmed catalog</strong>; collects variant, qty, phone, address into a <strong>lead</strong>; uncertain threads go to <strong>human inbox</strong> without double replies.</p>
         <ul>
-          <li>Connect Page + webhook</li>
+          <li>Connect Page + webhook (<code>messages</code>, <code>message_echoes</code>, <code>feed</code>)</li>
           <li>CSV / paste-link import → merchant confirms prices &amp; delivery rules</li>
           <li>AI + tools (not raw LLM for price/stock)</li>
-          <li>Lead capture + human takeover</li>
+          <li>Comment on post → private reply → same AI thread</li>
+          <li>Lead capture + human takeover (including takeover triggered by the merchant using Facebook's own Page inbox)</li>
         </ul>
-        <p class="not"><strong>Out of POC:</strong> WhatsApp, website widget, payments, auto-orders, CRM, multi-Page, billing (optional stub only).</p>
+        <p class="not"><strong>Out of POC:</strong> WhatsApp, website widget, payments, auto-orders, CRM, multi-Page, billing (optional stub only), <strong>image and voice-note understanding</strong> (attachment → straight to human).</p>
+        <p class="not"><strong>Not a goal:</strong> feature parity with any existing tool. This build exists to prove the pipeline on real BD traffic.</p>
       </div>
     </section>
 
@@ -209,13 +211,13 @@
           </tr>
           <tr>
             <td><strong>LLM</strong></td>
-            <td>DeepSeek or Kimi (OpenAI-compatible API)</td>
-            <td>Tool-calling agent; Bangla/English replies — pick one provider for POC, abstract behind a thin client</td>
+            <td><strong>Groq</strong> (OpenAI-compatible API)</td>
+            <td>Tool-calling agent; Banglish/Bangla/English replies. Fixed choice for the POC — fast and free enough to iterate. Always called through a thin <code>llm-client</code> wrapper so the provider is one env var, not a refactor.</td>
           </tr>
           <tr>
             <td><strong>Channels</strong></td>
-            <td>Meta Graph API (Messenger)</td>
-            <td>OAuth Page token, webhooks, Send API — no extra framework</td>
+            <td>Meta Graph API (Messenger + Page comments)</td>
+            <td>OAuth Page token, webhooks, Send API, Private Reply API — no extra framework</td>
           </tr>
           <tr>
             <td><strong>Hosting</strong></td>
@@ -232,7 +234,16 @@
     └── postgres
 
 Public URL → Meta webhook + Facebook OAuth redirect URIs must match.</pre>
-      <p class="not">Lock one LLM (DeepSeek <em>or</em> Kimi) until Phase 6 pilot; swap via env without rewriting tools.</p>
+      <div class="scope" style="margin-top:14px">
+        <p style="margin-top:0"><strong>LLM decision (settled):</strong> Groq for the whole POC. Do <em>not</em> spend POC time comparing providers — the pipeline is the deliverable.</p>
+        <ul>
+          <li>All model calls go through one module (<code>lib/llm.ts</code>): <code>chat(messages, tools)</code>. Nothing else imports the provider SDK.</li>
+          <li>Model name lives in env (<code>LLM_MODEL</code>), not in code.</li>
+          <li>Tool schemas are provider-neutral JSON Schema — reusable as-is on any OpenAI-compatible or Anthropic-style API.</li>
+          <li>Log every prompt + tool call + reply. That log becomes the eval set when a better model is chosen at commercialization.</li>
+        </ul>
+        <p class="not" style="margin-bottom:0">Choose the production model <strong>after</strong> the pilot, scored on the real messages the POC collected — not on guesses now.</p>
+      </div>
     </section>
 
     <section>
@@ -254,8 +265,8 @@ Public URL → Meta webhook + Facebook OAuth redirect URIs must match.</pre>
           </tr>
           <tr>
             <td><strong>Channel settings</strong></td>
-            <td>Webhook health (last event); toggle AI on/off for Page; test “send hello” (dev)</td>
-            <td>Debug Meta integration without guessing</td>
+            <td>Webhook health (last event); toggle AI on/off for Page; toggle <strong>comment auto-reply</strong> on/off; optional public reply text; test “send hello” (dev)</td>
+            <td>Debug Meta integration without guessing; merchant must be able to stop comment replies instantly</td>
           </tr>
           <tr>
             <td><strong>Catalog</strong></td>
@@ -299,21 +310,34 @@ Public URL → Meta webhook + Facebook OAuth redirect URIs must match.</pre>
         <span class="pill">Redis + BullMQ</span>
         <span class="pill">Webhook ingress</span>
         <span class="pill">Conversation state machine</span>
-        <span class="pill">DeepSeek / Kimi + tools</span>
+        <span class="pill">Groq client (swappable)</span>
         <span class="pill">Meta Send adapter</span>
+        <span class="pill">Comment → Private Reply adapter</span>
         <span class="pill">Hetzner deploy</span>
       </div>
-      <pre>Meta POST /webhook → verify → idempotency (message mid)
-  → enqueue(conversation_id)
-Worker: load thread + mode (bot|pending_human|human)
-  → if human: notify inbox only, no auto reply
+      <pre>Meta POST /webhook → verify signature → route by field
+  ├── messages        → idempotency on mid  → enqueue(conversation_id)
+  ├── message_echoes  → if sent by merchant (not by us) → mode = human, stop
+  └── feed (comment)  → idempotency on comment_id → enqueue(comment job)
+
+Comment job: optional public reply → Private Reply API
+  → creates/looks up conversation → continue as a normal thread
+
+Worker (one job at a time per conversation_id — Redis lock):
+  load thread + mode (bot|pending_human|human)
+  → attachment (image/audio)? → pending_human, notify, stop
+  → if human/pending_human: notify inbox only, no auto reply
   → if bot: run agent (tools) → send reply OR set pending_human
-Outbound: gate on mode again before Send API</pre>
+Outbound: re-read mode immediately before Send API</pre>
+      <p class="not">Every outbound message we send also comes back as a <code>message_echoes</code> event. Tag our own sends (store the returned <code>message_id</code>) so an echo of our own reply is ignored and only a <em>merchant-typed</em> echo triggers takeover.</p>
     </section>
 
     <section>
       <h2>Implementation phases (POC → first MVP)</h2>
       <p class="not" style="margin-top:0">Order is strict: later phases assume earlier exit criteria. Estimates assume 1–2 devs; adjust weeks to your pace.</p>
+      <div class="scope">
+        <p style="margin:0"><strong>Phase 0 (day 1, runs in background):</strong> start Meta <strong>Business Verification</strong> — business documents, verified domain, privacy-policy URL, data-deletion callback URL. It takes weeks and is independent of code. Do not discover this in Phase 7.</p>
+      </div>
 
       <div class="phase">
         <div class="phase-head">
@@ -359,13 +383,15 @@ Outbound: gate on mode again before Send API</pre>
         </div>
         <div class="phase-body">
           <ul class="checklist">
-            <li>Meta app (dev → later Live): Facebook Login, <code>pages_messaging</code>, <code>pages_manage_metadata</code>, <code>pages_show_list</code> (validate current permission names in Meta docs)</li>
+            <li>Meta app (dev → later Live): Facebook Login for Business, <code>pages_messaging</code>, <code>pages_manage_metadata</code>, <code>pages_show_list</code>, plus <code>pages_read_engagement</code> / <code>pages_manage_engagement</code> for comments in Phase 6 (validate current permission names in Meta docs)</li>
             <li>Connect flow: OAuth → select Page → save token encrypted</li>
             <li>Subscribe Page to app + register webhook URL; verify token challenge</li>
+            <li>Subscribe fields: <code>messages</code>, <code>message_echoes</code> (<code>feed</code> comes in Phase 6)</li>
             <li>Parse inbound messages → store in <code>messages</code>; show in Inbox UI (no AI yet)</li>
             <li>Idempotency on <code>message.mid</code></li>
+            <li>Detect attachments (image / audio / file) and flag the message — no parsing, just a flag the agent will honour later</li>
           </ul>
-          <div class="done-crit"><strong>Exit:</strong> Real customer message appears in dashboard within seconds; webhook retries don’t duplicate rows.</div>
+          <div class="done-crit"><strong>Exit:</strong> Real customer message appears in dashboard within seconds; webhook retries don’t duplicate rows; a reply typed by the merchant in Facebook's own Page inbox also shows up (via echo) in your timeline.</div>
         </div>
       </div>
 
@@ -381,60 +407,87 @@ Outbound: gate on mode again before Send API</pre>
             <li>Per-conversation <code>mode</code>: bot | pending_human | human; assignee optional</li>
             <li>“Take over” / “Release to bot” in UI updates mode</li>
             <li>Worker checks mode immediately before any automated send</li>
+            <li><strong>Redis lock per <code>conversation_id</code></strong> around the job — plain BullMQ has no per-key serialization (that is BullMQ Pro “Groups”), so two fast messages will otherwise process concurrently</li>
+            <li><strong>Echo-driven takeover:</strong> store the <code>message_id</code> of everything we send; a <code>message_echoes</code> event we did <em>not</em> send means the merchant replied from Facebook's own inbox → set <code>human</code></li>
           </ul>
-          <div class="done-crit"><strong>Exit:</strong> Human can reply from inbox; mode prevents bot send while human active.</div>
+          <div class="done-crit"><strong>Exit:</strong> Human can reply from inbox; mode prevents bot send while human active; replying from the Facebook Page inbox silently switches the thread to human mode.</div>
         </div>
       </div>
 
       <div class="phase">
         <div class="phase-head">
           <span class="phase-num">Phase 5</span>
-          <span class="phase-title">AI agent (Bangla/English) + lead capture</span>
-          <span class="phase-when">~1–2 weeks</span>
+          <span class="phase-title">AI agent (Banglish / Bangla / English) + lead capture</span>
+          <span class="phase-when">~2 weeks</span>
         </div>
         <div class="phase-body">
           <ul class="checklist">
-            <li>Agent via DeepSeek or Kimi (OpenAI-compatible): tool-calling loop; system prompt — fashion vertical, never invent price</li>
+            <li>Agent via <strong>Groq</strong> through <code>lib/llm.ts</code>: tool-calling loop; system prompt — fashion vertical, never invent price</li>
+            <li>System prompt states the language rule explicitly: <em>reply in the same script/style the customer used; Banglish in → Banglish out</em></li>
             <li>Agent loop: classify intent → tool calls → reply; max turns per inbound message</li>
             <li>Slot collection: variant, qty, phone, address → write/update <code>leads</code> row linked to conversation</li>
-            <li>Confidence rules: no product match, price question with empty catalog, angry/opt-out keywords → <code>pending_human</code> + notify inbox</li>
-            <li>Log tool inputs/outputs on message for audit</li>
+            <li>Confidence rules → <code>pending_human</code> + notify inbox: no product match, price question with empty catalog, angry/opt-out keywords, <strong>any image or voice attachment</strong></li>
+            <li>Log every prompt, tool input/output and reply on the message row — this is both the audit trail and the future eval set</li>
           </ul>
-          <div class="done-crit"><strong>Exit:</strong> On test Page, 10 scripted DMs (price, stock, delivery, order flow) pass without wrong prices; lead row complete when user gives address.</div>
+          <div class="done-crit"><strong>Exit:</strong> Replay <strong>~200 real messages</strong> pulled from the pilot merchant's existing Page inbox (not scripted ones) through the agent offline. Zero wrong prices; correct tool chosen on the common intents; Banglish replies read naturally to a native speaker. Lead row complete when the customer gives an address.</div>
         </div>
       </div>
 
       <div class="phase">
         <div class="phase-head">
           <span class="phase-num">Phase 6</span>
-          <span class="phase-title">POC pilot (design partner)</span>
-          <span class="phase-when">~2 weeks parallel</span>
+          <span class="phase-title">Comment → DM</span>
+          <span class="phase-when">~4–5 days</span>
         </div>
         <div class="phase-body">
           <ul class="checklist">
-            <li>One fashion Page owner; you onboard catalog together (CSV + confirm)</li>
-            <li>AI on limited hours or “supervised” (you watch inbox daily)</li>
-            <li>Track: auto-resolved vs human; lead count; factual errors (must be zero on price/stock)</li>
-            <li>Meta app Live + app review if pilot uses production Page (start dev/test Page if review slow)</li>
+            <li>Subscribe Page webhook field <code>feed</code>; filter to comment-add events on the Page's own posts</li>
+            <li>Ignore: comments by the Page itself, replies to our own comment, edits/deletes</li>
+            <li>Idempotency on <code>comment_id</code> (Meta will retry)</li>
+            <li>Optional public reply on the comment (short, fixed text — merchant-editable, e.g. “Inbox check korun”)</li>
+            <li>Private Reply API on the comment → opens/uses the Messenger thread with that user</li>
+            <li>Map comment → the same <code>conversation</code> row as a DM from that PSID; record <code>source: comment | dm</code></li>
+            <li>Seed the thread with the post context so the agent knows which product is being asked about</li>
+            <li>Respect the limits: one private reply per comment, only inside Meta's allowed window; after that the ordinary 24-hour messaging window applies</li>
+            <li>Merchant kill switch: comment auto-reply on/off in Channel settings</li>
           </ul>
-          <div class="done-crit"><strong>Exit:</strong> Merchant says inbox saves time; you have intent list + error log; ready to add billing.</div>
+          <div class="done-crit"><strong>Exit:</strong> A comment saying “dam koto” on a real post produces a private reply within seconds, the resulting thread runs through the same agent + tools + state machine as a DM, and a repeated webhook does not send a second private reply.</div>
         </div>
       </div>
 
       <div class="phase">
         <div class="phase-head">
           <span class="phase-num">Phase 7</span>
-          <span class="phase-title">First paid MVP (thin layer)</span>
+          <span class="phase-title">POC pilot (design partner)</span>
+          <span class="phase-when">~2 weeks parallel</span>
+        </div>
+        <div class="phase-body">
+          <ul class="checklist">
+            <li>One fashion Page owner in BD; you onboard catalog together (paste post links + CSV + confirm)</li>
+            <li>AI on limited hours or “supervised” (you watch inbox daily)</li>
+            <li>Track: auto-resolved vs human; lead count; comment→DM conversion; factual errors (must be zero on price/stock)</li>
+            <li>Keep a running list of the real Banglish intents seen — this is the main asset the POC produces</li>
+            <li>Meta app Live + app review if pilot uses production Page (stay on a dev/test Page if review is slow)</li>
+          </ul>
+          <div class="done-crit"><strong>Exit:</strong> Merchant says the inbox saves time; you have a real intent list + error log; you have a logged message corpus to evaluate a better model against.</div>
+        </div>
+      </div>
+
+      <div class="phase">
+        <div class="phase-head">
+          <span class="phase-num">Phase 8</span>
+          <span class="phase-title">Harden (post-POC, before a second merchant)</span>
           <span class="phase-when">after POC exit</span>
         </div>
         <div class="phase-body">
           <ul class="checklist">
-            <li>Stripe/bKash manual invoicing OK initially; or simple plan flag on tenant</li>
+            <li><strong>Model decision:</strong> score Groq against stronger candidates on the logged real messages; swap via <code>LLM_MODEL</code> if it wins</li>
+            <li>Image handling: vision model → product match, replacing attachment→human</li>
             <li>Onboarding checklist UI (connect → import → confirm → enable AI)</li>
             <li>Rate limits + AI kill switch per tenant</li>
-            <li>Basic analytics: messages/day, leads/week, human takeover rate</li>
+            <li>Basic analytics: messages/day, leads/week, human takeover rate, comment→DM conversion</li>
           </ul>
-          <div class="done-crit"><strong>Exit:</strong> Second merchant can self-serve connect + catalog with &lt;30 min your support.</div>
+          <div class="done-crit"><strong>Exit:</strong> Second merchant can self-serve connect + catalog with &lt;30 min of your support.</div>
         </div>
       </div>
     </section>
@@ -453,6 +506,7 @@ Outbound: gate on mode again before Send API</pre>
           <tr><td><code>request_human</code></td><td>reason</td><td>Sets pending_human; no customer-facing lie</td></tr>
         </tbody>
       </table>
+      <p class="not">Keep tool schemas as plain JSON Schema in one file. They must not reference anything Groq-specific — the same definitions get reused verbatim when the model changes.</p>
     </section>
 
     <section>
@@ -462,11 +516,14 @@ Outbound: gate on mode again before Send API</pre>
           <tr><th>Week</th><th>Focus</th></tr>
         </thead>
         <tbody>
+          <tr><td>0</td><td>Start Meta Business Verification (paperwork, runs in background all the way through)</td></tr>
           <tr><td>1</td><td>Phase 1 + 2 (shell, catalog, tools tested via script/Postman)</td></tr>
-          <tr><td>2</td><td>Phase 3 + 4 (webhook, inbox, human send, state machine)</td></tr>
-          <tr><td>3</td><td>Phase 5 (agent + leads + handoff rules)</td></tr>
-          <tr><td>4–5</td><td>Phase 6 pilot + fixes; Meta Live if needed</td></tr>
-          <tr><td>6+</td><td>Phase 7 polish + second tenant</td></tr>
+          <tr><td>2</td><td>Phase 3 (webhook, inbox, echoes)</td></tr>
+          <tr><td>3</td><td>Phase 4 (human send, state machine, per-conversation lock)</td></tr>
+          <tr><td>4–5</td><td>Phase 5 (agent + Banglish prompt + leads + handoff rules)</td></tr>
+          <tr><td>6</td><td>Phase 6 (comment → DM)</td></tr>
+          <tr><td>7–8</td><td>Phase 7 pilot + fixes; Meta Live if approved</td></tr>
+          <tr><td>9+</td><td>Phase 8 harden + model decision + second tenant</td></tr>
         </tbody>
       </table>
     </section>
@@ -474,10 +531,14 @@ Outbound: gate on mode again before Send API</pre>
     <section>
       <h2>Risks to watch during POC</h2>
       <ul>
-        <li><strong>App review delay</strong> — use test Page + test users until Live.</li>
+        <li><strong>Business Verification / app review delay</strong> — start day 1; use a test Page + test users until Live.</li>
+        <li><strong>Merchant uses Facebook's own Page inbox</strong> — without <code>message_echoes</code> the bot talks over the human. Highest-visibility failure; handled in Phase 4.</li>
+        <li><strong>Double reply from concurrency</strong> — outbound gate on conversation mode <em>plus</em> a Redis lock per <code>conversation_id</code>. Plain BullMQ does not serialize per key.</li>
+        <li><strong>Duplicate private replies</strong> — Meta retries <code>feed</code> events; a private reply is allowed once per comment. Idempotency on <code>comment_id</code> is mandatory, not optional.</li>
+        <li><strong>Banglish quality</strong> — the failure mode is a fluent, wrong-toned or wrong-tool reply. Evaluate on real inbox messages, never on scripted ones.</li>
+        <li><strong>Attachments</strong> — image/voice must route to human in the POC. An agent that silently ignores an attached photo looks broken to the customer.</li>
         <li><strong>Empty catalog</strong> — block “Enable AI” until ≥1 confirmed product + delivery rule saved.</li>
-        <li><strong>Double reply</strong> — outbound gate on conversation mode + single worker per conversation id.</li>
-        <li><strong>Bangla numbers</strong> — normalize ১২৯০ / 1290 in tool layer before compare.</li>
+        <li><strong>Bangla numbers</strong> — normalize ১২৯০ / 1290 in the tool layer before compare.</li>
       </ul>
     </section>
   </main>

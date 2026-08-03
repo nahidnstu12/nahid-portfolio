@@ -205,12 +205,15 @@ META_APP_ID=
 META_APP_SECRET=
 META_WEBHOOK_VERIFY_TOKEN=&lt;you invent this string&gt;
 
-# LLM (POC: Groq only)
+# LLM (POC: Groq only — one provider, one client module)
+LLM_PROVIDER=groq
+LLM_MODEL=&lt;model id with reliable tool calling&gt;
 GROQ_API_KEY=
 
-# Optional later
+# Optional later — swap LLM_PROVIDER + LLM_MODEL, no code change
 # DEEPSEEK_API_KEY=
-# MOONSHOT_API_KEY=</pre>
+# MOONSHOT_API_KEY=
+# ANTHROPIC_API_KEY=</pre>
       <p class="muted">Merchant Page tokens go in <strong>Postgres encrypted</strong>, not in env — one row per connected Page.</p>
     </section>
 
@@ -222,9 +225,16 @@ GROQ_API_KEY=
         <li>Set <code>GROQ_API_KEY</code> on worker (and Next if agent runs there).</li>
         <li>Monitor usage on Groq dashboard; upgrade only when free RPD/RPM blocks pilots.</li>
       </ol>
+      <ol start="5">
+        <li>Log every prompt, tool call and reply to Postgres — at commercialization this log is the eval set for choosing the production model.</li>
+      </ol>
       <div class="callout warn">
-        <strong>Later</strong>
-        Swap provider via a thin LLM client (DeepSeek/Kimi) without changing Meta or catalog code.
+        <strong>Groq is the POC decision — don't revisit it mid-build</strong>
+        All model calls go through one module (<code>lib/llm.ts</code>) exposing <code>chat(messages, tools)</code>; nothing else imports the provider SDK. Model name lives in <code>LLM_MODEL</code>. Tool schemas stay provider-neutral JSON Schema. Swapping to a stronger model later is an env change plus a re-run of the eval set — not a refactor.
+      </div>
+      <div class="callout warn">
+        <strong>Known weak spot to watch</strong>
+        Banglish (romanized Bangla) is where small open models are weakest, and it is the majority of real traffic. Test <code>search_products</code> tool selection on real Banglish messages early — if tool choice is unreliable, that is a model problem, not a prompt problem, and it is the one reason to revisit this decision before the pilot.
       </div>
     </section>
 
@@ -264,7 +274,12 @@ GROQ_API_KEY=
           <tr>
             <td><strong>Permissions</strong></td>
             <td>App Review when going Live</td>
-            <td>Typical: <code>pages_messaging</code>, <code>pages_manage_metadata</code>, <code>pages_show_list</code> — verify current names in Meta docs</td>
+            <td>Messaging: <code>pages_messaging</code>, <code>pages_manage_metadata</code>, <code>pages_show_list</code>. Comment→DM additionally needs <code>pages_read_engagement</code> and <code>pages_manage_engagement</code> — verify current names in Meta docs</td>
+          </tr>
+          <tr>
+            <td><strong>Business Verification</strong></td>
+            <td>Meta Business settings</td>
+            <td><strong>Start this on day 1.</strong> Advanced Access requires a verified business: business documents, verified domain, privacy-policy URL, data-deletion callback URL, and a screen recording demoing each permission. Takes weeks and blocks going Live.</td>
           </tr>
           <tr>
             <td><strong>App mode</strong></td>
@@ -281,14 +296,47 @@ GROQ_API_KEY=
       <ol>
         <li>Public HTTPS URL, e.g. <code>https://yourdomain.com/api/webhooks/meta</code></li>
         <li>In Meta app → Messenger → Webhooks: paste URL + verify token → subscribe your <strong>test Page</strong></li>
-        <li>Subscribe fields (minimal POC): <code>messages</code>, optionally <code>messaging_postbacks</code></li>
+        <li>Subscribe fields (POC): <code>messages</code>, <code>message_echoes</code>, <code>feed</code>, optionally <code>messaging_postbacks</code></li>
         <li>Implement GET handler: echo <code>hub.challenge</code> when verify token matches</li>
         <li>Implement POST: validate <code>X-Hub-Signature-256</code> with App Secret → enqueue job → return <strong>200 quickly</strong></li>
       </ol>
-      <pre>POST https://graph.facebook.com/v21.0/{PAGE-ID}/messages
+      <table>
+        <thead>
+          <tr><th>Field</th><th>Gives you</th><th>Why the POC needs it</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>messages</code></td>
+            <td>Inbound customer DMs</td>
+            <td>The main pipeline</td>
+          </tr>
+          <tr>
+            <td><code>message_echoes</code></td>
+            <td>Copies of messages sent <em>by the Page</em> — including ones the merchant typed in Facebook's own inbox</td>
+            <td>Without it the bot replies on top of a human. Tag your own sends by <code>message_id</code> and ignore those; a merchant-typed echo switches the thread to <code>human</code>.</td>
+          </tr>
+          <tr>
+            <td><code>feed</code></td>
+            <td>Comments on the Page's posts</td>
+            <td>Comment → DM. Filter to comment-add on own posts; ignore the Page's own comments.</td>
+          </tr>
+        </tbody>
+      </table>
+      <pre>Send a DM
+POST https://graph.facebook.com/v21.0/{PAGE-ID}/messages
   ?access_token={PAGE_ACCESS_TOKEN}
-Body: recipient { id: PSID }, message { text: "..." }</pre>
-      <p class="muted">Use current Graph API version from Meta docs. Standard replies: customer must message first; <strong>24-hour messaging window</strong> after their last message.</p>
+Body: recipient { id: PSID }, message { text: "..." }
+
+Private reply to a comment (opens a Messenger thread)
+POST https://graph.facebook.com/v21.0/{COMMENT-ID}/private_replies
+  ?access_token={PAGE_ACCESS_TOKEN}
+Body: message = "..."
+
+Optional public reply on the same comment
+POST https://graph.facebook.com/v21.0/{COMMENT-ID}/comments
+  ?access_token={PAGE_ACCESS_TOKEN}
+Body: message = "Inbox check korun"</pre>
+      <p class="muted">Use the current Graph API version from Meta docs. Standard replies: the customer must message first; <strong>24-hour messaging window</strong> after their last message. Private reply is allowed <strong>once per comment</strong> and only within Meta's documented window after the comment — confirm the current limit before building, and make the call idempotent on <code>comment_id</code> because Meta retries webhooks.</p>
     </section>
 
     <section id="oauth">
@@ -353,10 +401,16 @@ Body: recipient { id: PSID }, message { text: "..." }</pre>
         <li>Webhook signature verification enabled (reject bad POSTs)</li>
         <li>Test Page connected; inbound DM appears in Inbox</li>
         <li>Human can send reply from dashboard → customer sees it in Messenger</li>
+        <li>Reply typed in <strong>Facebook's own Page inbox</strong> switches the thread to <code>human</code> — bot stays silent</li>
+        <li>Our own outbound messages do <strong>not</strong> trigger the echo takeover (own <code>message_id</code> tagged and ignored)</li>
+        <li>Comment on a test post → private reply arrives; replaying the same webhook sends <strong>no</strong> second reply</li>
+        <li>Two DMs sent 200ms apart produce one ordered exchange, not two overlapping agent runs (per-conversation lock works)</li>
+        <li>Image or voice attachment → thread flips to <code>pending_human</code>, no AI reply attempted</li>
         <li>≥1 confirmed product + shop rules → AI toggle enabled</li>
         <li>Groq key on worker; test tool call returns real price from DB</li>
+        <li>Banglish smoke test: <code>dam koto</code> / <code>M size ache</code> / <code>delivery charge koto</code> answer correctly from the catalog</li>
         <li>Page tokens encrypted; App Secret not in client bundle</li>
-        <li>Meta app <strong>Live</strong> + permissions approved (or pilot stays on test Page in Dev mode)</li>
+        <li>Meta <strong>Business Verification</strong> submitted (or done); app <strong>Live</strong> + permissions approved — otherwise pilot stays on a test Page in Dev mode</li>
       </ul>
     </section>
 
@@ -364,7 +418,9 @@ Body: recipient { id: PSID }, message { text: "..." }</pre>
       <h2>Official links</h2>
       <ul>
         <li><a class="ext" href="https://developers.facebook.com/docs/messenger-platform/overview/">Messenger Platform overview</a></li>
-        <li><a class="ext" href="https://developers.facebook.com/docs/messenger-platform/webhooks">Webhooks</a></li>
+        <li><a class="ext" href="https://developers.facebook.com/docs/messenger-platform/webhooks">Webhooks</a> (incl. <code>message_echoes</code>)</li>
+        <li><a class="ext" href="https://developers.facebook.com/docs/messenger-platform/discovery/private-replies">Private Replies (comment → DM)</a></li>
+        <li><a class="ext" href="https://www.facebook.com/business/help/1095661473946872">Meta Business Verification</a></li>
         <li><a class="ext" href="https://developers.facebook.com/docs/graph-api/overview/rate-limiting/">Graph API rate limits</a></li>
         <li><a class="ext" href="https://console.groq.com/docs/rate-limits">Groq rate limits</a></li>
       </ul>
