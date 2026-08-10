@@ -28,10 +28,11 @@
 From `resume/`:
 
 ```bash
-node generate-pdf.js resume/resume-fullstack-remote.html cv/mazharul-islam-nahid-fullstack-developer.pdf
+node generate-pdf.js resume/resume-fullstack-erp-odg.html others/mazharul-islam-nahid-fullstack-developer.pdf
 node generate-pdf.js resume/resume-frontend-remote.html cv/mazharul-islam-nahid-frontend-remote.pdf
 node generate-pdf.js resume/resume-fullstack-laravel.html cv/mazharul-islam-nahid-fullstack-laravel.pdf
 node generate-pdf.js resume/resume-minhajul-islam.html cv/minhajul-islam-fullstack-developer.pdf
+resume/resume/resume-fullstack-erp-odg.html
 ```
 
 ## Rules

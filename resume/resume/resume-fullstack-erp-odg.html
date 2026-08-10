@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mazharul Islam Nahid — Senior Full-Stack Developer</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Calibri, "Segoe UI", Arial, sans-serif;
+      font-size: 10.5pt; line-height: 1.4; color: #000; background: #fff;
+      max-width: 210mm; margin: 0 auto; padding: 14mm 16mm;
+    }
+    @media print {
+      body { padding: 0; }
+      .block, .job, .project {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      h2 {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+    }
+    h1 { font-size: 20pt; font-weight: 700; }
+    .headline { font-size: 11pt; margin-top: 2px; }
+    .contact { margin-top: 8px; font-size: 9.5pt; line-height: 1.6; }
+    .contact a { color: #1155cc; text-decoration: none; }
+    section { margin-top: 12px; }
+    h2 {
+      font-size: 11pt; font-weight: 700; text-transform: uppercase;
+      border-bottom: 1px solid #000; padding-bottom: 2px; margin-bottom: 6px;
+    }
+    p, li { color: #111; }
+    .job, .project { margin-bottom: 10px; }
+    .row { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .title { font-weight: 700; }
+    .meta { font-size: 9.5pt; white-space: nowrap; }
+    .company { font-weight: 600; margin: 2px 0 4px; }
+    .company a { color: #1155cc; text-decoration: none; }
+    ul { margin: 0 0 0 18px; }
+    li { margin-bottom: 2px; }
+    .tech { font-size: 9.5pt; margin-top: 3px; }
+    .skill-line { margin-bottom: 3px; font-size: 10pt; }
+    .skill-line strong { font-weight: 700; }
+    .project-head { font-weight: 700; }
+    .project-links { font-size: 9.5pt; margin: 2px 0 4px; }
+    .project-links a { color: #1155cc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header class="block">
+    <h1>Mazharul Islam Nahid</h1>
+    <p class="headline">Senior Full-Stack Developer · Next.js, Node.js, PostgreSQL &amp; MySQL</p>
+    <p class="contact">
+      01832409825 |
+      <a href="mailto:nahid.dev19@gmail.com">nahid.dev19@gmail.com</a> |
+      <a href="https://github.com/nahidnstu12">GitHub</a> |
+      <a href="https://gitlab.com/nahid-dev">GitLab</a> |
+      <a href="https://www.linkedin.com/in/nahid-dev/">LinkedIn</a> |
+      <a href="https://nahid-portfolio.vercel.app/">Portfolio</a>
+    </p>
+  </header>
+
+  <section class="block">
+    <h2>Summary</h2>
+    <p>
+      Full-stack developer with 4+ years building production web applications and modular business systems
+      for enterprise and government clients. Strong in Next.js/React, Node.js REST APIs, PostgreSQL and MySQL,
+      and role-based access patterns. Deliver in Agile/Scrum teams with code reviews, mentoring, and
+      attention to performance, security, and maintainability. Docker, GitHub Actions CI/CD, and cloud deploys.
+    </p>
+  </section>
+
+  <section>
+    <h2>Experience</h2>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Deputy Team Lead – Full Stack Developer</span>
+        <span class="meta">Jan 2025 – Present</span>
+      </div>
+      <p class="company"><a href="https://radiustheme.com">RadiusTheme</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Lead development on Radius Directory — multi-tenant classified SaaS (Next.js, Node.js, Prisma, PostgreSQL)</li>
+        <li>Developed 30+ feature modules across the application — Page Builder, Form Builder, payments, reporting, jobs, and other core flows</li>
+        <li>Design and maintain REST APIs and backend services; integrate third-party services (payments, auth, storage, messaging)</li>
+        <li>Reduced database queries by ~60% with Redis caching; improved Page Builder drag-and-drop responsiveness by ~40%</li>
+        <li>Mentor juniors via code reviews, pair programming, and sprint planning in Agile/Scrum delivery</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, TypeScript, Node.js, Prisma, PostgreSQL, Redis, Docker, GitHub Actions</p>
+    </article>
+
+    <article class="job block">
+      <div class="row">
+        <span class="title">Software Engineer</span>
+        <span class="meta">May 2022 – Dec 2024</span>
+      </div>
+      <p class="company"><a href="https://softbdltd.com/">Softbd LTD</a> · Dhaka, Bangladesh</p>
+      <ul>
+        <li>Built and maintained web apps for government and enterprise clients — React/Next.js UI plus Express and NestJS REST APIs</li>
+        <li>Worked with relational data layers (TypeORM, MySQL) and Redis caching under production load</li>
+        <li>Improved page load performance by ~40% through SSR, code splitting, and client-side caching</li>
+        <li>Maintained and enhanced large legacy systems (e.g. national portal theme engine serving 54,000+ sites)</li>
+        <li>Collaborated with PMs, testers, and developers in Agile/Scrum; estimates and code reviews</li>
+      </ul>
+      <p class="tech">Tech: React, Next.js, TypeScript, NestJS, Express, TypeORM, MySQL, Redis, MinIO</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Skills</h2>
+    <p class="skill-line"><strong>Languages:</strong> JavaScript (ES6+), TypeScript</p>
+    <p class="skill-line"><strong>Backend &amp; APIs:</strong> Node.js, NestJS, Express, REST API design and maintenance, Next.js Server Actions</p>
+    <p class="skill-line"><strong>Database:</strong> PostgreSQL, MySQL, Prisma, TypeORM, Redis (caching, job queues)</p>
+    <p class="skill-line"><strong>Frontend:</strong> React, Next.js, HTML, CSS, Tailwind CSS, Material UI, shadcn/ui, Zustand, Redux Toolkit</p>
+    <p class="skill-line"><strong>Quality &amp; testing:</strong> Jest, Vitest, code reviews, linting</p>
+    <p class="skill-line"><strong>DevOps &amp; tools:</strong> Git, GitHub Actions, Docker, Vercel, AWS S3, PM2, Postman · Agile/Scrum (Jira, ClickUp)</p>
+  </section>
+
+  <section>
+    <h2>Projects</h2>
+
+    <article class="project block">
+      <p class="project-head">RadiusTask — HR &amp; Project Management SaaS</p>
+      <p class="project-links"><a href="https://app.radiustask.com/login">app.radiustask.com</a> · In-house · Jan 2025 – Present</p>
+      <ul>
+        <li>Multi-workspace product with HR-oriented modules: employee profiles, org chart, and shift scheduling</li>
+        <li>Accounts-oriented invoicing module and client records; role-based access across workspaces</li>
+        <li>Project/task delivery (List, Board, Calendar, Gantt); REST APIs; Redis-backed Live Monitor (SSE)</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, TypeScript, Prisma, PostgreSQL, Redis, BullMQ, AWS S3</p>
+    </article>
+
+    <article class="project block">
+      <p class="project-head">Radius Directory — SaaS Marketplace</p>
+      <p class="project-links"><a href="https://bikribd.com/">bikribd.com</a> · Jan 2025 – Present</p>
+      <ul>
+        <li>Multi-tenant classified marketplace — full-stack ownership across UI, APIs, and PostgreSQL data layer</li>
+        <li>Developed or contributed across 30+ modules covering core product flows (builders, listings, billing, reporting, jobs)</li>
+        <li>REST/auth flows (NextAuth OAuth + credentials); payment integrations (Stripe, SSLCommerz, PayPal)</li>
+        <li>Background jobs via Graphile Worker / Redis — alerts, cleanup, stats, health checks</li>
+      </ul>
+      <p class="tech">Tech: Next.js, React, TypeScript, Prisma, PostgreSQL, Redis, Node.js, Tailwind CSS</p>
+    </article>
+
+    <article class="project block">
+      <p class="project-head">Digital Land Record and Management System (DLRMS)</p>
+      <p class="project-links"><a href="https://dlrms.land.gov.bd/">dlrms.land.gov.bd</a> · Apr 2024 – Dec 2024</p>
+      <ul>
+        <li>Citizen land-record entry and multi-step admin correction flows integrated with REST APIs at national scale</li>
+        <li>Contributed to scalable backend services (NestJS, TypeORM) and production UI under heavy data load; Redis caching</li>
+      </ul>
+      <p class="tech">Tech: React, Next.js, TypeScript, NestJS, TypeORM, Oracle, Material UI, Redis, REST APIs</p>
+    </article>
+  </section>
+
+  <section class="block">
+    <h2>Education</h2>
+    <div class="row">
+      <span class="title">BSc. Computer Science and Telecommunication Engineering</span>
+      <span class="meta">2017 – 2022</span>
+    </div>
+    <p>Noakhali Science and Technology University · CGPA 3.39 / 4.00</p>
+  </section>
+
+  <section class="block">
+    <h2>Certification</h2>
+    <p class="contact">
+      <a href="https://learnwithsumit.com/certificates/verify/LWSCTXN-FTIOH0BP">LWS (think-in-a-redux-way) Certificate</a>
+    </p>
+  </section>
+</body>
+</html>
